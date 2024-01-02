@@ -1,0 +1,149 @@
+﻿
+        //[HttpGet("GetDataBySheetId")]
+        //public IActionResult GetDataBySheetId(long sheetId)
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        PaginatedResult<Sheet> sheets = smartsheet.SheetResources.ListSheets(null, new PaginationParameters(true, null, null), null);
+        //        List<long> sheetIds = new List<long>();
+        //        foreach (Sheet sheet in sheets.Data)
+        //        {
+        //            sheetIds.Add((long)sheet.Id);
+        //        }
+        //        //foreach (var sheet in sheetIds)
+        //        //{
+        //        //    if(sheetId == sheet)
+        //        //    {
+        //        //        return Ok("Done");
+        //        //    }
+
+        //        //}
+        //        if (sheetIds.Contains(sheetId))
+        //        {
+        //            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+
+        //            // Extract data from the sheet as key-value pairs
+        //            List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+
+        //            // Get column names
+        //            List<string> columnNames = new List<string>();
+        //            foreach (Column column in sheet.Columns)
+        //            {
+        //                columnNames.Add(column.Title);
+        //            }
+
+        //            foreach (Row row in sheet.Rows)
+        //            {
+        //                Dictionary<string, object> rowData = new Dictionary<string, object>();
+
+        //                for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+        //                {
+        //                    // Use column name as key
+        //                    rowData[columnNames[i]] = row.Cells[i].Value;
+        //                }
+
+        //                sheetData.Add(rowData);
+        //            }
+
+        //            return Ok(sheetData);
+        //            //return Ok("Sheet Found");
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Give Proper sheet Id");
+        //        }
+
+
+
+        //        return Ok(sheetId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+
+
+
+
+
+          [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] Register userObj)
+        
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
+            long.TryParse(sheetId1, out long parsedSheetId);
+            Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+            if (userObj == null)
+            {
+                return BadRequest();
+            }
+            Cell[] cells = sheet.Rows.First().Cells.ToArray();
+            var smartSheetUserNameId = sheet.Columns.FirstOrDefault(c => c.Title == "UserName")?.Id;
+            var smartSheetPasswordId = sheet.Columns.FirstOrDefault(c => c.Title == "Password")?.Id;
+
+            var smartSheetUserName = cells.FirstOrDefault(c=>c.ColumnId ==  smartSheetUserNameId)?.Value.ToString();
+            var smartSheetPassword = cells.FirstOrDefault(c=>c.ColumnId ==  smartSheetPasswordId)?.Value.ToString();
+
+
+
+            //var token = CreateJwt(userObj);
+            return Ok(new
+            {
+                //Token = token,
+                Message = "Login Success!"
+            });
+
+        }
+
+
+        [3:48 PM] Srikanth Nagolla
+[HttpPost("RegisterNew")]
+public async Task<IActionResult> RegisterNew([FromBody] Register formData)
+{
+    try
+    {
+        // Your existing code...
+ 
+        // Validate Email
+        var emailColumnId = GetColumnIdByName(sheet, "Email");
+        var existingEmails = sheet.Rows.Select(row => row.Cells.FirstOrDefault(c => c.ColumnId == emailColumnId)?.Value?.ToString());
+ 
+        if (existingEmails.Contains(formData.Email))
+        {
+            return BadRequest("Email already exists.");
+        }
+ 
+        // Validate Username
+        var usernameColumnId = GetColumnIdByName(sheet, "UserName");
+        var existingUsernames = sheet.Rows.Select(row => row.Cells.FirstOrDefault(c => c.ColumnId == usernameColumnId)?.Value?.ToString());
+ 
+        if (existingUsernames.Contains(formData.UserName))
+        {
+            return BadRequest("Username already exists.");
+        }
+ 
+        // Validate Password
+        if (formData.Password.Length < 8 || !HasAlphaNumeric(formData.Password))
+        {
+            return BadRequest("Password should be at least 8 characters long and include alphanumeric characters.");
+        }
+ 
+        // Your existing code...
+ 
+        return Ok("Data added successfully.");
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+ 
+private bool HasAlphaNumeric(string input)
+{
+    return input.Any(char.IsLetter) && input.Any(char.IsDigit);
+}
