@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Google.Apis.Auth;
+using Google.Apis.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MieProject.Helpers;
 using MieProject.Models;
+using NPOI.SS.Formula;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,6 +24,9 @@ namespace MieProject.Controllers
     {
         private readonly string accessToken;
         private readonly IConfiguration configuration;
+        private readonly string clientId = "460379778026-nhgqueksa9p730jj0lokj8m5dv35jpr5.apps.googleusercontent.com";
+        private readonly string clientSecret = "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";
+
         //private readonly string sheetId1;
 
         public LoginAndRegisterController(IConfiguration configuration)
@@ -110,19 +117,14 @@ namespace MieProject.Controllers
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
 
-                // Retrieve sheet ID from configuration
                 string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
 
-                // Convert sheet ID to long if needed
                 long.TryParse(sheetId1, out long parsedSheetId);
 
-                // Get sheet by ID
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
-                // Extract data from the sheet as key-value pairs
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
 
-                // Get column names
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
                 {
@@ -153,96 +155,6 @@ namespace MieProject.Controllers
 
 
 
-        [HttpPost("RegisterNew")]
-        public async Task<IActionResult> RegisterNew([FromBody] Register formData)
-        {
-            try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                // Retrieve sheet ID from configuration
-                string sheetId = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
-
-                // Convert sheet ID to long if needed
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
-                var newRow = new Row();
-                newRow.Cells = new List<Cell>();
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "FirstName"),
-                    Value = formData.FirstName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "LastName"),
-                    Value = formData.LastName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "UserName"),
-                    Value = formData.UserName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "Password"),
-                    Value = formData.Password
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "Email"),
-                    Value = formData.Email
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "MobileNumber"),
-                    Value = formData.MobileNumber
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "Role"),
-                    Value = formData.Role
-                });
-
-                // Validate Email
-                var emailColumnId = GetColumnIdByName(sheet, "Email");
-                var existingEmails = sheet.Rows.Select(row => row.Cells.FirstOrDefault(c => c.ColumnId == emailColumnId)?.Value?.ToString());
-
-                if (existingEmails.Contains(formData.Email))
-                {
-                    return BadRequest("Email already exists.");
-                }
-
-                // Validate Username
-                var usernameColumnId = GetColumnIdByName(sheet, "UserName");
-                var existingUsernames = sheet.Rows.Select(row => row.Cells.FirstOrDefault(c => c.ColumnId == usernameColumnId)?.Value?.ToString());
-
-                if (existingUsernames.Contains(formData.UserName))
-                {
-                    return BadRequest("Username already exists.");
-                }
-
-                // Validate Password
-                if (formData.Password.Length < 8 || !HasAlphaNumeric(formData.Password))
-                {
-                    return BadRequest("Password should be at least 8 characters long and include alphanumeric characters.");
-                }
-
-                smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-
-
-
-
-
-                return Ok("Data added successfully.");
-
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
         private long GetColumnIdByName(Sheet sheet, string columnname)
         {
             foreach (var column in sheet.Columns)
@@ -254,14 +166,9 @@ namespace MieProject.Controllers
             }
             return 0;
         }
-        private bool HasAlphaNumeric(string input)
-        {
-            return input.Any(char.IsLetter) && input.Any(char.IsDigit);
-        }
-
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] Register userData)
+        public IActionResult Login([FromBody] EmployeeMaster userData)
         {
             try
             {
@@ -271,12 +178,13 @@ namespace MieProject.Controllers
                 long.TryParse(sheetId, out long parsedSheetId);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
-                var usernameColumnId = GetColumnIdByName(sheet, "UserName");
+                var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
                 var passwordColumnId = GetColumnIdByName(sheet, "Password");
-                var roleColumnId = GetColumnIdByName(sheet, "Role");
+                var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
+                var roleColumnId = GetColumnIdByName(sheet, "RoleName");
 
 
-                if (usernameColumnId == 0 || passwordColumnId == 0)
+                if (EmailColumnId == 0 || passwordColumnId == 0 )
                 {
                     return BadRequest("Column not found");
                 }
@@ -285,13 +193,20 @@ namespace MieProject.Controllers
 
                 foreach (var row in rows)
                 {
-                    var usernameCell = row.Cells.FirstOrDefault(c => c.ColumnId == usernameColumnId);
+                    var EmailIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
                     var passwordCell = row.Cells.FirstOrDefault(c => c.ColumnId == passwordColumnId);
+                    
+
                     var roleCell = row.Cells.FirstOrDefault(c => c.ColumnId == roleColumnId);
 
-                    if (usernameCell?.Value?.ToString() == userData.UserName && passwordCell?.Value?.ToString() == userData.Password)
+                    if (EmailIdCell?.Value?.ToString() == userData.EmailId && passwordCell?.Value?.ToString() == userData.Password)
                     {
-                        var username=usernameCell.Value?.ToString();
+                        var isActiveCell = row.Cells.FirstOrDefault(c => c.ColumnId == IsActiveColumnId);
+                        if (isActiveCell?.Value?.ToString() == "No")
+                        {
+                            return BadRequest("Employee is inactive");
+                        }
+                        var username= EmailIdCell.Value?.ToString();
                         var password=passwordCell.Value?.ToString();
                         var role= roleCell.Value?.ToString();
                         // Additional logic if needed
@@ -310,16 +225,17 @@ namespace MieProject.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
 
-      
-        private string CreateJwt(string username,string password)
+
+        private string CreateJwt(string username,string role)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("veryveryveryveryverysecret..................");
+            var key = Encoding.ASCII.GetBytes("veryveryveryveryverysecret......................");
             var identity = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Name,username),
-                new Claim(ClaimTypes.Role,password)
+                new Claim(ClaimTypes.Role,role)
             });
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
 
