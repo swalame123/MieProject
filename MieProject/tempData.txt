@@ -351,3 +351,129 @@ private string GetCellValueByColumnName(Row row, Sheet sheet, string columnName)
                 return BadRequest(ex.Message);
             }
         }
+
+
+        .............................................................
+            //[HttpGet("GetSheetIds")]
+        //public IActionResult Get()
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        PaginatedResult<Sheet> sheets = smartsheet.SheetResources.ListSheets(null, new PaginationParameters(true, null, null), null);
+        //        List<long> sheetIds = new List<long>();
+        //        foreach (Sheet sheet in sheets.Data)
+        //        {
+        //            sheetIds.Add((long)sheet.Id);
+        //        }
+        //        return Ok(sheetIds);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //[HttpGet("GetSheetData")]
+        //public IActionResult GetData()
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        long sheetId = 8716767337598852;
+        //        Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+        //        List<List<object>> sheetData = new List<List<object>>();
+
+        //        foreach (Row row in sheet.Rows)
+        //        {
+        //            List<object> rowData = new List<object>();
+        //            foreach (Cell cell in row.Cells)
+        //            {
+        //                rowData.Add(cell.Value);
+        //            }
+        //            sheetData.Add(rowData);
+        //        }
+        //        return Ok(sheetData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //[HttpGet("GetSheetDataAppSettings")]
+        //public IActionResult GetDataex()
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        string sheetId1 = configuration.GetSection("SmartsheetSettings:sheetId1").Value;
+        //        long.TryParse(sheetId1, out long parsedSheetId);
+
+        //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+        //        List<List<object>> sheetData = new List<List<object>>();
+
+        //        foreach (Row row in sheet.Rows)
+        //        {
+        //            List<object> rowData = new List<object>();
+        //            foreach (Cell cell in row.Cells)
+        //            {
+        //                rowData.Add(cell.Value);
+        //            }
+        //            sheetData.Add(rowData);
+        //        }
+        //        return Ok(sheetData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+
+
+
+
+        /////////////////////////////////////////////////////
+        
+
+                //SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                //string sheetId = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
+
+                //long.TryParse(sheetId, out long parsedSheetId);
+                //Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                //var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
+                //var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
+                //var EmailIdCell = sheet.Rows.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
+
+                //List<string> emails = new List<string>();
+                //foreach (Row row in sheet.Rows)
+                //{
+                //    emails.Add(row);
+                //}
+
+
+
+                //List<string> columnNames = new List<string>();
+                //foreach (Column column in sheet.Columns)
+                //{
+                //    columnNames.Add(column.Title);
+                //}
+
+                //var user = sheet.Rows.Select(row => new {
+                //EmailCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId)          
+                //})
+                //    .FirstOrDefault(x => x.EmailCell?.Value?.ToString() == payload.Email);
+
+
+
+
+
+
+                //if (user != null)
+                //{
+                //    return Ok("Done"); //CreateJwt(user)
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}

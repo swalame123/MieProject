@@ -24,8 +24,10 @@ namespace MieProject.Controllers
     {
         private readonly string accessToken;
         private readonly IConfiguration configuration;
-        private readonly string clientId = "460379778026-nhgqueksa9p730jj0lokj8m5dv35jpr5.apps.googleusercontent.com";
+        private readonly string clientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
         private readonly string clientSecret = "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";
+        private string GoogleClientId;
+
 
         //private readonly string sheetId1;
 
@@ -35,79 +37,7 @@ namespace MieProject.Controllers
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
 
         }
-        //[HttpGet("GetSheetIds")]
-        //public IActionResult Get()
-        //{
-        //    try
-        //    {
-        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-        //        PaginatedResult<Sheet> sheets = smartsheet.SheetResources.ListSheets(null, new PaginationParameters(true, null, null), null);
-        //        List<long> sheetIds = new List<long>();
-        //        foreach (Sheet sheet in sheets.Data)
-        //        {
-        //            sheetIds.Add((long)sheet.Id);
-        //        }
-        //        return Ok(sheetIds);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        //[HttpGet("GetSheetData")]
-        //public IActionResult GetData()
-        //{
-        //    try
-        //    {
-        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-        //        long sheetId = 8716767337598852;
-        //        Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
-        //        List<List<object>> sheetData = new List<List<object>>();
-
-        //        foreach (Row row in sheet.Rows)
-        //        {
-        //            List<object> rowData = new List<object>();
-        //            foreach (Cell cell in row.Cells)
-        //            {
-        //                rowData.Add(cell.Value);
-        //            }
-        //            sheetData.Add(rowData);
-        //        }
-        //        return Ok(sheetData);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        //[HttpGet("GetSheetDataAppSettings")]
-        //public IActionResult GetDataex()
-        //{
-        //    try
-        //    {
-        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-        //        string sheetId1 = configuration.GetSection("SmartsheetSettings:sheetId1").Value;
-        //        long.TryParse(sheetId1, out long parsedSheetId);
-
-        //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-        //        List<List<object>> sheetData = new List<List<object>>();
-
-        //        foreach (Row row in sheet.Rows)
-        //        {
-        //            List<object> rowData = new List<object>();
-        //            foreach (Cell cell in row.Cells)
-        //            {
-        //                rowData.Add(cell.Value);
-        //            }
-        //            sheetData.Add(rowData);
-        //        }
-        //        return Ok(sheetData);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+    
 
         [HttpGet("GetSheetDataKeyValue")]
 
@@ -173,18 +103,95 @@ namespace MieProject.Controllers
             try
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
+                string sheetId2 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
+
+
+                List<string> Sheets = new List<string>() {sheetId1 ,sheetId2};
+                foreach(var sheetId in Sheets)
+                {
+                    long.TryParse(sheetId, out long parsedSheetId);
+                    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                    var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
+                    var passwordColumnId = GetColumnIdByName(sheet, "Password");
+                    var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
+                    var roleColumnId = GetColumnIdByName(sheet, "RoleName");
+
+
+                    if (EmailColumnId == 0 || passwordColumnId == 0)
+                    {
+                        return BadRequest("Column not found");
+                    }
+
+                    var rows = sheet.Rows;
+
+                    foreach (var row in rows)
+                    {
+                        var EmailIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
+                        var passwordCell = row.Cells.FirstOrDefault(c => c.ColumnId == passwordColumnId);
+
+
+                        var roleCell = row.Cells.FirstOrDefault(c => c.ColumnId == roleColumnId);
+
+                        if (EmailIdCell?.Value?.ToString() == userData.EmailId && passwordCell?.Value?.ToString() == userData.Password)
+                        {
+                            var isActiveCell = row.Cells.FirstOrDefault(c => c.ColumnId == IsActiveColumnId);
+                            if (isActiveCell?.Value?.ToString() == "No")
+                            {
+                                return BadRequest("Employee is inactive");
+                            }
+                            var username = EmailIdCell.Value?.ToString();
+                            var password = passwordCell.Value?.ToString();
+                            var role = roleCell.Value?.ToString();
+                            // Additional logic if needed
+                            var token = CreateJwt(username, role);
+
+                            return Ok(new
+                            { Token = token, Message = "Login Success!" });
+                        }
+                    }
+
+                    // If no matching credentials found
+                    
+                }
+                return BadRequest("Username or Password Incorrect");
+            }
+               
+
+               
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("LoginWithGoogle")]
+        public async Task<IActionResult> LoginWithGoogle([FromBody] string credential)
+        {
+            try
+            {
+
+                string GoogleclientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
+                //200698853522 - 5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com
+
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { GoogleclientId }
+                };
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
 
                 long.TryParse(sheetId, out long parsedSheetId);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
                 var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
-                var passwordColumnId = GetColumnIdByName(sheet, "Password");
+                
                 var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
                 var roleColumnId = GetColumnIdByName(sheet, "RoleName");
 
 
-                if (EmailColumnId == 0 || passwordColumnId == 0 )
+                if (EmailColumnId == 0 )
                 {
                     return BadRequest("Column not found");
                 }
@@ -194,40 +201,36 @@ namespace MieProject.Controllers
                 foreach (var row in rows)
                 {
                     var EmailIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
-                    var passwordCell = row.Cells.FirstOrDefault(c => c.ColumnId == passwordColumnId);
-                    
-
+                   
                     var roleCell = row.Cells.FirstOrDefault(c => c.ColumnId == roleColumnId);
 
-                    if (EmailIdCell?.Value?.ToString() == userData.EmailId && passwordCell?.Value?.ToString() == userData.Password)
+                    if (EmailIdCell?.Value?.ToString() == payload.Email )
                     {
                         var isActiveCell = row.Cells.FirstOrDefault(c => c.ColumnId == IsActiveColumnId);
                         if (isActiveCell?.Value?.ToString() == "No")
                         {
                             return BadRequest("Employee is inactive");
                         }
-                        var username= EmailIdCell.Value?.ToString();
-                        var password=passwordCell.Value?.ToString();
-                        var role= roleCell.Value?.ToString();
-                        // Additional logic if needed
-                        var token = CreateJwt(username,role);
+                        var username = EmailIdCell.Value?.ToString();
+                        
+                        var role = roleCell.Value?.ToString();
+                       
+                        var token = CreateJwt(username, role);
 
-                        return Ok(new 
-                        {Token=token, Message = "Login Success!" });
+                        return Ok(new
+                        { Token = token, Message = "Login Success!" });
                     }
                 }
 
-                // If no matching credentials found
                 return BadRequest("Username or Password Incorrect");
+
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(BadRequest(ex.Message));
             }
+            
         }
-        
-
-
         private string CreateJwt(string username,string role)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();

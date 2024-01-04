@@ -13,7 +13,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie()
 .AddGoogle(options =>
 {
-    options.ClientId = "460379778026-nhgqueksa9p730jj0lokj8m5dv35jpr5.apps.googleusercontent.com";
+    options.ClientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
     options.ClientSecret = "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";
 });
 
@@ -40,13 +40,13 @@ IHostBuilder CreateHostBuilder(string[] args) =>
     {
         config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
     })
-    .ConfigureServices((hostContext, services) =>
-    {
-        IConfiguration configuration = hostContext.Configuration;
-        services.AddOptions();
-        services.Configure<SmartsheetSettings>(configuration.GetSection("SmartsheetSettings"));
+.ConfigureServices((hostContext, services) =>
+{
+    IConfiguration configuration = hostContext.Configuration;
+    services.AddOptions();
+    services.Configure<SmartsheetSettings>(configuration.GetSection("SmartsheetSettings"));
 
-    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
