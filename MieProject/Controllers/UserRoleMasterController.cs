@@ -4,6 +4,7 @@ using MieProject.Models;
 using NPOI.OpenXml4Net.OPC;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using Smartsheet.Api.OAuth;
 
 namespace MieProject.Controllers
 {
@@ -98,8 +99,11 @@ namespace MieProject.Controllers
                     ColumnId = GetColumnIdByName(sheet, "CreatedBy"),
                     Value = formData.UserName
                 });
+                
                 smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-                return Ok("Data added successfully.");
+                //return Ok("Data added successfully.");
+                return Ok(new
+                { Message = "Data added successfully." });
 
             }
             catch (Exception ex)
