@@ -39,7 +39,7 @@ namespace MieProject.Controllers
         }
     
 
-        [HttpGet("GetSheetDataKeyValue")]
+        [HttpGet("GetSheetData")]
 
         public IActionResult GetSheetData()
         {
