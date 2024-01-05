@@ -108,10 +108,15 @@ namespace MieProject.Controllers
                 });
                 newRow.Cells.Add(new Cell
                 {
+                    ColumnId = GetColumnIdByName(sheet, "RoleName"),
+                    Value = formData.RoleName
+                });
+                newRow.Cells.Add(new Cell
+                {
                     ColumnId = GetColumnIdByName(sheet, "CreatedBy"),
                     Value = formData.UserName
                 });
-                if()
+                
                 smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                 //return Ok("Data added successfully.");
                 return Ok(new
