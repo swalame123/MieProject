@@ -54,6 +54,15 @@ namespace MieProject.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        private bool EmailExists(Sheet sheet, string email)
+        {
+            // Find the column ID based on the email column name
+            long emailColumnId = GetColumnIdByName(sheet, "Email");
+
+            // Check if any row in the sheet has the specified email
+            return sheet.Rows.Any(row =>
+                row.Cells.Any(cell => cell.ColumnId == emailColumnId && cell.Value?.ToString() == email));
+        }
         [HttpPost("AddData")]
         public IActionResult AddData([FromBody] UserRoleMaster formData)
         {
@@ -66,7 +75,10 @@ namespace MieProject.Controllers
                 // Convert sheet ID to long if needed
                 long.TryParse(sheetId, out long parsedSheetId);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
+                if (EmailExists(sheet, formData.Email))
+                {
+                    return BadRequest("Email already exists in the sheet.");
+                }
                 var newRow = new Row();
                 newRow.Cells = new List<Cell>();
                 newRow.Cells.Add(new Cell
@@ -99,7 +111,7 @@ namespace MieProject.Controllers
                     ColumnId = GetColumnIdByName(sheet, "CreatedBy"),
                     Value = formData.UserName
                 });
-                
+                if()
                 smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                 //return Ok("Data added successfully.");
                 return Ok(new

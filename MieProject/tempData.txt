@@ -528,4 +528,4 @@ private string LookupInSheet(string searchValue, string searchColumn, string res
     // If no matching row is found, return null or an empty string based on your preference
     return null;
 }
-   
+ 
