@@ -375,7 +375,157 @@
         //}
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////
+         [HttpPost("AddData")]
+        public IActionResult AddData([FromBody] UserRoleMaster formData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string EmpMsater1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
+                string EmpMaster2 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
+                string RpleMaster = configuration.GetSection("SmartsheetSettings:RoleMaster").Value;
+                string UserRoleMaster = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+                //long.TryParse(UserRoleMaster, out long parsedSheetId);
+                //Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                //List<string> UserRoleMasterColumnName = new List<string>();
+                //foreach (Column column in sheet.Columns)
+                //{
+                //    UserRoleMasterColumnName.Add(column.Title);
+                //}
+            }
+            catch (Exception ex)
+            {
 
-
-
+            }
+            return Ok(formData);
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+        [5:17 PM] Srikanth Nagolla
+[HttpPost("CreateUserRole")]
+public IActionResult CreateUserRole([FromBody] UserRoleInputModel userData)
+{
+    try
+    {
+        // Assuming you have the necessary configurations and access token
+        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+ 
+        // Fetch sheet IDs from configuration
+        string sheet1Id = configuration.GetSection("SmartsheetSettings:Sheet1Id").Value;
+        string sheet2Id = configuration.GetSection("SmartsheetSettings:Sheet2Id").Value;
+        string userRoleMasterSheetId = configuration.GetSection("SmartsheetSettings:UserRoleMasterSheetId").Value;
+ 
+        // Fetch user role master sheet
+        long.TryParse(userRoleMasterSheetId, out long userRoleMasterSheetParsedId);
+        Sheet userRoleMasterSheet = smartsheet.SheetResources.GetSheet(userRoleMasterSheetParsedId, null, null, null, null, null, null, null);
+ 
+        // Lookup employee ID and role ID
+        string employeeId = LookupEmployeeId(userData.Email, sheet1Id, sheet2Id);
+        string roleId = LookupRoleId(userData.RoleName);
+ 
+        // Post data to user role master sheet
+        var newRow = new Row
+        {
+            Cells = new List<Cell>
+            {
+                new Cell
+                {
+                    ColumnId = GetColumnIdByName(userRoleMasterSheet, "EmployeeId"),
+                    Value = employeeId
+                },
+                new Cell
+                {
+                    ColumnId = GetColumnIdByName(userRoleMasterSheet, "Username"),
+                    Value = userData.Email // Assuming email as username
+                },
+                new Cell
+                {
+                    ColumnId = GetColumnIdByName(userRoleMasterSheet, "RoleId"),
+                    Value = roleId
+                },
+                // Add more cells as needed for other columns in user role master sheet
+            }
+        };
+ 
+        // Add the new row to the user role master sheet
+        smartsheet.SheetResources.RowResources.AddRows(userRoleMasterSheetParsedId, new Row[] { newRow });
+ 
+        return Ok("User Role created successfully");
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+ 
+private string LookupEmployeeId(string email, string sheet1Id, string sheet2Id)
+{
+    // Implement logic to lookup employee ID based on email from sheet1 and sheet2
+    // You can reuse your existing logic or modify it as needed
+    // Return the employee ID
+}
+ 
+private string LookupRoleId(string roleName)
+{
+    // Implement logic to lookup role ID based on roleName
+    // You can use a similar approach as in the Login method
+    // Return the role ID
+}
+ 
+private long GetColumnIdByName(Sheet sheet, string columnName)
+{
+    // Implement logic to get column ID by name from the specified sheet
+    // You can reuse your existing GetColumnIdByName method or modify it as needed
+    // Return the column ID
+}
+=========================================================================
+private string LookupEmployeeId(string email, string sheet1Id, string sheet2Id)
+{
+    SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+ 
+    // Lookup in Sheet1
+    string employeeId = LookupInSheet(email, "Email", "EmployeeId", sheet1Id, smartsheet);
+    
+    if (string.IsNullOrEmpty(employeeId))
+    {
+        // If not found in Sheet1, try Sheet2
+        employeeId = LookupInSheet(email, "Email", "EmployeeId", sheet2Id, smartsheet);
+    }
+ 
+    return employeeId;
+}
+ 
+private string LookupRoleId(string roleName)
+{
+    SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+ 
+    // Assuming "Role" is the column in your Role sheet corresponding to role names
+    string roleId = LookupInSheet(roleName, "Role", "RoleId", "RoleSheetId", smartsheet);
+ 
+    return roleId;
+}
+ 
+private string LookupInSheet(string searchValue, string searchColumn, string resultColumn, string sheetId, SmartsheetClient smartsheet)
+{
+    long.TryParse(sheetId, out long parsedSheetId);
+    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+ 
+    // Find the column IDs based on the provided column names
+    long searchColumnId = GetColumnIdByName(sheet, searchColumn);
+    long resultColumnId = GetColumnIdByName(sheet, resultColumn);
+ 
+    // Search for the row with the matching value in the search column
+    var matchingRow = sheet.Rows.FirstOrDefault(row =>
+        row.Cells.Any(cell => cell.ColumnId == searchColumnId && cell.Value?.ToString() == searchValue));
+ 
+    // If a matching row is found, return the value from the result column
+    if (matchingRow != null)
+    {
+        var resultCell = matchingRow.Cells.FirstOrDefault(cell => cell.ColumnId == resultColumnId);
+        return resultCell?.Value?.ToString();
+    }
+ 
+    // If no matching row is found, return null or an empty string based on your preference
+    return null;
+}
    
