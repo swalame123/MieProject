@@ -47,33 +47,31 @@ namespace MieProject.Controllers
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
 
-                string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
-
-                long.TryParse(sheetId1, out long parsedSheetId);
-
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
 
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
+                string sheetId2 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
 
-                foreach (Row row in sheet.Rows)
+                List<string> Sheets = new List<string>() { sheetId1, sheetId2 };
+                foreach (var sheetId in Sheets)
                 {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    long.TryParse(sheetId, out long parsedSheetId);
+                    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                    List<string> columnNames = new List<string>();
+                    foreach (Column column in sheet.Columns)
                     {
-                        // Use column name as key
-                        rowData[columnNames[i]] = row.Cells[i].Value;
+                        columnNames.Add(column.Title);
                     }
-
-                    sheetData.Add(rowData);
-                }
-
+                    foreach (Row row in sheet.Rows)
+                    {
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        sheetData.Add(rowData);
+                    }
+                }           
                 return Ok(sheetData);
             }
             catch (Exception ex)
