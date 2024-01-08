@@ -96,5 +96,130 @@ namespace MieProject.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetBrandNameData")]
+        public IActionResult GetBrandNameData()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:BrandMaster").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+                foreach (Column column in sheet.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                foreach (Row row in sheet.Rows)
+                {
+                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    {
+                        
+                        if (columnNames[i] == "BrandId")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        if (columnNames[i] == "BrandName")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+
+                    }
+                    sheetData.Add(rowData);
+                }
+                return Ok(sheetData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetCityNameData")]
+        public IActionResult GetCityNameData()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:City").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+                foreach (Column column in sheet.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                foreach (Row row in sheet.Rows)
+                {
+                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    {
+
+                        if (columnNames[i] == "CityId")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        if (columnNames[i] == "CityName")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        if (columnNames[i] == "StateId")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+
+                    }
+                    sheetData.Add(rowData);
+                }
+                return Ok(sheetData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetStateNameData")]
+        public IActionResult GetStateNameData()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:State").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+                foreach (Column column in sheet.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                foreach (Row row in sheet.Rows)
+                {
+                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    {
+
+                        if (columnNames[i] == "StateId")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        if (columnNames[i] == "StateName")
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                       
+
+                    }
+                    sheetData.Add(rowData);
+                }
+                return Ok(sheetData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

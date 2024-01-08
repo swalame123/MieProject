@@ -696,3 +696,236 @@ private string LookupInSheet(string searchValue, string searchColumn, string res
 //        return BadRequest(ex.Message);
 //    }
 //}
+
+
+
+// Row row = smartsheet.SheetResources.RowResources.GetRow(SheetId,rowId,null,null);
+
+            //  var rowId = 0;
+            ////  var rowToEdit = 0;
+            //  foreach (var row in sheet.Rows)
+            //  {
+            //      rowId=(int)row.Id;
+            //      Console.WriteLine(row.Id);
+            //      //Row rowToEdit = sheet.Rows.FirstOrDefault(x => x.Id == rowId)
+            //  }
+//////////////////////////////////////////////////////////////////////////////////////////////
+ public IActionResult Edit(Sheet sheet, long id)
+        {
+            var SheetId = 7813703822954372;
+            var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            sheet = smartsheet.SheetResources.GetSheet(SheetId, null, null, null, null, null, null, null);
+            
+            Row rowToEdit = sheet.Rows.FirstOrDefault(r => r.Id == id);
+
+
+
+            if (rowToEdit == null)
+            {
+                return NotFound();
+            }
+            var editRowViewModel = new UserRoleMaster
+            {
+                Id = (int)rowToEdit.Id.Value,
+                UserName = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "UserName"))?.Value.ToString(),
+                Email = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "Email"))?.Value.ToString(),
+                RoleId = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "RoleId"))?.Value.ToString(),
+                RoleName = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "RoleName"))?.Value.ToString(),
+                EmployeeId = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "EmployeeId"))?.Value.ToString(),
+                FirstName = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "FirstName"))?.Value.ToString(),
+                LastName = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "LastName"))?.Value.ToString()
+            };
+            return Ok(editRowViewModel);
+        }
+        [HttpPost]
+        public IActionResult Edit(Sheet sheet, UserRoleMaster model)
+        {
+
+
+
+            if (ModelState.IsValid)
+            {
+                var SheetId = 7813703822954372;
+                var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
+                try
+                {
+                    SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                    sheet = smartsheet.SheetResources.GetSheet(SheetId, null, null, null, null, null, null, null);
+                    Row rowToEdit = sheet.Rows.FirstOrDefault(r => r.Id == model.Id);
+                    Row updateRow = new Row { Id = model.Id, Cells = new List<Cell>() };
+                    if (rowToEdit == null)
+                    {
+                        return NotFound();
+                    }
+                    //var row = new Row();
+                    //row.Id = model.RowId;
+
+
+                    foreach (var cell in rowToEdit.Cells)
+                    {
+                        if (cell.ColumnId == GetColumnIdByName(sheet, "UserName"))
+                        {
+                            cell.Value = model.UserName;
+                        }
+                        else if (cell.ColumnId == GetColumnIdByName(sheet, "Email"))
+                        {
+                            cell.Value = model.Email;
+                        }
+                        else if (cell.ColumnId == GetColumnIdByName(sheet, "RoleId"))
+                        {
+                            cell.Value = model.RoleId;
+                        }
+                        else if (cell.ColumnId == GetColumnIdByName(sheet, "RoleName"))
+                        {
+                            cell.Value = model.RoleName;
+                        }
+                        else if (cell.ColumnId == GetColumnIdByName(sheet, "EmployeeId"))
+                        {
+                            cell.Value = model.EmployeeId;
+                        }
+                        else if (cell.ColumnId == GetColumnIdByName(sheet, "FirstName"))
+                        {
+                            cell.Value = model.FirstName;
+                        }
+                        else if (cell.ColumnId == GetColumnIdByName(sheet, "LastName"))
+                        {
+                            cell.Value = model.LastName;
+                        }
+                        updateRow.Cells.Add(cell);
+
+
+                    }
+
+
+                    smartsheet.SheetResources.RowResources.UpdateRows(SheetId, new Row[] { updateRow });
+
+                    return RedirectToAction("Index");
+                }
+
+
+
+                catch (Exception ex)
+                {
+
+                    return View();
+                }
+            }
+            return View(model);
+
+        }
+        public IActionResult Delete(long id)
+        {
+            var SheetId = 6701107275321220;
+            var accessToken = "prq5Ve9cZNUXRgC0IJH50Jvf1D9lD6BgqfPi8";
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            Sheet sheet = smartsheet.SheetResources.GetSheet(SheetId, null, null, null, null, null, null, null);
+            Row rowToEdit = sheet.Rows.FirstOrDefault(r => r.Id == id);
+            if (rowToEdit == null)
+            {
+                return NotFound();
+            }
+            var editRowViewModel = new NewRow
+            {
+                RowId = rowToEdit.Id.Value,
+                FullName = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "Full Name"))?.Value.ToString(),
+                Email = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "Email"))?.Value.ToString(),
+                Phone = rowToEdit.Cells.FirstOrDefault(c => c.ColumnId == GetColumnIdByName(sheet, "Phone"))?.Value.ToString()
+            };
+            return View(editRowViewModel);
+
+        }
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteRow(long Id)
+        {
+            var SheetId = 6701107275321220;
+            var accessToken = "prq5Ve9cZNUXRgC0IJH50Jvf1D9lD6BgqfPi8";
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+            smartsheet.SheetResources.RowResources.DeleteRows(SheetId, new long[] { Id }, true);
+
+
+            //return View(Index);
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+       
+    [HttpPut("UpdateData/{id}")]
+    public IActionResult UpdateData(long id, [FromBody] UserRoleMaster updatedData)
+    {
+    try
+    {
+        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+        long.TryParse(sheetId, out long parsedSheetId);
+ 
+        // Retrieve the sheet and find the row by id
+        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+        Row existingRow = GetRowById(smartsheet, parsedSheetId, id);
+ 
+        if (existingRow == null)
+        {
+            return NotFound($"Row with id {id} not found.");
+        }
+ 
+        // Update the existing row with new data
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "Email")).Value = updatedData.Email;
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "FirstName")).Value = updatedData.FirstName;
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "LastName")).Value = updatedData.LastName;
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "EmployeeId")).Value = updatedData.EmployeeId;
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleId")).Value = updatedData.RoleId;
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleName")).Value = updatedData.RoleName;
+        existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "CreatedBy")).Value = updatedData.UserName;
+ 
+        smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
+ 
+        return Ok(new { Message = "Data updated successfully." });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+ 
+private Row GetRowById(SmartsheetClient smartsheet, long sheetId, long rowId)
+{
+    Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+    return sheet.Rows.FirstOrDefault(row => row.Id == rowId);
+}
+
+EMP0001	Employee 1	Arnold	Arun	AM	KAM	EMP0001AM@vss.com	Yes				EMP0001AM
+
+
+
+private Row GetRowById(SmartsheetClient smartsheet, long sheetId, int id)
+{
+    Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+ 
+    // Assuming you have a column named "Id"
+    Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Id");
+ 
+    if (idColumn != null)
+    {
+        foreach (var row in sheet.Rows)
+        {
+            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == id.ToString());
+ 
+            if (cell != null)
+            {
+                return row;
+            }
+        }
+    }
+ 
+    return null;
+}
