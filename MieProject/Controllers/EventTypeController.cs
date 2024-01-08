@@ -126,16 +126,19 @@ namespace MieProject.Controllers
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        else if (columnNames[i] == "IsChecked" && row.Cells[i].Value.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase))
-                        {
-                            includeRow = true;
-                        }
-                    }
+                        
+                        //    else if (columnNames[i] == "IsChecked" && row.Cells[i].Value.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase))
+                        //    {
+                        //        includeRow = true;
+                        //    }
+                        //}
 
-                    if (includeRow)
-                    {
-                        sheetData.Add(rowData);
+                        //if (includeRow)
+                        //{
+                        //    sheetData.Add(rowData);
+                        //}
                     }
+                    sheetData.Add(rowData);
                 }
                
                 
