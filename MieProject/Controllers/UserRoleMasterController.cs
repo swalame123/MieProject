@@ -139,53 +139,53 @@ namespace MieProject.Controllers
             return 0;
         }
 
-       
-        [HttpPut("UpdateData")]
-        public IActionResult UpdateData( [FromBody] UserRoleMaster updatedData)
-        {
-            try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
 
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+        //[HttpPut("UpdateData")]
+        //public IActionResult UpdateData( [FromBody] UserRoleMaster updatedData)
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+        //        long.TryParse(sheetId, out long parsedSheetId);
 
-                //Row existingRow = GetRowById(sheet, updatedData.Id);
-                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Id);
+        //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
-                if (existingRow == null)
-                {
-                    return BadRequest("Row with specified ID not found.");
-                }
+        //        //Row existingRow = GetRowById(sheet, updatedData.Id);
+        //        Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Id);
 
-                // Update the existing row with the new data
-                UpdateCellValue(existingRow, sheet, "FirstName", updatedData.FirstName);
-                UpdateCellValue(existingRow, sheet, "LastName", updatedData.LastName);
-                UpdateCellValue(existingRow, sheet, "EmployeeId", updatedData.EmployeeId);
-                UpdateCellValue(existingRow, sheet, "RoleId", updatedData.RoleId);
-                UpdateCellValue(existingRow, sheet, "RoleName", updatedData.RoleName);
-                UpdateCellValue(existingRow, sheet, "CreatedBy", updatedData.UserName);
+        //        if (existingRow == null)
+        //        {
+        //            return BadRequest("Row with specified ID not found.");
+        //        }
 
-                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
+        //        // Update the existing row with the new data
+        //        UpdateCellValue(existingRow, sheet, "FirstName", updatedData.FirstName);
+        //        UpdateCellValue(existingRow, sheet, "LastName", updatedData.LastName);
+        //        UpdateCellValue(existingRow, sheet, "EmployeeId", updatedData.EmployeeId);
+        //        UpdateCellValue(existingRow, sheet, "RoleId", updatedData.RoleId);
+        //        UpdateCellValue(existingRow, sheet, "RoleName", updatedData.RoleName);
+        //        UpdateCellValue(existingRow, sheet, "CreatedBy", updatedData.UserName);
 
-                return Ok(new { Message = "Data updated successfully." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
 
-        private void UpdateCellValue(Row row, Sheet sheet, string columnName, object value)
-        {
-            long columnId = GetColumnIdByName(sheet, columnName);
-            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == columnId);
-            if (cell != null)
-            {
-                cell.Value = value;
-            }
-        }
+        //        return Ok(new { Message = "Data updated successfully." });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //private void UpdateCellValue(Row row, Sheet sheet, string columnName, object value)
+        //{
+        //    long columnId = GetColumnIdByName(sheet, columnName);
+        //    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == columnId);
+        //    if (cell != null)
+        //    {
+        //        cell.Value = value;
+        //    }
+        //}
 
         //private Row GetRowById(Sheet sheet, int id)
         //{
@@ -201,67 +201,68 @@ namespace MieProject.Controllers
         //}
 
 
-        //[HttpPut("UpdateData")]
-        //public IActionResult UpdateData( [FromBody] UserRoleMaster updatedData)
+        [HttpPut("UpdateData")]
+        public IActionResult UpdateData([FromBody] UserRoleMaster updatedData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+
+                // Retrieve the sheet and find the row by id
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Id);
+
+                if (existingRow == null)
+                {
+                    return NotFound($"Row with id {updatedData.Id} not found.");
+                }
+                //foreach (var cell in rowToEdit.Cells)
+                //{
+                //    if (cell.ColumnId == GetColumnIdByName(sheet, "Full Name"))
+                //    {
+                //        cell.Value = model.FullName;
+                //    }
+                //    else if (cell.ColumnId == GetColumnIdByName(sheet, "Email"))
+                //    {
+                //        cell.Value = model.Email;
+                //    }
+                //    else if (cell.ColumnId == GetColumnIdByName(sheet, "Phone"))
+                //    {
+                //        cell.Value = model.Phone;
+                //    }
+                //    updateRow.Cells.Add(cell);
+
+
+                //}
+                
+                existingRow.CreatedAt = DateTime.Now;
+                existingRow.ModifiedAt = DateTime.Now;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "Email")).Value = updatedData.Email;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "FirstName")).Value = updatedData.FirstName;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "LastName")).Value = updatedData.LastName;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "EmployeeId")).Value = updatedData.EmployeeId;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleId")).Value = updatedData.RoleId;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleName")).Value = updatedData.RoleName;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "CreatedBy")).Value = updatedData.UserName;
+                
+                //smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { new Row { Id = existingRow.Id,Cells= existingRow.Cells } });
+                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
+
+                return Ok(new { Message = "Data updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //private Row GetRowById(SmartsheetClient smartsheet, long sheetId, int id)
         //{
-        //    try
-        //    {
-        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-        //        string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
-        //        long.TryParse(sheetId, out long parsedSheetId);
-
-        //        // Retrieve the sheet and find the row by id
-        //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-        //        Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Id);
-
-        //        if (existingRow == null)
-        //        {
-        //            return NotFound($"Row with id {updatedData.Id} not found.");
-        //        }
-        //        foreach (var cell in rowToEdit.Cells)
-        //        {
-        //            if (cell.ColumnId == GetColumnIdByName(sheet, "Full Name"))
-        //            {
-        //                cell.Value = model.FullName;
-        //            }
-        //            else if (cell.ColumnId == GetColumnIdByName(sheet, "Email"))
-        //            {
-        //                cell.Value = model.Email;
-        //            }
-        //            else if (cell.ColumnId == GetColumnIdByName(sheet, "Phone"))
-        //            {
-        //                cell.Value = model.Phone;
-        //            }
-        //            updateRow.Cells.Add(cell);
-
-
-        //        }
-
-        //        // Update the existing row with new data
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "Email")).Value = updatedData.Email;
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "FirstName")).Value = updatedData.FirstName;
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "LastName")).Value = updatedData.LastName;
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "EmployeeId")).Value = updatedData.EmployeeId;
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleId")).Value = updatedData.RoleId;
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleName")).Value = updatedData.RoleName;
-        //        //existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "CreatedBy")).Value = updatedData.UserName;
-
-        //        //smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { new Row { Id = existingRow.Id,Cells= existingRow.Cells } });
-        //        smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
-
-        //        return Ok(new { Message = "Data updated successfully." });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
+        //    Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+        //    return sheet.Rows.FirstOrDefault(row => row.Id == id);
         //}
-
-        ////private Row GetRowById(SmartsheetClient smartsheet, long sheetId, int id)
-        ////{
-        ////    Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
-        ////    return sheet.Rows.FirstOrDefault(row => row.Id == id);
-        ////}
 
         private Row GetRowById(SmartsheetClient smartsheet, long sheetId, int id)
         {

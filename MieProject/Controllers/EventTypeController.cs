@@ -255,11 +255,11 @@ namespace MieProject.Controllers
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if (columnNames[i] == "HCP Role ID")
+                        if (columnNames[i] == "HCP_Role_ID")
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "HCP Role")
+                        if (columnNames[i] == "HCP_Role")
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
