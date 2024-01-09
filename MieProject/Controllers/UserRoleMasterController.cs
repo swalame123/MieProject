@@ -204,9 +204,8 @@ namespace MieProject.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpDelete("DeleteData")]
-        public IActionResult DeleteData([FromBody] UserRoleMaster updatedData)
+        [HttpDelete("DeleteData/{email}")]
+        public IActionResult DeleteData(string email)
         {
             try
             {
@@ -215,16 +214,16 @@ namespace MieProject.Controllers
                 long.TryParse(sheetId, out long parsedSheetId);
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Email);
-               
+                Row existingRow = GetRowById(smartsheet, parsedSheetId, email);
+
 
                 if (existingRow == null)
                 {
-                    return NotFound($"Row with id {updatedData.Id} not found.");
+                    return NotFound($"Row with id {email} not found.");
                 }
                 var Id = (long)existingRow.Id;
                 smartsheet.SheetResources.RowResources.DeleteRows(parsedSheetId, new long[] { Id }, true);
-               
+
                 return Ok(new { Message = "Data updated successfully." });
             }
             catch (Exception ex)
@@ -233,8 +232,36 @@ namespace MieProject.Controllers
             }
         }
 
+        //[HttpDelete("DeleteData/{email}")]
+        //public IActionResult DeleteData([FromBody] UserRoleMaster updatedData)
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+        //        long.TryParse(sheetId, out long parsedSheetId);
 
-     
+        //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+        //        Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Email);
+
+
+        //        if (existingRow == null)
+        //        {
+        //            return NotFound($"Row with id {updatedData.Id} not found.");
+        //        }
+        //        var Id = (long)existingRow.Id;
+        //        smartsheet.SheetResources.RowResources.DeleteRows(parsedSheetId, new long[] { Id }, true);
+
+        //        return Ok(new { Message = "Data updated successfully." });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+
+
         private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
         {
             Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
@@ -258,7 +285,34 @@ namespace MieProject.Controllers
 
             return null;
         }
+        
+        //[HttpDelete("DeleteData/{email}")]
+        //public IActionResult DeleteData(string email)
+        //{
+        //    try
+        //    {
+        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //        string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+        //        long.TryParse(sheetId, out long parsedSheetId);
 
+        //        // Get the row to be deleted based on email
+        //        Row existingRow = GetRowByEmail(smartsheet, parsedSheetId, email);
+
+        //        if (existingRow == null)
+        //        {
+        //            return NotFound($"Row with email {email} not found.");
+        //        }
+
+        //        // Delete the row
+        //        smartsheet.SheetResources.RowResources.DeleteRow(parsedSheetId, existingRow.Id);
+
+        //        return Ok(new { Message = "Data deleted successfully." });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }
 
