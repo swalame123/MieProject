@@ -281,7 +281,7 @@ namespace MieProject.Controllers
             try
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+                string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value;
                 long.TryParse(sheetId, out long parsedSheetId);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
