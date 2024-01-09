@@ -6,6 +6,7 @@ using NPOI.OpenXml4Net.OPC;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using Smartsheet.Api.OAuth;
+using System.Runtime;
 using System.Runtime.InteropServices;
 
 namespace MieProject.Controllers
@@ -140,66 +141,6 @@ namespace MieProject.Controllers
         }
 
 
-        //[HttpPut("UpdateData")]
-        //public IActionResult UpdateData( [FromBody] UserRoleMaster updatedData)
-        //{
-        //    try
-        //    {
-        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-        //        string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
-        //        long.TryParse(sheetId, out long parsedSheetId);
-
-        //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
-        //        //Row existingRow = GetRowById(sheet, updatedData.Id);
-        //        Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Id);
-
-        //        if (existingRow == null)
-        //        {
-        //            return BadRequest("Row with specified ID not found.");
-        //        }
-
-        //        // Update the existing row with the new data
-        //        UpdateCellValue(existingRow, sheet, "FirstName", updatedData.FirstName);
-        //        UpdateCellValue(existingRow, sheet, "LastName", updatedData.LastName);
-        //        UpdateCellValue(existingRow, sheet, "EmployeeId", updatedData.EmployeeId);
-        //        UpdateCellValue(existingRow, sheet, "RoleId", updatedData.RoleId);
-        //        UpdateCellValue(existingRow, sheet, "RoleName", updatedData.RoleName);
-        //        UpdateCellValue(existingRow, sheet, "CreatedBy", updatedData.UserName);
-
-        //        smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
-
-        //        return Ok(new { Message = "Data updated successfully." });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-        //private void UpdateCellValue(Row row, Sheet sheet, string columnName, object value)
-        //{
-        //    long columnId = GetColumnIdByName(sheet, columnName);
-        //    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == columnId);
-        //    if (cell != null)
-        //    {
-        //        cell.Value = value;
-        //    }
-        //}
-
-        //private Row GetRowById(Sheet sheet, int id)
-        //{
-        //    foreach (var row in sheet.Rows)
-        //    {
-        //        var idCell = row.Cells.FirstOrDefault(cell => cell.ColumnId == GetColumnIdByName(sheet, "ID"));
-        //        if (idCell != null && long.TryParse(idCell.Value.ToString(), out var cellId) && cellId == id)
-        //        {
-        //            return row;
-        //        }
-        //    }
-        //    return null;
-        //}
-
 
         [HttpPut("UpdateData")]
         public IActionResult UpdateData([FromBody] UserRoleMaster updatedData)
@@ -212,44 +153,50 @@ namespace MieProject.Controllers
 
                 // Retrieve the sheet and find the row by id
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Id);
+                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Email);
+                Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
 
                 if (existingRow == null)
                 {
                     return NotFound($"Row with id {updatedData.Id} not found.");
                 }
-                //foreach (var cell in rowToEdit.Cells)
-                //{
-                //    if (cell.ColumnId == GetColumnIdByName(sheet, "Full Name"))
-                //    {
-                //        cell.Value = model.FullName;
-                //    }
-                //    else if (cell.ColumnId == GetColumnIdByName(sheet, "Email"))
-                //    {
-                //        cell.Value = model.Email;
-                //    }
-                //    else if (cell.ColumnId == GetColumnIdByName(sheet, "Phone"))
-                //    {
-                //        cell.Value = model.Phone;
-                //    }
-                //    updateRow.Cells.Add(cell);
+                foreach (var cell in existingRow.Cells)
+                {
+                    if (cell.ColumnId == GetColumnIdByName(sheet, "Email"))
+                    {
+                        cell.Value = updatedData.Email;
+                    }
+                    else if (cell.ColumnId == GetColumnIdByName(sheet, "FirstName"))
+                    {
+                        cell.Value = updatedData.FirstName;
+                    }
+                    else if (cell.ColumnId == GetColumnIdByName(sheet, "LastName"))
+                    {
+                        cell.Value = updatedData.LastName;
+                    }
+                    else if (cell.ColumnId == GetColumnIdByName(sheet, "EmployeeId"))
+                    {
+                        cell.Value = updatedData.EmployeeId;
+                    }
+                    else if (cell.ColumnId == GetColumnIdByName(sheet, "RoleId"))
+                    {
+                        cell.Value = updatedData.RoleId;
+                    }
+                    else if (cell.ColumnId == GetColumnIdByName(sheet, "RoleName"))
+                    {
+                        cell.Value = updatedData.RoleName;
+                    }
+                    else if (cell.ColumnId == GetColumnIdByName(sheet, "CreatedBy"))
+                    {
+                        cell.Value = updatedData.CreatedBy;
+                    }
+                    updateRow.Cells.Add(cell);
 
 
-                //}
-                
-                existingRow.CreatedAt = DateTime.Now;
-                existingRow.ModifiedAt = DateTime.Now;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "Email")).Value = updatedData.Email;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "FirstName")).Value = updatedData.FirstName;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "LastName")).Value = updatedData.LastName;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "EmployeeId")).Value = updatedData.EmployeeId;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleId")).Value = updatedData.RoleId;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleName")).Value = updatedData.RoleName;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "CreatedBy")).Value = updatedData.CreatedBy;
-                
-                //smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { new Row { Id = existingRow.Id,Cells= existingRow.Cells } });
-                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
+                }
 
+              
+                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
                 return Ok(new { Message = "Data updated successfully." });
             }
             catch (Exception ex)
@@ -258,25 +205,49 @@ namespace MieProject.Controllers
             }
         }
 
-        //private Row GetRowById(SmartsheetClient smartsheet, long sheetId, int id)
-        //{
-        //    Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
-        //    return sheet.Rows.FirstOrDefault(row => row.Id == id);
-        //}
+        [HttpDelete("DeleteData")]
+        public IActionResult DeleteData([FromBody] UserRoleMaster updatedData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
 
-        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, int id)
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Email);
+               
+
+                if (existingRow == null)
+                {
+                    return NotFound($"Row with id {updatedData.Id} not found.");
+                }
+                var Id = (long)existingRow.Id;
+                smartsheet.SheetResources.RowResources.DeleteRows(parsedSheetId, new long[] { Id }, true);
+               
+                return Ok(new { Message = "Data updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+     
+        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
         {
             Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
 
             // Assuming you have a column named "Id"
 
-            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "id");
+            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Email");
 
             if (idColumn != null)
             {
                 foreach (var row in sheet.Rows)
                 {
-                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == id.ToString());
+                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == email);
 
                     if (cell != null)
                     {
@@ -290,5 +261,7 @@ namespace MieProject.Controllers
 
     }
 }
+
+
 
 
