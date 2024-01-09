@@ -3,7 +3,7 @@
     public class UserRoleMaster
     {
         public int Id { get; set; }
-        public string UserName { get; set; }
+        public string CreatedBy { get; set; }
         public string RoleId { get; set; } 
         public string RoleName { get; set; }
         public string EmployeeId { get; set; }

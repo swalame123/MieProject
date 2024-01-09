@@ -113,7 +113,7 @@ namespace MieProject.Controllers
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "CreatedBy"),
-                    Value = formData.UserName
+                    Value = formData.CreatedBy
                 });
                 
                 smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
@@ -245,7 +245,7 @@ namespace MieProject.Controllers
                 existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "EmployeeId")).Value = updatedData.EmployeeId;
                 existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleId")).Value = updatedData.RoleId;
                 existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "RoleName")).Value = updatedData.RoleName;
-                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "CreatedBy")).Value = updatedData.UserName;
+                existingRow.Cells.First(c => c.ColumnId == GetColumnIdByName(sheet, "CreatedBy")).Value = updatedData.CreatedBy;
                 
                 //smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { new Row { Id = existingRow.Id,Cells= existingRow.Cells } });
                 smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
