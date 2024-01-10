@@ -69,10 +69,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
 
                 long.TryParse(sheetId, out long parsedSheetId);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                //if (EmailExists(sheet, formData.Email))
-                //{
-                //    return BadRequest("Email already exists in the sheet.");
-                //}
+               
                 var newRow = new Row();
                 newRow.Cells = new List<Cell>();
                 newRow.Cells.Add(new Cell
@@ -80,11 +77,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                     ColumnId = GetColumnIdByName(sheet, "EventTopic"),
                     Value = formData.EventTopic
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"),
-                //    Value = formData.EventId
-                //});
+               
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "EventType"),
@@ -110,11 +103,11 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                     ColumnId = GetColumnIdByName(sheet, "VenueName"),
                     Value = formData.VenueName
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "InitiatorName"),
-                //    Value = formData.InitiatorName
-                //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "InitiatorName"),
+                    Value = formData.InitiatorName
+                });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "City"),
@@ -142,24 +135,50 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 });
                 newRow.Cells.Add(new Cell
                 {
+                    ColumnId = GetColumnIdByName(sheet, "SelectionOfTaxes"),
+                    Value = formData.SelectionOfTaxes
+                });
+                newRow.Cells.Add(new Cell
+                {
                     ColumnId = GetColumnIdByName(sheet, "HCPRole"),
                     Value = formData.HCPRole
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "Objective"),
-                //    Value = formData.Objective
-                //});
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "MeetingTypeId"),
-                    Value = formData.MeetingTypeId
+                    ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"),
+                    Value = formData.BeneficiaryName
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "Honorarium"),
-                    Value = formData.Honorarium
+                    ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"),
+                    Value = formData.BankAccountNumber
                 });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "PanName"),
+                    Value = formData.PanName
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "PanCardNumber"),
+                    Value = formData.PanCardNumber
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "IfscCode"),
+                    Value = formData.IfscCode
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "EmailId"),
+                    Value = formData.EmailId
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Invitees"),
+                    Value = formData.Invitees
+                });
+               
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "IsAdvanceRequired"),
