@@ -85,16 +85,16 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 //    ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"),
                 //    Value = formData.EventId
                 //});
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "EventType"),
-                //    Value = formData.EventType
-                //});
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "EventDate"),
-                //    Value = formData.EventDate
-                //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "EventType"),
+                    Value = formData.EventType
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "EventDate"),
+                    Value = formData.EventDate
+                });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "StartTime"),
@@ -145,22 +145,27 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                     ColumnId = GetColumnIdByName(sheet, "HCPRole"),
                     Value = formData.HCPRole
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "Objective"),
-                    Value = formData.Objective
-                });
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet, "Objective"),
+                //    Value = formData.Objective
+                //});
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "MeetingTypeId"),
                     Value = formData.MeetingTypeId
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "RBM/BM"),
-                //    Value = formData.RBM_BM
-                //});
-               
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Honorarium"),
+                    Value = formData.Honorarium
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "IsAdvanceRequired"),
+                    Value = formData.IsAdvanceRequired
+                });
+
 
 
                 smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });

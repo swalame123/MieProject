@@ -114,35 +114,15 @@ namespace MieProject.Controllers
                 foreach (Row row in sheet.Rows)
                 {
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    bool includeRow = false;
-
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if (columnNames[i] == "BrandId")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
-                        else if (columnNames[i] == "BrandName")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
-                        
-                        //    else if (columnNames[i] == "IsChecked" && row.Cells[i].Value.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase))
-                        //    {
-                        //        includeRow = true;
-                        //    }
-                        //}
+                        rowData[columnNames[i]] = row.Cells[i].Value;
 
-                        //if (includeRow)
-                        //{
-                        //    sheetData.Add(rowData);
-                        //}
                     }
                     sheetData.Add(rowData);
                 }
-               
-                
                 return Ok(sheetData);
+                
             }
             catch (Exception ex)
             {
@@ -301,6 +281,39 @@ namespace MieProject.Controllers
                     sheetData.Add(rowData);
                 }
                 return Ok(sheetData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("VendorMasterSheetData")]
+        public IActionResult VendorMasterSheetData()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+                foreach (Column column in sheet.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                foreach (Row row in sheet.Rows)
+                {
+                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    {
+                        rowData[columnNames[i]] = row.Cells[i].Value;
+
+                    }
+                    sheetData.Add(rowData);
+                }
+                return Ok(sheetData);
+
             }
             catch (Exception ex)
             {
