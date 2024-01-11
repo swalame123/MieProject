@@ -74,7 +74,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 newRow.Cells = new List<Cell>();
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "EventTopic"),
+                    ColumnId = GetColumnIdByName(sheet, "Event Topic"),
                     Value = formData.EventTopic
                 });
                
@@ -103,11 +103,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                     ColumnId = GetColumnIdByName(sheet, "VenueName"),
                     Value = formData.VenueName
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "InitiatorName"),
-                    Value = formData.InitiatorName
-                });
+              
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "City"),
@@ -130,54 +126,17 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "ProjectID"),
+                    ColumnId = GetColumnIdByName(sheet, "Project ID"),
                     Value = formData.ProjectId
                 });
+              
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "SelectionOfTaxes"),
-                    Value = formData.SelectionOfTaxes
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "HCPRole"),
+                    ColumnId = GetColumnIdByName(sheet, "HCP Role"),
                     Value = formData.HCPRole
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"),
-                    Value = formData.BeneficiaryName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"),
-                    Value = formData.BankAccountNumber
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "PanName"),
-                    Value = formData.PanName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "PanCardNumber"),
-                    Value = formData.PanCardNumber
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "IfscCode"),
-                    Value = formData.IfscCode
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "EmailId"),
-                    Value = formData.EmailId
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "Invitees"),
-                    Value = formData.Invitees
-                });
+               
+               
                
                 newRow.Cells.Add(new Cell
                 {
