@@ -24,6 +24,7 @@
         public string? EmailId { get; set; }
         public string? Invitees { get; set; }
         public string? IsAdvanceRequired { get; set; }
+        public IFormFile FormFile { get; set; }
 
 
 

@@ -188,8 +188,37 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
 
 
                 smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-                //return Ok("Data added successfully.");
-                return Ok(new
+
+                //if (formData.FormFile != null && formData.FormFile.Length > 0)
+                //{
+                //    //var fileContent = new byte[formData.FormFile.Length];
+                //    //formData.FormFile.OpenReadStream().Read(fileContent, 0, (int)formData.FormFile.Length);
+                //    //var attachment = smartsheet.Attachments.CreateAttachment(parsedSheetId, newRow.Id.Value, formData.FormFile.FileName, fileContent, formData.FormFile.ContentType);
+                //    try
+                //    {
+                //        //    var uploadPath = "FilesUpload\\";
+                //        //    if (!Directory.Exists(uploadPath))
+                //        //    {
+                //        //        Directory.CreateDirectory(uploadPath);
+                //        //    }
+                //        //    var filePath = Path.Combine(uploadPath,FileUploadModel.File.FileName);
+                //        var fileName = FileUploadModel.File.FileName;
+                //    var addedRow = addedRows[0];
+
+
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+
+                //    }
+
+
+
+
+                //}
+                    //return Ok("Data added successfully.");
+                    return Ok(new
                 { Message = "Data added successfully." });
 
             }
