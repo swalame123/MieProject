@@ -76,8 +76,18 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "Travel/Accomodation"),
-                    Value = formData.TravelorAccomodation
+                    ColumnId = GetColumnIdByName(sheet, "Travel"),
+                    Value = formData.Travel
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Accomodation"),
+                    Value = formData.Accomodation
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "LocalConveyance"),
+                    Value = formData.LocalConveyance
                 });
                 newRow.Cells.Add(new Cell
                 {
