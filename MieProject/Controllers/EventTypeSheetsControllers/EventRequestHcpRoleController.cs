@@ -65,7 +65,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 newRow.Cells = new List<Cell>();
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "HcpRoleId"),
+                    ColumnId = GetColumnIdByName(sheet, "HcpRole"),
                     Value = formData.HcpRoleId
                 });
 
@@ -73,6 +73,11 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
                 {
                     ColumnId = GetColumnIdByName(sheet, "MISCode"),
                     Value = formData.MISCode
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Travel/Accomodation"),
+                    Value = formData.TravelorAccomodation
                 });
                 newRow.Cells.Add(new Cell
                 {

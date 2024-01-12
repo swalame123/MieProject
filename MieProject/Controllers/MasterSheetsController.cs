@@ -287,7 +287,41 @@ namespace MieProject.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetApprovedTrainersData")]
+        public IActionResult GetApprovedTrainersData()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+                foreach (Column column in sheet.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                foreach (Row row in sheet.Rows)
+                {
+                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    {
+                        rowData[columnNames[i]] = row.Cells[i].Value;
+
+                    }
+                    sheetData.Add(rowData);
+                }
+                return Ok(sheetData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("VendorMasterSheetData")]
+
         public IActionResult VendorMasterSheetData()
         {
             try

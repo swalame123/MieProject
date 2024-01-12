@@ -7,6 +7,8 @@
         public string? SpeakerCode { get; set; }
         public string? TrainerCode { get; set; }
         public string? HonorariumRequired { get; set; }
+        public string? TravelorAccomodation { get; set; }
+       
         public string? Speciality { get; set; }
         public string? Tier { get; set; }
         public string? GOorNGO { get; set; }
