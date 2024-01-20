@@ -63,25 +63,62 @@ namespace MieProject.Controllers.Testing
             string sheetId3 = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
             string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
             string sheetId5 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpSlideKit").Value;
+            string sheetId6 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
             long.TryParse(sheetId1, out long parsedSheetId1);
             long.TryParse(sheetId2, out long parsedSheetId2);
             long.TryParse(sheetId3, out long parsedSheetId3);
             long.TryParse(sheetId4, out long parsedSheetId4);
             long.TryParse(sheetId5, out long parsedSheetId5);
+            long.TryParse(sheetId6, out long parsedSheetId6);
+
             Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
             Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);
             Sheet sheet3 = smartsheet.SheetResources.GetSheet(parsedSheetId3, null, null, null, null, null, null, null);
             Sheet sheet4 = smartsheet.SheetResources.GetSheet(parsedSheetId4, null, null, null, null, null, null, null);
             Sheet sheet5 = smartsheet.SheetResources.GetSheet(parsedSheetId5, null, null, null, null, null, null, null);
+            Sheet sheet6 = smartsheet.SheetResources.GetSheet(parsedSheetId6, null, null, null, null, null, null, null);
             StringBuilder addedBrandsData = new StringBuilder();
             StringBuilder addedInviteesData = new StringBuilder();
             StringBuilder addedHcpData = new StringBuilder(); 
             StringBuilder addedSlideKitData = new StringBuilder();
+            StringBuilder addedExpences = new StringBuilder();
 
             int addedSlideKitDataNo = 1;
             int addedHcpDataNo = 1;
             int addedInviteesDataNo = 1;
             int addedBrandsDataNo = 1;
+            int addedExpencesNo = 1;
+
+            foreach (var formdata in formDataList.EventRequestExpenseSheet)
+            {
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet6, "Expense"),
+                    Value = formdata.Expense
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet6, "AmountExcludingTax?"),
+                    Value = formdata.AmountExcludingTax
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet6, "Amount"),
+                    Value = formdata.Amount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"),
+                    Value = formdata.BtcorBte
+                });
+                string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
+                addedExpences.AppendLine(rowData);
+                addedExpencesNo++;
+            }
+            string Expense = addedExpences.ToString();
 
             foreach (var formdata in formDataList.EventRequestHCPSlideKits)
             {
@@ -249,6 +286,11 @@ namespace MieProject.Controllers.Testing
                 {
                     ColumnId = GetColumnIdByName(sheet1, "SelectedBrands"),
                     Value = brand
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Expenses"),
+                    Value = Expense
                 });
                 newRow.Cells.Add(new Cell
                 {
@@ -500,7 +542,54 @@ namespace MieProject.Controllers.Testing
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId5, new Row[] { newRow5 });
                 }
 
-                return Ok("done");
+                foreach (var formdata in formDataList.EventRequestExpenseSheet)
+                {
+                    var newRow6 = new Row();
+                    newRow6.Cells = new List<Cell>();
+
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "Expense"),
+                        Value = formdata.Expense
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "EventId/EventRequestID"),
+                        Value = val
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "AmountExcludingTax?"),
+                        Value = formdata.AmountExcludingTax
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "Amount"),
+                        Value = formdata.Amount
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"),
+                        Value = formdata.BtcorBte
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "BudgetAmount"),
+                        Value = formdata.BudgetAmount
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "BTCAmount"),
+                        Value = formdata.BtcAmount
+                    });
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "BTEAmount"),
+                        Value = formdata.BteAmount
+                    });
+                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
+                }
+                    return Ok("done");
             }
 
 
