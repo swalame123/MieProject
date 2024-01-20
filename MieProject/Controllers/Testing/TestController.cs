@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MieProject.Models;
+using MieProject.Models.RequestSheets;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using System.Text;
 
 namespace MieProject.Controllers.Testing
 {
@@ -52,7 +54,7 @@ namespace MieProject.Controllers.Testing
             }
         }
         [HttpPost("AllObjModelsData")]
-        public IActionResult AllObjModelsData(AllObjModels obj)
+        public IActionResult AllObjModelsData(AllObjModels formDataList)
         {
 
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
@@ -60,12 +62,471 @@ namespace MieProject.Controllers.Testing
             string sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestBrandsList").Value;
             string sheetId3 = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
             string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
-            long.TryParse(sheetId2, out long parsedSheetId);
+            string sheetId5 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpSlideKit").Value;
+            long.TryParse(sheetId1, out long parsedSheetId1);
+            long.TryParse(sheetId2, out long parsedSheetId2);
+            long.TryParse(sheetId3, out long parsedSheetId3);
+            long.TryParse(sheetId4, out long parsedSheetId4);
+            long.TryParse(sheetId5, out long parsedSheetId5);
+            Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
+            Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);
+            Sheet sheet3 = smartsheet.SheetResources.GetSheet(parsedSheetId3, null, null, null, null, null, null, null);
+            Sheet sheet4 = smartsheet.SheetResources.GetSheet(parsedSheetId4, null, null, null, null, null, null, null);
+            Sheet sheet5 = smartsheet.SheetResources.GetSheet(parsedSheetId5, null, null, null, null, null, null, null);
+            StringBuilder addedBrandsData = new StringBuilder();
+            StringBuilder addedInviteesData = new StringBuilder();
+            StringBuilder addedHcpData = new StringBuilder(); 
+            StringBuilder addedSlideKitData = new StringBuilder();
 
-            Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-            return Ok(obj);
 
+            foreach (var formdata in formDataList.EventRequestHCPSlideKits)
+            {
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet5, "MIS"),
+                    Value = formdata.MIS
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet5, "Slide Kit Type"),
+                    Value = formdata.SlideKitType
+                });
+                string rowData = $"{formdata.MIS} | {formdata.SlideKitType}";
+                addedSlideKitData.AppendLine(rowData);
+            }
+            string slideKit = addedSlideKitData.ToString();
+
+            foreach (var formdata in formDataList.RequestBrandsList)
+            {
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet2, "% Allocation"),
+                    Value = formdata.PercentAllocation
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet2, "Brands"),
+                    Value = formdata.BrandName
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet2, "Project ID"),
+                    Value = formdata.ProjectId
+                });
+                string rowData = $"{formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
+                addedBrandsData.AppendLine(rowData);
+            }
+            string brand = addedBrandsData.ToString();
+
+            foreach (var formdata in formDataList.EventRequestInvitees)
+            {
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet3, "InviteeName"),
+                    Value = formdata.InviteeName
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet3, "MISCode"),
+                    Value = formdata.MISCode
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet3, "LocalConveyance"),
+                    Value = formdata.LocalConveyance
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet3, "BTC/BTE"),
+                    Value = formdata.BtcorBte
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet3, "LcAmount"),
+                    Value = formdata.LcAmount
+                });
+                string rowData = $"{formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance} | {formdata.BtcorBte} | {formdata.LcAmount}";
+                addedInviteesData.AppendLine(rowData);
+            }
+            string Invitees = addedInviteesData.ToString();
+
+
+            foreach (var formdata in formDataList.EventRequestHcpRole)
+            {
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet4, "HcpRole"),
+                    Value = formdata.HcpRole
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet4, "GO/NGO"),
+                    Value = formdata.GOorNGO
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet4, "MISCode"),
+                    Value = formdata.MisCode
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                    Value = formdata.HcpName
+                });
+
+                string rowData = $"{formdata.HcpRole} | {formdata.HcpName} | {formdata.MisCode} | {formdata.GOorNGO}";
+                addedHcpData.AppendLine(rowData);
+            }
+            string HCP = addedHcpData.ToString();
+
+
+
+            try
+            {
+
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Event Topic"),
+                    Value = formDataList.class1.EventTopic
+                });
+
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "EventType"),
+                    Value = formDataList.class1.EventType
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "EventDate"),
+                    Value = formDataList.class1.EventDate
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "StartTime"),
+                    Value = formDataList.class1.StartTime
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "EndTime"),
+                    Value = formDataList.class1.EndTime
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "VenueName"),
+                    Value = formDataList.class1.VenueName
+                });
+
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "City"),
+                    Value = formDataList.class1.City
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "State"),
+                    Value = formDataList.class1.State
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "SelectedBrands"),
+                    Value = brand
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "SelectedHcp's&TheirDetails"),
+                    Value = HCP
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "SelectedInvitees"),
+                    Value = Invitees
+                });
+
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "SelectedSlideKit"),
+                    Value = slideKit
+                });
+
+
+
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
+                    Value = formDataList.class1.IsAdvanceRequired
+                });
+
+
+
+                var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
+                //var eventId = addedRows[0].Id.Value;
+                //long eventIdColumnId = GetColumnIdByName(sheet, "Event ID");
+                //var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+                var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
+                var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+                var val = eventIdCell.DisplayValue;
+                //return Ok($"Data saved successfully. BrandsList: {brand}, Invitees: {Invitees}, HcpRole: {HCP}, ");
+
+
+                foreach (var formData in formDataList.EventRequestHcpRole)
+                {
+                    var newRow1 = new Row();
+                    newRow1.Cells = new List<Cell>();
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HcpRole"),
+                        Value = formData.HcpRole
+                    });
+
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "MISCode"),
+                        Value = formData.MisCode
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "Travel"),
+                        Value = formData.Travel
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "Accomodation"),
+                        Value = formData.Accomdation
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "LocalConveyance"),
+                        Value = formData.LocalConveyance
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "SpeakerCode"),
+                        Value = formData.SpeakerCode
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "TrainerCode"),
+                        Value = formData.TrainerCode
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HonorariumRequired"),
+                        Value = formData.HonorariumRequired
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "Speciality"),
+                        Value = formData.Speciality
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "Tier"),
+                        Value = formData.Tier
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "GO/NGO"),
+                        Value = formData.GOorNGO
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "PresentationDuration"),
+                        Value = formData.PresentationDuration
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "PanelSessionPreparationDuration"),
+                        Value = formData.PanelSessionPreperationDuration
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "PanelDiscussionDuration"),
+                        Value = formData.PanelDisscussionDuration
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "QASessionDuration"),
+                        Value = formData.QASessionDuration
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "BriefingSession"),
+                        Value = formData.BriefingSession
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "TotalSessionHours"),
+                        Value = formData.TotalSessionHours
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "Rationale"),
+                        Value = formData.Rationale
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "EventId/EventRequestId"),
+                        Value = val
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
+                    });
+
+                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
+
+
+
+
+
+
+
+                }
+
+                foreach (var formdata in formDataList.RequestBrandsList)
+                {
+                    var newRow2 = new Row();
+                    newRow2.Cells = new List<Cell>();
+                    newRow2.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet2, "% Allocation"),
+                        Value = formdata.PercentAllocation
+                    });
+                    newRow2.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet2, "Brands"),
+                        Value = formdata.BrandName
+                    });
+                    newRow2.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet2, "Project ID"),
+                        Value = formdata.ProjectId
+                    });
+                    newRow2.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet2, "EventId/EventRequestId"),
+                        Value = val
+                    });
+
+                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId2, new Row[] { newRow2 });
+
+                }
+                foreach (var formdata in formDataList.EventRequestInvitees)
+                {
+                    var newRow3 = new Row();
+                    newRow3.Cells = new List<Cell>();
+                    newRow3.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet3, "InviteeName"),
+                        Value = formdata.InviteeName
+                    });
+                    newRow3.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet3, "MISCode"),
+                        Value = formdata.MISCode
+                    });
+                    newRow3.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet3, "LocalConveyance"),
+                        Value = formdata.LocalConveyance
+                    });
+                    newRow3.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet3, "BTC/BTE"),
+                        Value = formdata.BtcorBte
+                    });
+                    newRow3.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet3, "LcAmount"),
+                        Value = formdata.LcAmount
+                    });
+                    newRow3.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet3, "EventId/EventRequestId"),
+                        Value = val
+                    });
+
+                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId3, new Row[] { newRow3 });
+                }
+
+
+                foreach (var formdata in formDataList.EventRequestHCPSlideKits)
+                {
+                    var newRow5 = new Row();
+                    newRow5.Cells = new List<Cell>();
+
+                    newRow5.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet5, "MIS"),
+                        Value = formdata.MIS
+                    });
+                    newRow5.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet5, "Slide Kit Type"),
+                        Value = formdata.SlideKitType
+                    });
+                    newRow5.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet5, "SlideKit Document"),
+                        Value = formdata.SlideKitDocument
+                    });
+                    newRow5.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet5, "EventId/EventRequestId"),
+                        Value = val
+                    });
+
+
+                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId5, new Row[] { newRow5 });
+                }
+
+                return Ok("done");
+            }
+
+
+
+            catch (Exception ex)
+            {
+                return BadRequest($"Could not find {ex.Message}");
+            }
+
+
+
+
+
+            return Ok();
+           
+            
+
+
+
+
+    }
+
+        private long GetColumnIdByName(Sheet sheet, string columnname)
+        {
+            foreach (var column in sheet.Columns)
+            {
+                if (column.Title == columnname)
+                {
+                    return column.Id.Value;
+                }
+            }
+            return 0;
         }
+
 
         [HttpGet("GetfmvColumnValue")]
         public IActionResult GetfmvColumnValue(string specialty, string columnTitle)

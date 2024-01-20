@@ -4,6 +4,7 @@ using MieProject.Models;
 using MieProject.Models.RequestSheets;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using System.Text;
 
 namespace MieProject.Controllers.RequestSheets
 {
@@ -62,6 +63,9 @@ namespace MieProject.Controllers.RequestSheets
                 long.TryParse(sheetId, out long parsedSheetId);
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                StringBuilder addedRowsData = new StringBuilder();
+
                 foreach (var formData in formDataList)
                 {
 
@@ -86,25 +90,17 @@ namespace MieProject.Controllers.RequestSheets
 
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-                    //// Create a list to hold the rows to be added
-                    //List<Row> rowsToAdd = new List<Row>();
+                    string rowData = $"{formData.BrandName}|{formData.ProjectId}|{formData.PercentAllocation}";
+                    addedRowsData.AppendLine(rowData);
 
-                    //// Iterate through the provided list and create rows
+                    
 
-                    //var newRow = new Row();
-                    //newRow.Cells = new List<Cell>();
-                    //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "% Allocation"), Value = formData.PercentAllocation });
-                    //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Brands"), Value = formData.BrandName });
-                    //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Project ID"), Value = formData.ProjectId });
-                    //rowsToAdd.Add(newRow);
-
-
-                    //// Add the list of rows to the sheet
-                    ////smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, rowsToAdd.ToArray());
-                    //smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+                   
                 }
+                string resultString = addedRowsData.ToString();
 
-                return Ok(new { Message = "Data added successfully." });
+                return Ok(resultString);
+                //return Ok(new { Message = "Data added successfully." } );
             }
             catch (Exception ex)
             {

@@ -2,6 +2,8 @@
 {
     public class Class1
     {
+        public string? EventId { get; set; }
+
         public string? EventTopic { get; set; }       
         public string? EventType { get; set; }
         public DateTime? EventDate { get; set; }

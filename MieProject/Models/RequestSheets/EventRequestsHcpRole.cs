@@ -18,8 +18,9 @@
         public string PresentationDuration { get; set; }
         public string PanelSessionPreperationDuration { get; set; }
         public string PanelDisscussionDuration { get; set; }
-        public string OASessionDuration { get; set; }
+        public string QASessionDuration { get; set; }
         public string BriefingSession { get; set; }
         public string TotalSessionHours { get; set; }
+        public string HcpName { get; set; }
     }
 }

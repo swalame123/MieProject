@@ -6,7 +6,7 @@
         public string InviteeName { get; set; }
         public string MISCode { get; set; }
         public string LocalConveyance { get; set; }
-        public string BTCorBTE { get; set; }
+        public string BtcorBte { get; set; }
         public string LcAmount { get; set; }
 
 
