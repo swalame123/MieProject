@@ -63,8 +63,8 @@ namespace MieProject.Controllers.Testing
             long.TryParse(sheetId2, out long parsedSheetId);
 
             Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
             return Ok(obj);
+
         }
 
         [HttpGet("GetfmvColumnValue")]
