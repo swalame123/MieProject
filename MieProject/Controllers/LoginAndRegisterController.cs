@@ -114,7 +114,7 @@ namespace MieProject.Controllers
                     var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
                     var passwordColumnId = GetColumnIdByName(sheet, "Password");
                     var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
-                    var roleColumnId = GetColumnIdByName(sheet, "RoleName");
+                    var roleColumnId = GetColumnIdByName(sheet, "Designation");
 
 
                     if (EmailColumnId == 0 || passwordColumnId == 0)

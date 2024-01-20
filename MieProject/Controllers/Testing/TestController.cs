@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MieProject.Models;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 
@@ -49,6 +50,21 @@ namespace MieProject.Controllers.Testing
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpPost("AllObjModelsData")]
+        public IActionResult AllObjModelsData(AllObjModels obj)
+        {
+
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string sheetId1 = configuration.GetSection("SmartsheetSettings:Class1").Value;
+            string sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestBrandsList").Value;
+            string sheetId3 = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
+            string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+            long.TryParse(sheetId2, out long parsedSheetId);
+
+            Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+            return Ok(obj);
         }
 
         [HttpGet("GetfmvColumnValue")]
