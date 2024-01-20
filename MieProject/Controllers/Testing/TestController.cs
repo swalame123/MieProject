@@ -78,6 +78,10 @@ namespace MieProject.Controllers.Testing
             StringBuilder addedHcpData = new StringBuilder(); 
             StringBuilder addedSlideKitData = new StringBuilder();
 
+            int addedSlideKitDataNo = 1;
+            int addedHcpDataNo = 1;
+            int addedInviteesDataNo = 1;
+            int addedBrandsDataNo = 1;
 
             foreach (var formdata in formDataList.EventRequestHCPSlideKits)
             {
@@ -94,8 +98,9 @@ namespace MieProject.Controllers.Testing
                     ColumnId = GetColumnIdByName(sheet5, "Slide Kit Type"),
                     Value = formdata.SlideKitType
                 });
-                string rowData = $"{formdata.MIS} | {formdata.SlideKitType}";
+                string rowData = $"{addedSlideKitDataNo}. {formdata.MIS} | {formdata.SlideKitType}";
                 addedSlideKitData.AppendLine(rowData);
+                addedSlideKitDataNo++;
             }
             string slideKit = addedSlideKitData.ToString();
 
@@ -118,8 +123,9 @@ namespace MieProject.Controllers.Testing
                     ColumnId = GetColumnIdByName(sheet2, "Project ID"),
                     Value = formdata.ProjectId
                 });
-                string rowData = $"{formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
+                string rowData = $"{addedBrandsDataNo}. {formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
                 addedBrandsData.AppendLine(rowData);
+                addedBrandsDataNo++;
             }
             string brand = addedBrandsData.ToString();
 
@@ -152,8 +158,9 @@ namespace MieProject.Controllers.Testing
                     ColumnId = GetColumnIdByName(sheet3, "LcAmount"),
                     Value = formdata.LcAmount
                 });
-                string rowData = $"{formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance} | {formdata.BtcorBte} | {formdata.LcAmount}";
+                string rowData = $"{addedInviteesDataNo}. {formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance} | {formdata.BtcorBte} | {formdata.LcAmount}";
                 addedInviteesData.AppendLine(rowData);
+                addedInviteesDataNo++;
             }
             string Invitees = addedInviteesData.ToString();
 
@@ -183,8 +190,9 @@ namespace MieProject.Controllers.Testing
                     Value = formdata.HcpName
                 });
 
-                string rowData = $"{formdata.HcpRole} | {formdata.HcpName} | {formdata.MisCode} | {formdata.GOorNGO}";
+                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} | {formdata.HcpName} | {formdata.MisCode} | {formdata.GOorNGO}";
                 addedHcpData.AppendLine(rowData);
+                addedHcpDataNo++;
             }
             string HCP = addedHcpData.ToString();
 
