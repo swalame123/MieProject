@@ -1,1 +1,80 @@
-﻿
+﻿ [HttpGet("EventRequestsHcpRole/{eventIdorEventRequestId}")]
+        public async Task<IActionResult> GetEventRequestsHcpRoleById(string eventIdorEventRequestId)
+        {
+            try
+            {
+                var hcpRole = await dbContext.EventRequestsHcpRoles
+                    .FirstOrDefaultAsync(e => e.EventIdorEventRequestId == eventIdorEventRequestId);
+
+                if (hcpRole == null)
+                {
+                    return NotFound(); // Return 404 Not Found if the record is not found
+                }
+
+                return Ok(hcpRole); // Return the entire row
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately, log them, and return an error response
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+
+
+
+
+        [HttpGet("GetEventRequestsHcpRoleById/{eventIdorEventRequestId}")]
+public IActionResult GetEventRequestsHcpRoleById(string eventIdorEventRequestId)
+{
+    try
+    {
+        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+        long.TryParse(sheetId, out long parsedSheetId);
+
+        // Specify additional parameters if needed
+        var sheetOptions = new SheetGetOptions(EnumSet<SheetInclusion>.of(SheetInclusion.COLUMNS));
+
+        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, sheetOptions, null, null, null, null);
+
+        List<Dictionary<string, object>> hcpRoleData = new List<Dictionary<string, object>>();
+        List<string> columnNames = new List<string>();
+
+        foreach (Column column in sheet.Columns)
+        {
+            columnNames.Add(column.Title);
+        }
+
+        foreach (Row row in sheet.Rows)
+        {
+            // Check if the row has the specified EventIdorEventRequestId
+            var eventIdorEventRequestIdCell = row.Cells.FirstOrDefault(cell => cell.ColumnId == GetColumnIdByName(sheet, "EventIdorEventRequestId"));
+            if (eventIdorEventRequestIdCell != null && eventIdorEventRequestIdCell.Value == eventIdorEventRequestId)
+            {
+                Dictionary<string, object> hcpRoleRowData = new Dictionary<string, object>();
+
+                for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                {
+                    hcpRoleRowData[columnNames[i]] = row.Cells[i].Value;
+                }
+
+                hcpRoleData.Add(hcpRoleRowData);
+            }
+        }
+
+        return Ok(hcpRoleData);
+    }
+    catch (Exception ex)
+    {
+        // Enhance error handling - log the exception details, etc.
+        return BadRequest($"Error retrieving HCP Role data by ID: {ex.Message}");
+    }
+}
+
+// Helper method to get the column ID by name
+private long GetColumnIdByName(Sheet sheet, string columnName)
+{
+    Column column = sheet.Columns.FirstOrDefault(c => c.Title == columnName);
+    return column?.Id ?? 0;
+}
