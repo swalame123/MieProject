@@ -1,4 +1,4 @@
-﻿namespace MieProject.Models
+﻿namespace MieProject.Junk
 {
     public class Register
     {

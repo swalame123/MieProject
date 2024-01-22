@@ -4,7 +4,7 @@ using MieProject.Models.EventTypeSheets;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 
-namespace MieProject.Controllers.EventTypeSheetsControllers
+namespace MieProject.Junk.EventTypeSheetsControllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +17,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
         }
-       
+
         //[HttpPost("AddData")]
         //public IActionResult AddData(HonorariumPaymentList formData)
         //{

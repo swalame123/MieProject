@@ -6,7 +6,7 @@ using NPOI.OpenXml4Net.OPC;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 
-namespace MieProject.Controllers.EventTypeSheetsControllers
+namespace MieProject.Junk.EventTypeSheetsControllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,7 +19,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
         }
-       
+
         //private bool EmailExists(Sheet sheet, string email)
         //{
         //    long emailColumnId = GetColumnIdByName(sheet, "Email");
@@ -38,7 +38,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
 
         //        long.TryParse(sheetId, out long parsedSheetId);
         //        Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-               
+
         //        var newRow = new Row();
         //        newRow.Cells = new List<Cell>();
         //        newRow.Cells.Add(new Cell
@@ -46,7 +46,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
         //            ColumnId = GetColumnIdByName(sheet, "Event Topic"),
         //            Value = formData.EventTopic
         //        });
-               
+
         //        newRow.Cells.Add(new Cell
         //        {
         //            ColumnId = GetColumnIdByName(sheet, "EventType"),
@@ -72,7 +72,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
         //            ColumnId = GetColumnIdByName(sheet, "VenueName"),
         //            Value = formData.VenueName
         //        });
-              
+
         //        newRow.Cells.Add(new Cell
         //        {
         //            ColumnId = GetColumnIdByName(sheet, "City"),
@@ -98,15 +98,15 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
         //            ColumnId = GetColumnIdByName(sheet, "Project ID"),
         //            Value = formData.ProjectId
         //        });
-              
+
         //        newRow.Cells.Add(new Cell
         //        {
         //            ColumnId = GetColumnIdByName(sheet, "HCP Role"),
         //            Value = formData.HCPRole
         //        });
-               
-               
-               
+
+
+
         //        newRow.Cells.Add(new Cell
         //        {
         //            ColumnId = GetColumnIdByName(sheet, "IsAdvanceRequired"),
