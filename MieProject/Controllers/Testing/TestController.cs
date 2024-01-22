@@ -478,7 +478,7 @@ namespace MieProject.Controllers.Testing
                         Value = formData.HcpRole
                     });
 
-                    newRow.Cells.Add(new Cell
+                    newRow1.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet4, "MISCode"),
                         Value = formData.MisCode
