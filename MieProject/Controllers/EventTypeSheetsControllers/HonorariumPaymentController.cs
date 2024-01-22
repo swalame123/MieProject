@@ -50,7 +50,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
             }
         }
         [HttpPost("AddData")]
-        public IActionResult AddData([FromBody] HonorariumPayment formData)
+        public IActionResult AddData(HonorariumPaymentList formData)
         {
             try
             {
@@ -60,49 +60,57 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
 
                 long.TryParse(sheetId, out long parsedSheetId);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                foreach(var i in formData.RequestHonorariumList)
+                {
+                    var newRow = new Row();
+                    newRow.Cells = new List<Cell>();
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "HCP Name"),
+                        Value = i.HCPName
+                    });
 
-                var newRow = new Row();
-                newRow.Cells = new List<Cell>();
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "HCP Name"),
-                    Value = formData.HCPName
-                });
-
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"),
-                    Value = formData.EventId
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "HCPRole"),
-                    Value = formData.HCPRole
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "MISCODE"),
-                    Value = formData.MISCode
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"),
-                    Value = formData.GONGO
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
-                    Value = formData.IsItincludingGST
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
-                    Value = formData.AgreementAmount
-                });
-                
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"),
+                        Value = i.EventId
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "EventType"),
+                        Value = i.EventType
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "HCPRole"),
+                        Value = i.HCPRole
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "MISCODE"),
+                        Value = i.MISCode
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"),
+                        Value = i.GONGO
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
+                        Value = i.IsItincludingGST
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
+                        Value = i.AgreementAmount
+                    });
 
 
-                smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+
+                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+                }
+
 
                 return Ok(new
                 { Message = "Data added successfully." });

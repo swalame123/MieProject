@@ -101,6 +101,54 @@ namespace MieProject.Controllers.Testing
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("GetEventRequestsHcpRole")]
+        public IActionResult GetEventRequestsHcpRole()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> hcpRoleData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+
+                foreach (Column column in sheet1.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                foreach (Row row in sheet1.Rows)
+                {
+
+                    // Check if the row has the specified EventIdorEventRequestId
+                    var eventIdorEventRequestIdCell = row.Cells.FirstOrDefault(cell => cell.ColumnId == GetColumnIdByName(sheet1, "EventId/EventRequestId"));
+                    var x = eventIdorEventRequestIdCell.Value.ToString();
+                    // Console.WriteLine($"Row {row.RowNumber}: EventId/EventRequestId in cell: {eventIdorEventRequestIdCell.Value}");
+                    if (eventIdorEventRequestIdCell != null)
+                    {
+                        Dictionary<string, object> hcpRoleRowData = new Dictionary<string, object>();
+
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            hcpRoleRowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+
+                        hcpRoleData.Add(hcpRoleRowData);
+                    }
+
+                }
+
+                return Ok(hcpRoleData);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("GetEventRequestsHcpRoleByIds")]
         public IActionResult GetEventRequestsHcpRoleByIds([FromBody] getIds eventIdorEventRequestIds)
         {
