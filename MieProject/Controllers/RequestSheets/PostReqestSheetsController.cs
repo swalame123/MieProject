@@ -280,26 +280,30 @@ namespace MieProject.Controllers.RequestSheets
                     Value = slideKit
                 });
 
-
-
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
                     Value = formDataList.class1.IsAdvanceRequired
                 });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "EventOpen30days"),
+                    Value = formDataList.class1.EventOpen30days
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "EventWithin7days"),
+                    Value = formDataList.class1.EventWithin7days
+                });
 
 
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
-                //var eventId = addedRows[0].Id.Value;
-                //long eventIdColumnId = GetColumnIdByName(sheet, "Event ID");
-                //var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+               
                 var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
-                //return Ok($"Data saved successfully. BrandsList: {brand}, Invitees: {Invitees}, HcpRole: {HCP}, ");
-
-
+              
                 foreach (var formData in formDataList.EventRequestHcpRole)
                 {
                     var newRow1 = new Row();

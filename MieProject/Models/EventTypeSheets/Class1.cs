@@ -17,5 +17,7 @@
         public string? ProjectId { get; set; }
         public string? HCPRole { get; set; }       
         public string? IsAdvanceRequired { get; set; }
+        public string? EventOpen30days { get; set; }
+        public string? EventWithin7days { get; set; }
     }
 }
