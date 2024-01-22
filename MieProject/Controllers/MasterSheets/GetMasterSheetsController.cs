@@ -168,18 +168,11 @@ namespace MieProject.Controllers.MasterSheets
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if (columnNames[i] == "CityId")
+                        if ((columnNames[i] == "CityId" ) || (columnNames[i] == "CityName")|| (columnNames[i] == "StateId"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "CityName")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
-                        if (columnNames[i] == "StateId")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
+                       
 
                     }
                     sheetData.Add(rowData);
@@ -379,14 +372,14 @@ namespace MieProject.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if (columnNames[i] == "EventTypeId")
+                        if ((columnNames[i] == "EventTypeId")|| (columnNames[i] == "EventType"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "EventType")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
+                        //if (columnNames[i] == "EventType")
+                        //{
+                        //    rowData[columnNames[i]] = row.Cells[i].Value;
+                        //}
 
                     }
                     sheetData.Add(rowData);
@@ -418,14 +411,14 @@ namespace MieProject.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if (columnNames[i] == "EventTypeId")
+                        if ((columnNames[i] == "EventTypeId")|| (columnNames[i] == "EventType"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "EventType")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
+                        //if (columnNames[i] == "EventType")
+                        //{
+                        //    rowData[columnNames[i]] = row.Cells[i].Value;
+                        //}
 
                     }
                     sheetData.Add(rowData);
@@ -492,14 +485,14 @@ namespace MieProject.Controllers.MasterSheets
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if (columnNames[i] == "HCPRoleID")
+                        if ((columnNames[i] == "HCPRoleID")|| (columnNames[i] == "HCPRole"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "HCPRole")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
+                        //if (columnNames[i] == "HCPRole")
+                        //{
+                        //    rowData[columnNames[i]] = row.Cells[i].Value;
+                        //}
 
 
                     }
@@ -601,14 +594,14 @@ namespace MieProject.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if (columnNames[i] == "RoleId")
+                        if ((columnNames[i] == "RoleId")|| (columnNames[i] == "RoleName"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "RoleName")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
+                        //if (columnNames[i] == "RoleName")
+                        //{
+                        //    rowData[columnNames[i]] = row.Cells[i].Value;
+                        //}
 
                     }
                     sheetData.Add(rowData);
@@ -710,14 +703,14 @@ namespace MieProject.Controllers.MasterSheets
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if (columnNames[i] == "StateId")
+                        if ((columnNames[i] == "StateId")|| (columnNames[i] == "StateName"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        if (columnNames[i] == "StateName")
-                        {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
-                        }
+                        //if (columnNames[i] == "StateName")
+                        //{
+                        //    rowData[columnNames[i]] = row.Cells[i].Value;
+                        //}
 
 
                     }
