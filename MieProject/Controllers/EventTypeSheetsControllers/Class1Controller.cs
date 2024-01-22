@@ -19,38 +19,7 @@ namespace MieProject.Controllers.EventTypeSheetsControllers
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
         }
-        [HttpGet("GetEventData")]
-        public IActionResult GetEventData()
-        {
-            try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:Class1").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
-                return Ok(sheetData);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+       
         //private bool EmailExists(Sheet sheet, string email)
         //{
         //    long emailColumnId = GetColumnIdByName(sheet, "Email");
