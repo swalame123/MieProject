@@ -304,7 +304,32 @@ namespace MieProject.Controllers.RequestSheets
                 var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
-              
+
+                //if (formDataList.formFile != null && formDataList.formFile.Length > 0)
+                //{
+                //    var fileName = formDataList.formFile.FileName;
+                //    var folderName = Path.Combine("Resources", "Images");
+                //    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                //    var fullPath = Path.Combine(pathToSave, fileName);
+                   
+                //    if (!Directory.Exists(pathToSave))
+                //    {
+                //        Directory.CreateDirectory(pathToSave);
+                //    }
+
+                //    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                //    {
+                //        formDataList.formFile.CopyTo(fileStream);
+                //    }
+
+                //    var addedRow = addedRows[0];
+                //    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                //        parsedSheetId1, addedRow.Id.Value, fullPath, "application/msword");
+                //}
+
+
+
+
                 foreach (var formData in formDataList.EventRequestHcpRole)
                 {
                     var newRow1 = new Row();
@@ -565,6 +590,10 @@ namespace MieProject.Controllers.RequestSheets
                     });
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
                 }
+
+
+
+
                 return Ok("done");
             }
 
