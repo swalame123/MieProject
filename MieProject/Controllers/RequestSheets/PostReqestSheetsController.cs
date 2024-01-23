@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MieProject.Models;
 using MieProject.Models.EventTypeSheets;
@@ -626,9 +627,12 @@ namespace MieProject.Controllers.RequestSheets
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
 
                 string sheetId = configuration.GetSection("SmartsheetSettings:HonorariumPayment").Value;
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
 
                 long.TryParse(sheetId, out long parsedSheetId);
+                long.TryParse(sheetId1, out long parsedSheetId1);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
                 foreach (var i in formData.RequestHonorariumList)
                 {
                     var newRow = new Row();
@@ -677,8 +681,31 @@ namespace MieProject.Controllers.RequestSheets
 
 
 
-                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+                    var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+                    var eventId = i.EventId;
+                    var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
+                    
+                    if (targetRow != null)
+                    {
+                        long honorariumSubmittedColumnId = GetColumnIdByName(sheet1, "Honorarium Submitted?");
+                        var cellToUpdateB = new Cell
+                        {
+                            ColumnId = honorariumSubmittedColumnId,
+                            Value = "Yes"
+                        };
+                        Row updateRow = new Row { Id = targetRow.Id, Cells = new Cell[] { cellToUpdateB } };
+                        var cellToUpdate = targetRow.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
+                        if (cellToUpdate != null)
+                        {
+                            cellToUpdate.Value = "Yes";
+                        }
+
+                        smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRow });
+
+                    }
+                    
                 }
+
 
 
                 return Ok(new
@@ -703,6 +730,62 @@ namespace MieProject.Controllers.RequestSheets
             }
             return 0;
         }
+        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string val)
+        {
+            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
 
+            // Assuming you have a column named "Id"
+
+            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Honorarium Submitted?");
+
+            if (idColumn != null)
+            {
+                foreach (var row in sheet.Rows)
+                {
+                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == val);
+
+                    if (cell != null)
+                    {
+                        return row;
+                    }
+                }
+            }
+
+            return null;
+        }
     }
 }
+
+
+
+
+
+
+
+  //var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
+  //                  var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+  //                  var val = eventIdCell.DisplayValue;
+  //                  var IsHonorarium = "Yes";
+  //                  Row existingRow = GetRowById(smartsheet, parsedSheetId1, val);
+  //                  Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+
+
+  //                  if (existingRow == null)
+  //                  {
+  //                      return NotFound($"Row with id {val} not found.");
+  //                  }
+
+  //                  foreach (var cell in existingRow.Cells)
+  //                  {
+  //                      if (cell.ColumnId == GetColumnIdByName(sheet, "Honorarium Submitted?"))
+  //                      {
+  //                          cell.Value = IsHonorarium;
+  //                      }
+  //                      updateRow.Cells.Add(cell);
+  //                      //else
+  //                      //{
+  //                      //    c
+  //                      //}
+
+  //                  }
+  //                  smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRow });
