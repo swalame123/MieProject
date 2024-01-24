@@ -399,6 +399,127 @@ namespace MieProject.Controllers.RequestSheets
             return Ok(hcpRoleData);
 
         }
+
+
+       
+
+
+
+        [HttpGet("GetEventRequestsHcpDetailsTotalSpendValue")]
+        public IActionResult GetcgtColumnValue(string EventID)
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+            long.TryParse(sheetId, out long parsedSheetId);
+
+            Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+            Column SpecialityColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
+            Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "TotalSpend", StringComparison.OrdinalIgnoreCase));
+
+            if (targetColumn != null && SpecialityColumn != null)
+            {
+                // Find all rows with the specified speciality
+                List<Row> targetRows = sheet.Rows
+                    .Where(row => row.Cells.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value.ToString() == EventID))
+                    .ToList();
+
+                if (targetRows.Any())
+                {
+                    // Retrieve and sum up the values of the specified column for the given speciality
+                    decimal totalValue = targetRows.Sum(row => Convert.ToDecimal(row.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value ?? 0));
+
+                    return Ok(totalValue);
+                }
+                else
+                {
+                    return NotFound("NotFound");
+                }
+            }
+            else
+            {
+                return NotFound("NotFound");
+            }
+        }
+
+
+
+        [HttpGet("GetEventRequestsInviteesLcAmountValue")]
+        public IActionResult GetEventRequestsInviteesLcAmountValue(string EventID)
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
+            long.TryParse(sheetId, out long parsedSheetId);
+
+            Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+            Column SpecialityColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
+            Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "LcAmount", StringComparison.OrdinalIgnoreCase));
+
+            if (targetColumn != null && SpecialityColumn != null)
+            {
+                // Find all rows with the specified speciality
+                List<Row> targetRows = sheet.Rows
+                    .Where(row => row.Cells.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value.ToString() == EventID))
+                    .ToList();
+
+                if (targetRows.Any())
+                {
+                    // Retrieve and sum up the values of the specified column for the given speciality
+                    decimal totalValue = targetRows.Sum(row => Convert.ToDecimal(row.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value ?? 0));
+
+                    return Ok(totalValue);
+                }
+                else
+                {
+                    return NotFound("NotFound");
+                }
+            }
+            else
+            {
+                return NotFound("NotFound");
+            }
+        }
+
+
+
+        [HttpGet("GetEventRequestExpenseSheetAmountValue")]
+        public IActionResult GetEventRequestExpenseSheetAmountValue(string EventID)
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+            long.TryParse(sheetId, out long parsedSheetId);
+
+            Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+            Column SpecialityColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestID", StringComparison.OrdinalIgnoreCase));
+            Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "Amount", StringComparison.OrdinalIgnoreCase));
+
+            if (targetColumn != null && SpecialityColumn != null)
+            {
+                // Find all rows with the specified speciality
+                List<Row> targetRows = sheet.Rows
+                    .Where(row => row.Cells?.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value?.ToString() == EventID)==true)
+                    .ToList();
+
+                if (targetRows.Any() == true)
+                {
+                    // Retrieve and sum up the values of the specified column for the given speciality
+                    decimal totalValue = targetRows.Sum(row => Convert.ToDecimal(row.Cells?.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value ?? 0));
+
+                    return Ok(totalValue);
+                }
+                else
+                {
+                    return NotFound("NotFound");
+                }
+            }
+            else
+            {
+                return NotFound("NotFound");
+            }
+        }
+
         private long GetColumnIdByName(Sheet sheet, string columnname)
         {
             foreach (var column in sheet.Columns)

@@ -11,7 +11,7 @@ namespace MieProject.Controllers
     public class TempController : ControllerBase
     {
         [HttpPost("AddFormData")]
-        public IActionResult AddFormData( FileUploadodel fileUploadModel)
+        public IActionResult AddFormData([FromForm] FileUploadodel fileUploadModel)
         {
             try
             {
@@ -34,21 +34,23 @@ namespace MieProject.Controllers
                     var folderName = Path.Combine("Resources", "Images");
                     var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                     var fullPath = Path.Combine(pathToSave, fileName);
-                 
+
                     if (!Directory.Exists(pathToSave))
                     {
                         Directory.CreateDirectory(pathToSave);
                     }
 
-                  
+
                     using (var fileStream = new FileStream(fullPath, FileMode.Create))
                     {
                         fileUploadModel.File.CopyTo(fileStream);
                     }
-
+                    string type = fileUploadModel.File.ContentType;
                     var addedRow = addedRows[0];
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                        sheetId1, addedRow.Id.Value, fullPath, "application/msword");
+                        sheetId1, addedRow.Id.Value, fullPath,type);
+
+
                 }
 
                 return Ok("Data added successfully.");

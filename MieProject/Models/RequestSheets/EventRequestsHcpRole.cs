@@ -14,6 +14,7 @@
         public string Travel { get; set; }
         public string Accomdation { get; set; }
         public string LocalConveyance { get; set; }
+        public string FinalAmount { get; set; }
         public string Rationale { get; set; }
         public string PresentationDuration { get; set; }
         public string PanelSessionPreperationDuration { get; set; }
