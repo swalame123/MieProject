@@ -24,7 +24,7 @@ namespace MieProject.Controllers
                 var newRow = new Row();
                 newRow.Cells = new List<Cell>();
                
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "GENDER"), Value = fileUploadModel.FormData.GENDER });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "GENDER"), Value = fileUploadModel.Gender.GENDER });
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Row[] { newRow });
 
