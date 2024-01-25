@@ -871,11 +871,13 @@ namespace MieProject.Controllers.RequestSheets
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
 
                 string sheetId = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
-
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
 
                 long.TryParse(sheetId, out long parsedSheetId);
+                long.TryParse(sheetId1, out long parsedSheetId1);
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
                 StringBuilder addedExpenseData = new StringBuilder();
                 StringBuilder addedInviteesData = new StringBuilder();
                 int addedInviteesDataNo = 1;
@@ -1035,6 +1037,29 @@ namespace MieProject.Controllers.RequestSheets
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
 
+                var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
+                var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+                var val = eventIdCell.DisplayValue;
+                var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == val));
+
+                if (targetRow != null)
+                {
+                    long EventSettlementSubmittedColumnId = GetColumnIdByName(sheet1, "PostEventSubmitted?");
+                    var cellToUpdateB = new Cell
+                    {
+                        ColumnId = EventSettlementSubmittedColumnId,
+                        Value = "Yes"
+                    };
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new Cell[] { cellToUpdateB } };
+                    var cellToUpdate = targetRow.Cells.FirstOrDefault(c => c.ColumnId == EventSettlementSubmittedColumnId);
+                    if (cellToUpdate != null)
+                    {
+                        cellToUpdate.Value = "Yes";
+                    }
+
+                    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRow });
+
+                }
 
 
 
