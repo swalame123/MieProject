@@ -64,6 +64,12 @@ namespace MieProject.Controllers.RequestSheets
             int addedInviteesDataNo = 1;
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
+            var TotalHonorariumAmount = 0;
+            var TotalTravelAmount = 0;
+            var TotalAccomodateAmount = 0;
+            var TotalHCPLcAmount = 0;
+            var TotalInviteesLcAmount = 0;
+            var TotalExpenseAmount = 0;
 
             foreach (var formdata in formDataList.EventRequestExpenseSheet)
             {
@@ -93,6 +99,9 @@ namespace MieProject.Controllers.RequestSheets
                 string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
                 addedExpences.AppendLine(rowData);
                 addedExpencesNo++;
+                var amount = int.Parse(formdata.Amount);
+                TotalExpenseAmount = TotalExpenseAmount + amount;
+
             }
             string Expense = addedExpences.ToString();
 
@@ -161,12 +170,14 @@ namespace MieProject.Controllers.RequestSheets
                     ColumnId = GetColumnIdByName(sheet3, "LocalConveyance"),
                     Value = formdata.LocalConveyance
                 });
-               
-              
-               
-                string rowData = $"{addedInviteesDataNo}. Name: {formdata.InviteeName} | MIS Code: {formdata.MISCode} | LocalConveyance: {formdata.LocalConveyance} ";
+
+
+
+                // string rowData = $"{addedInviteesDataNo}. Name: {formdata.InviteeName} | MIS Code: {formdata.MISCode} | LocalConveyance: {formdata.LocalConveyance} ";
+                string rowData = $"{addedInviteesDataNo}. {formdata.InviteeName}";
                 addedInviteesData.AppendLine(rowData);
                 addedInviteesDataNo++;
+                TotalInviteesLcAmount = TotalInviteesLcAmount + int.Parse(formdata.LcAmount);
             }
             string Invitees = addedInviteesData.ToString();
 
@@ -215,11 +226,22 @@ namespace MieProject.Controllers.RequestSheets
 
                     Value = formdata.GOorNGO
                 });
-               
+                newRow.Cells.Add(new Cell
+                {
 
-                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |Name: {formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.Amt: {formdata.Travel} |Acco.Amt: {formdata.Accomdation} ";
+                    Value = formdata.LocalConveyance
+                });
+
+
+                //string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |Name: {formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.Amt: {formdata.Travel} |Acco.Amt: {formdata.Accomdation} ";
+                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.&Acc.Amt: {int.Parse(formdata.Travel) + int.Parse(formdata.Accomdation)} ";
+
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
+                TotalHonorariumAmount = TotalHonorariumAmount +int.Parse( formdata.HonarariumAmount);
+                TotalTravelAmount = TotalTravelAmount + int.Parse(formdata.Travel);
+                TotalAccomodateAmount=TotalAccomodateAmount+ int.Parse(formdata.Accomdation);
+                TotalHCPLcAmount = TotalHCPLcAmount + int.Parse(formdata.LocalConveyance);
             }
             string HCP = addedHcpData.ToString();
 
@@ -274,7 +296,7 @@ namespace MieProject.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "SelectedBrands"),
+                    ColumnId = GetColumnIdByName(sheet1, "Brands"),
                     Value = brand
                 });
                 newRow.Cells.Add(new Cell
@@ -284,18 +306,18 @@ namespace MieProject.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "SelectedPanelists&TheirDetails"),
+                    ColumnId = GetColumnIdByName(sheet1, "Panelists"),
                     Value = HCP
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "SelectedInvitees"),
+                    ColumnId = GetColumnIdByName(sheet1, "Invitees"),
                     Value = Invitees
                 });
 
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "SelectedSlideKit"),
+                    ColumnId = GetColumnIdByName(sheet1, "SlideKits"),
                     Value = slideKit
                 });
 
@@ -344,6 +366,37 @@ namespace MieProject.Controllers.RequestSheets
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Initiator Email"),
                     Value = formDataList.class1.Initiator_Email
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Honorarium Spend"),
+                    Value = TotalHonorariumAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
+                    Value = TotalTravelAmount
+                });
+
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Spend"),
+                    Value = TotalAccomodateAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Local Conveyance"),
+                    Value = TotalHCPLcAmount+ TotalInviteesLcAmount
+                });
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet1, "InviteesLcSpendTotal"),
+                //    Value = TotalInviteesLcAmount
+                //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
+                    Value = TotalExpenseAmount
                 });
 
 
@@ -428,6 +481,11 @@ namespace MieProject.Controllers.RequestSheets
                     {
                         ColumnId = GetColumnIdByName(sheet4, "HonorariumRequired"),
                         Value = formData.HonorariumRequired
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HonorariumAmount"),
+                        Value = formData.HonarariumAmount
                     });
                     newRow1.Cells.Add(new Cell
                     {
