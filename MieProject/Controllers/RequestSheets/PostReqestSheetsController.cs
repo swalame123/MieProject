@@ -7,6 +7,7 @@ using MieProject.Models.EventTypeSheets;
 using MieProject.Models.RequestSheets;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using Smartsheet.Api.OAuth;
 using System.Text;
 
 namespace MieProject.Controllers.RequestSheets
@@ -160,17 +161,10 @@ namespace MieProject.Controllers.RequestSheets
                     ColumnId = GetColumnIdByName(sheet3, "LocalConveyance"),
                     Value = formdata.LocalConveyance
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet3, "BTC/BTE"),
-                    Value = formdata.BtcorBte
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet3, "LcAmount"),
-                    Value = formdata.LcAmount
-                });
-                string rowData = $"{addedInviteesDataNo}. {formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance} | {formdata.BtcorBte} | {formdata.LcAmount}";
+               
+              
+               
+                string rowData = $"{addedInviteesDataNo}. Name: {formdata.InviteeName} | MIS Code {formdata.MISCode} | LocalConveyance: {formdata.LocalConveyance} ";
                 addedInviteesData.AppendLine(rowData);
                 addedInviteesDataNo++;
             }
@@ -183,26 +177,47 @@ namespace MieProject.Controllers.RequestSheets
                 newRow.Cells = new List<Cell>();
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet4, "HcpRole"),
+                    
                     Value = formdata.HcpRole
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet4, "GO/NGO"),
-                    Value = formdata.GOorNGO
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet4, "MISCode"),
-                    Value = formdata.MisCode
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                    
                     Value = formdata.HcpName
                 });
+                newRow.Cells.Add(new Cell
+                {
+                   
+                    Value = formdata.Speciality
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    
+                    Value = formdata.Tier
+                });
+                newRow.Cells.Add(new Cell
+                {
 
-                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} | {formdata.HcpName} | {formdata.MisCode} | {formdata.GOorNGO}";
+                    Value = formdata.HonarariumAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+
+                    Value = formdata.Travel
+                });
+                newRow.Cells.Add(new Cell
+                {
+
+                    Value = formdata.Accomdation
+                });
+                newRow.Cells.Add(new Cell
+                {
+
+                    Value = formdata.GOorNGO
+                });
+               
+
+                string rowData = $"{addedHcpDataNo}.Role: {formdata.HcpRole} |Name: {formdata.HcpName} |Speciality: {formdata.Speciality} |Tier: {formdata.Tier} | Honorarium Amount: {formdata.HonarariumAmount} |Travel Amount: {formdata.Travel} |Accomodation Amount: {formdata.Accomdation} |HCP Type: {formdata.GOorNGO}";
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
             }
@@ -269,7 +284,7 @@ namespace MieProject.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "SelectedHcp's&TheirDetails"),
+                    ColumnId = GetColumnIdByName(sheet1, "SelectedPanelists&TheirDetails"),
                     Value = HCP
                 });
                 newRow.Cells.Add(new Cell
@@ -599,10 +614,11 @@ namespace MieProject.Controllers.RequestSheets
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
                 }
 
+                return Ok(new
+                {  Message = " Success!" });
 
 
-
-                return Ok("done");
+               
             }
 
 
