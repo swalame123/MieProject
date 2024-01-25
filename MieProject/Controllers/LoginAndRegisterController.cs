@@ -111,7 +111,9 @@ namespace MieProject.Controllers
                     long.TryParse(sheetId, out long parsedSheetId);
                     Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
+                   
                     var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
+                    var UsernameColumnId = GetColumnIdByName(sheet, "UserName");
                     var passwordColumnId = GetColumnIdByName(sheet, "Password");
                     var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
                     var roleColumnId = GetColumnIdByName(sheet, "Designation");
@@ -126,7 +128,9 @@ namespace MieProject.Controllers
 
                     foreach (var row in rows)
                     {
+                        //var EmailIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
                         var EmailIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
+                        var UsernameIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == UsernameColumnId);
                         var passwordCell = row.Cells.FirstOrDefault(c => c.ColumnId == passwordColumnId);
 
 
@@ -139,11 +143,13 @@ namespace MieProject.Controllers
                             {
                                 return BadRequest("Employee is inactive");
                             }
-                            var username = EmailIdCell.Value?.ToString();
+                            //var username = EmailIdCell.Value?.ToString();
+                            var username = UsernameIdCell.Value?.ToString();
+                            var email = EmailIdCell.Value?.ToString();
                             var password = passwordCell.Value?.ToString();
                             var role = roleCell.Value?.ToString();
                            
-                            var token = CreateJwt(username, role);
+                            var token = CreateJwt(username,email, role);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
@@ -189,6 +195,7 @@ namespace MieProject.Controllers
                     Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
                     var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
+                    var UsernameColumnId = GetColumnIdByName(sheet, "UserName");
 
                     var IsActiveColumnId = GetColumnIdByName(sheet, "IsActive");
                     var roleColumnId = GetColumnIdByName(sheet, "Designation");
@@ -204,6 +211,7 @@ namespace MieProject.Controllers
                     foreach (var row in rows)
                     {
                         var EmailIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == EmailColumnId);
+                        var UsernameIdCell = row.Cells.FirstOrDefault(c => c.ColumnId == UsernameColumnId);
 
                         var roleCell = row.Cells.FirstOrDefault(c => c.ColumnId == roleColumnId);
 
@@ -214,11 +222,12 @@ namespace MieProject.Controllers
                             {
                                 return BadRequest("Employee is inactive");
                             }
-                            var username = EmailIdCell.Value?.ToString();
+                            var username = UsernameIdCell.Value?.ToString();
+                            var email = EmailIdCell.Value?.ToString();
 
                             var role = roleCell.Value?.ToString();
 
-                            var token = CreateJwt(username, role);
+                            var token = CreateJwt(username,email, role);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
@@ -237,13 +246,14 @@ namespace MieProject.Controllers
             }
             
         }
-        private string CreateJwt(string username,string role)
+        private string CreateJwt(string username, string email,string role)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("veryveryveryveryverysecret......................");
             var identity = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Name,username),
+                new Claim(ClaimTypes.Email,email),
                 new Claim(ClaimTypes.Role,role)
             });
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);

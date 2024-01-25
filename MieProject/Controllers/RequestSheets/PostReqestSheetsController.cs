@@ -217,7 +217,7 @@ namespace MieProject.Controllers.RequestSheets
                 });
                
 
-                string rowData = $"{addedHcpDataNo}.Role: {formdata.HcpRole} |Name: {formdata.HcpName} |Speciality: {formdata.Speciality} |Tier: {formdata.Tier} | Honorarium Amount: {formdata.HonarariumAmount} |Travel Amount: {formdata.Travel} |Accomodation Amount: {formdata.Accomdation} |HCP Type: {formdata.GOorNGO}";
+                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |Name: {formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.Amt: {formdata.Travel} |Acco.Amt: {formdata.Accomdation} ";
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
             }
@@ -452,6 +452,37 @@ namespace MieProject.Controllers.RequestSheets
                     {
                         ColumnId = GetColumnIdByName(sheet4, "EventId/EventRequestId"),
                         Value = val
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
+                    });
+                    // ///////////////////////////////////////////////////
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
+                    });
+                    newRow1.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                        Value = formData.HcpName
                     });
                     newRow1.Cells.Add(new Cell
                     {
