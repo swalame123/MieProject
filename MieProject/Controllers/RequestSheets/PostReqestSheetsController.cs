@@ -164,7 +164,7 @@ namespace MieProject.Controllers.RequestSheets
                
               
                
-                string rowData = $"{addedInviteesDataNo}. Name: {formdata.InviteeName} | MIS Code {formdata.MISCode} | LocalConveyance: {formdata.LocalConveyance} ";
+                string rowData = $"{addedInviteesDataNo}. Name: {formdata.InviteeName} | MIS Code: {formdata.MISCode} | LocalConveyance: {formdata.LocalConveyance} ";
                 addedInviteesData.AppendLine(rowData);
                 addedInviteesDataNo++;
             }
@@ -314,6 +314,37 @@ namespace MieProject.Controllers.RequestSheets
                     ColumnId = GetColumnIdByName(sheet1, "EventWithin7days"),
                     Value = formDataList.class1.EventWithin7days
                 });
+                // //////////////////////////////////////////////////////////////
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "RBM/BM"),
+                    Value = formDataList.class1.RBMorBM
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Sales Head"),
+                    Value = formDataList.class1.Sales_Head
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Marketing Head"),
+                    Value = formDataList.class1.Marketing_Head
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Finance"),
+                    Value = formDataList.class1.Finance
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "InitiatorName"),
+                    Value = formDataList.class1.InitiatorName
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Initiator Email"),
+                    Value = formDataList.class1.Initiator_Email
+                });
 
 
 
@@ -459,36 +490,7 @@ namespace MieProject.Controllers.RequestSheets
                         Value = formData.HcpName
                     });
                     // ///////////////////////////////////////////////////
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
+                  
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
 
