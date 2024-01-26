@@ -9,6 +9,7 @@ using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using Smartsheet.Api.OAuth;
 using System.Text;
+using System.Globalization;
 
 namespace IndiaEventsWebApi.Controllers.RequestSheets
 {
@@ -64,12 +65,19 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             int addedInviteesDataNo = 1;
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
+
             var TotalHonorariumAmount = 0;
             var TotalTravelAmount = 0;
             var TotalAccomodateAmount = 0;
             var TotalHCPLcAmount = 0;
             var TotalInviteesLcAmount = 0;
             var TotalExpenseAmount = 0;
+
+            CultureInfo hindi = new CultureInfo("hi-IN");
+
+
+
+
 
             foreach (var formdata in formDataList.EventRequestExpenseSheet)
             {
@@ -232,9 +240,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     Value = formdata.LocalConveyance
                 });
 
-
+                var HM = int.Parse(formdata.HonarariumAmount);
+                var x = string.Format(hindi, "{0:#,#}", HM);
+                var t = int.Parse(formdata.Travel) + int.Parse(formdata.Accomdation);
+                var y = string.Format(hindi, "{0:#,#}", t);
                 //string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |Name: {formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.Amt: {formdata.Travel} |Acco.Amt: {formdata.Accomdation} ";
-                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.&Acc.Amt: {int.Parse(formdata.Travel) + int.Parse(formdata.Accomdation)} ";
+                string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {x} |Trav.&Acc.Amt: {y} ";
 
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
@@ -244,6 +255,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 TotalHCPLcAmount = TotalHCPLcAmount + int.Parse(formdata.LocalConveyance);
             }
             string HCP = addedHcpData.ToString();
+
+
+
+            var FormattedTotalHonorariumAmount = string.Format(hindi, "{0:#,#}", TotalHonorariumAmount);
+            var FormattedTotalTravelAmount = string.Format(hindi, "{0:#,#}", TotalTravelAmount);
+            var FormattedTotalAccomodateAmount = string.Format(hindi, "{0:#,#}", TotalAccomodateAmount);
+            var FormattedTotalHCPLcAmount = string.Format(hindi, "{0:#,#}", TotalHCPLcAmount);
+            var FornattedTotalInviteesLcAmount = string.Format(hindi, "{0:#,#}", TotalInviteesLcAmount);
+            var FormattedTotalExpenseAmount = string.Format(hindi, "{0:#,#}", TotalExpenseAmount);
+            var c = TotalHCPLcAmount + TotalInviteesLcAmount;
+            var FormattedTotalLC = string.Format(hindi, "{0:#,#}", c);
 
 
 
@@ -370,33 +392,28 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Honorarium Spend"),
-                    Value = TotalHonorariumAmount
+                    Value = FormattedTotalHonorariumAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
-                    Value = TotalTravelAmount
+                    Value = FormattedTotalTravelAmount
                 });
 
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Spend"),
-                    Value = TotalAccomodateAmount
+                    Value = FormattedTotalAccomodateAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Local Conveyance"),
-                    Value = TotalHCPLcAmount+ TotalInviteesLcAmount
+                    Value = FormattedTotalLC
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet1, "InviteesLcSpendTotal"),
-                //    Value = TotalInviteesLcAmount
-                //});
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
-                    Value = TotalExpenseAmount
+                    Value = FormattedTotalExpenseAmount
                 });
 
 
