@@ -266,6 +266,9 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             var FormattedTotalExpenseAmount = string.Format(hindi, "{0:#,#}", TotalExpenseAmount);
             var c = TotalHCPLcAmount + TotalInviteesLcAmount;
             var FormattedTotalLC = string.Format(hindi, "{0:#,#}", c);
+            var total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
+
+            var FormattedTotal = string.Format(hindi, "{0:#,#}", total);
 
 
 
@@ -414,6 +417,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
                     Value = FormattedTotalExpenseAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Spend"),
+                    Value = FormattedTotal
                 });
 
 
