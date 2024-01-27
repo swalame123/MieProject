@@ -1,0 +1,21 @@
+Rest :Representation State Transfer
+ Status codes:
+100-199 == Information response
+200-299 == Successful	
+300-399 == Redirection	
+400-499 == Client error
+500-599 == Server error
+
+Frequently used status code
+
+200 - OK
+201 - New Resource created
+204 - No Content
+301 - Moved Permanently
+302 - moved temporarily
+400 - bad request
+401 - unothorized
+404 - Not found
+405 - method not allowed
+500 - Internal server error
+503 - service unavaliable
