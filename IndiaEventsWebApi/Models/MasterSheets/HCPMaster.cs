@@ -19,4 +19,15 @@
         public string AttendenceCountry { get; set; }
         public string Hcp_Level { get; set; }
     }
+    public class HCPMaster1
+    {
+       
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string HCPName { get; set; }
+        
+        public string GOorNGO { get; set; }
+        public string MISCode { get; set; }
+       
+    }
 }
