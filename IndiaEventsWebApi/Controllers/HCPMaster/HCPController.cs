@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using Smartsheet.Api.OAuth;
 
 namespace IndiaEventsWebApi.Controllers.HCPMaster
 {
@@ -25,7 +26,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
         {
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
             string[] sheetIds = {
-                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
@@ -84,7 +85,8 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
 
 
 
-            return Ok();
+            return Ok(new
+            { Message = " Success!" });
 
         }
         private long GetColumnIdByName(Sheet sheet, string columnname)
