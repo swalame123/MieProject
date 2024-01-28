@@ -269,7 +269,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             var total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
 
             var FormattedTotal = string.Format(hindi, "{0:#,#}", total);
-            var FormattedTotalTAAmount = string.Format(hindi, "{0:#,#}", (TotalTravelAmount+ TotalAccomodateAmount));
+            var s = (TotalTravelAmount + TotalAccomodateAmount);
+            var FormattedTotalTAAmount = string.Format(hindi, "{0:#,#}",s );
 
 
 
@@ -397,33 +398,33 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Honorarium Spend"),
-                    Value = FormattedTotalHonorariumAmount
+                    Value = TotalHonorariumAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
-                    Value = FormattedTotalTravelAmount
+                    Value = TotalTravelAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accomodation Spend"),
-                    Value = FormattedTotalTAAmount
+                    Value = s
                 });
 
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Spend"),
-                    Value = FormattedTotalAccomodateAmount
+                    Value = TotalAccomodateAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Local Conveyance"),
-                    Value = FormattedTotalLC
+                    Value = c
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
-                    Value = FormattedTotalExpenseAmount
+                    Value = TotalExpenseAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
@@ -844,6 +845,26 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 }
                 string HCPd = HCP.ToString();
 
+                foreach (var formdata in formData.hCPSlideKits)
+                {
+                    
+                    string rowData = $"{addedSlideKitDataNo}. {formdata.MIS} | {formdata.SlideKitType}";
+                    addedSlideKitData.AppendLine(rowData);
+                    addedSlideKitDataNo++;
+                }
+                string slideKits = addedSlideKitData.ToString();
+
+                foreach (var formdata in formData.expenseSheet)
+                {
+                   
+                    string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
+                    addedExpences.AppendLine(rowData);
+                    addedExpencesNo++;
+                    var amount = int.Parse(formdata.Amount);
+                   
+
+                }
+                string Expense = addedExpences.ToString();
 
 
 
@@ -851,7 +872,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
-                    
+
+                    //newRow.Cells.Add(new Cell
+                    //{
+                    //    ColumnId = GetColumnIdByName(sheet, ""),
+                    //    Value = Expense
+                    //});
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "SlideKits"),
+                        Value = slideKits
+                    });
 
                     newRow.Cells.Add(new Cell
                     {

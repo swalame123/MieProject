@@ -63,6 +63,25 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string AccomdationAmount { get; set; }
 
     }
+    public class ExpenseSheet
+    {
+        
+        public string Expense { get; set; }
+        public string Amount { get; set; }
+        public string AmountExcludingTax { get; set; }
+        public string BtcorBte { get; set; }
+      
+    }
+
+    public class HCPSlideKit
+    {
+        
+        public string MIS { get; set; }
+        public string SlideKitType { get; set; }
+        public string SlideKitDocument { get; set; }
+
+
+    }
 
     public class HonorariumPaymentList
     {
@@ -71,6 +90,9 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public List<Branddetails>? BrandDetails { get; set; }
         public List<Invitees>? Invitees { get; set; }
         public List<Panalist>? panalist { get; set; }
+        public List<ExpenseSheet>? expenseSheet { get; set; }
+        public List<HCPSlideKit>? hCPSlideKits { get; set; }
+
 
     }
 }

@@ -36,19 +36,29 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
             {
                 long.TryParse(i, out long p);
                 Sheet sheeti = smartsheet.SheetResources.GetSheet(p, null, null, null, null, null, null, null);
+                Column hcpNameColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCPName");
+                Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "MISCode");
 
-                
-                Row existingRow = sheeti.Rows.FirstOrDefault(row =>
-                    row.Cells != null &&
-                    row.Cells.Any(cell => cell.Value != null && cell.Value.ToString() == misCode ));
-
-                if (existingRow != null)
+                if (hcpNameColumn != null && misCodeColumn != null)
                 {
-                    // Data with the same MISCode already exists, return a response
-                    return BadRequest("Data with the same MISCode already exists.");
+                    Row existingRow = sheeti.Rows.FirstOrDefault(row =>
+                        row.Cells != null &&
+                        row.Cells.Any(cell =>
+                            cell.ColumnId == hcpNameColumn.Id && cell.Value != null && cell.Value.ToString() == Name
+                        ) &&
+                        row.Cells.Any(cell =>
+                            cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == misCode
+                        )
+                    );
+                    if (existingRow != null)
+                    {
+                        // Both Name and MISCode are present in the same row, return success
+                        return Ok("True");
+                    }
+
                 }
             }
-            return Ok("True");
+            return Ok("False");
         }
 
 
