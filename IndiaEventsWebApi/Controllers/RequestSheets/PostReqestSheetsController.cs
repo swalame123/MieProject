@@ -854,17 +854,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 }
                 string slideKits = addedSlideKitData.ToString();
 
-                foreach (var formdata in formData.expenseSheet)
-                {
+                //foreach (var formdata in formData.expenseSheet)
+                //{
                    
-                    string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
-                    addedExpences.AppendLine(rowData);
-                    addedExpencesNo++;
-                    var amount = int.Parse(formdata.Amount);
+                //    string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
+                //    addedExpences.AppendLine(rowData);
+                //    addedExpencesNo++;
+                //    var amount = int.Parse(formdata.Amount);
                    
 
-                }
-                string Expense = addedExpences.ToString();
+                //}
+                //string Expense = addedExpences.ToString();
 
 
 
