@@ -21,6 +21,39 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
 
         }
+        [HttpGet("GetHCPDataUsingNameAndMISCode")]
+        public IActionResult GetHCPDataUsingNameAndMISCode(string Name, string misCode)
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string[] sheetIds = {
+                configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
+            };
+            foreach (string i in sheetIds)
+            {
+                long.TryParse(i, out long p);
+                Sheet sheeti = smartsheet.SheetResources.GetSheet(p, null, null, null, null, null, null, null);
+
+                
+                Row existingRow = sheeti.Rows.FirstOrDefault(row =>
+                    row.Cells != null &&
+                    row.Cells.Any(cell => cell.Value != null && cell.Value.ToString() == misCode ));
+
+                if (existingRow != null)
+                {
+                    // Data with the same MISCode already exists, return a response
+                    return BadRequest("Data with the same MISCode already exists.");
+                }
+            }
+            return Ok("True");
+        }
+
+
+
+
         [HttpPost("PostHcpData1")]
         public IActionResult PostHcpData1(HCPMaster1 formDataList)
         {

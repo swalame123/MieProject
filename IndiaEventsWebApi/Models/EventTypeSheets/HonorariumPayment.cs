@@ -9,7 +9,6 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string EventType { get; set; }
         public string EventTopic { get; set; }
         public string HonarariumSubmitted { get; set; }
-
         public DateTime EventDate { get; set; }
         public string City { get; set; }
         public string State { get; set; }
