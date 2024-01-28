@@ -24,5 +24,8 @@
         public string BriefingSession { get; set; }
         public string TotalSessionHours { get; set; }
         public string HcpName { get; set; }
+        public string? IsInclidingGst { get; set; }
+        public string? AgreementAmount { get; set; }
+
     }
 }

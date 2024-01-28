@@ -269,6 +269,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             var total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
 
             var FormattedTotal = string.Format(hindi, "{0:#,#}", total);
+            var FormattedTotalTAAmount = string.Format(hindi, "{0:#,#}", (TotalTravelAmount+ TotalAccomodateAmount));
+
 
 
 
@@ -401,6 +403,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
                     Value = FormattedTotalTravelAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accomodation Spend"),
+                    Value = FormattedTotalTAAmount
                 });
 
                 newRow.Cells.Add(new Cell
@@ -759,7 +766,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
         [HttpPost("AddHonorariumData")]
-        public IActionResult AddHonorariumData(HonorariumPaymentList formData)
+        public IActionResult AddHonorariumData(HonorariumPaymentList formData )
         {
             try
             {
@@ -772,15 +779,79 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 long.TryParse(sheetId1, out long parsedSheetId1);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
+
+                StringBuilder addedBrandsData = new StringBuilder();
+                StringBuilder addedInviteesData = new StringBuilder();
+                StringBuilder addedHcpData = new StringBuilder();
+                StringBuilder addedSlideKitData = new StringBuilder();
+                StringBuilder addedExpences = new StringBuilder();
+                StringBuilder HCP = new StringBuilder();
+
+                int addedSlideKitDataNo = 1;
+                int addedHcpDataNo = 1;
+                int addedInviteesDataNo = 1;
+                int addedBrandsDataNo = 1;
+                int addedExpencesNo = 1;
+                int hcpNo = 1;
+                
+                
+                CultureInfo hindi = new CultureInfo("hi-IN");
+                foreach (var i in formData.HcpRoles)
+                {
+                    
+                    string rowData = $"{addedHcpDataNo}. Name:{i.HcpName} | Role:{i.HcpRole} |Code:{i.MisCode} | HCP Type:{i.GOorNGO}| Including GST:{i.IsInclidingGst}| Agreement Amount:{i.AgreementAmount} ";
+                   
+                    addedHcpData.AppendLine(rowData);
+                    addedHcpDataNo++;
+                }
+                string slideKit = addedHcpData.ToString();
+
+
+                foreach (var formdata in formData.BrandDetails)
+                {                 
+                    
+                    string rowData = $"{addedBrandsDataNo}. {formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
+                    addedBrandsData.AppendLine(rowData);
+                    addedBrandsDataNo++;
+                }
+                string brand = addedBrandsData.ToString();
+
+                foreach (var formdata in formData.Invitees)
+                {             
+                    string rowData = $"{addedInviteesDataNo}. Name: {formdata.InviteeName} | MIS Code: {formdata.MISCode} | LocalConveyance: {formdata.LocalConveyance} ";
+                    
+                    addedInviteesData.AppendLine(rowData);
+                    addedInviteesDataNo++;
+                   
+                }
+                string Invitees = addedInviteesData.ToString();
+
+
+                foreach (var formdata in formData.panalist)
+                {
+                   
+
+                    var HM = int.Parse(formdata.HonarariumAmount);
+                    var x = string.Format(hindi, "{0:#,#}", HM);
+                    var t = int.Parse(formdata.TravelAmount) + int.Parse(formdata.AccomdationAmount);
+                    var y = string.Format(hindi, "{0:#,#}", t);
+                   
+                    string rowData = $"{hcpNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {x} |Trav.&Acc.Amt: {y} ";
+
+                    HCP.AppendLine(rowData);
+                    hcpNo++;
+                  
+                }
+                string HCPd = HCP.ToString();
+
+
+
+
                 foreach (var i in formData.RequestHonorariumList)
                 {
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "HCP Name"),
-                        Value = i.HCPName
-                    });
+                    
 
                     newRow.Cells.Add(new Cell
                     {
@@ -789,35 +860,121 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     });
                     newRow.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet, "EventType"),
+                        ColumnId = GetColumnIdByName(sheet, "Event Type"),
                         Value = i.EventType
                     });
                     newRow.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet, "HCPRole"),
-                        Value = i.HCPRole
+                        ColumnId = GetColumnIdByName(sheet, "Event Date"),
+                        Value = i.EventDate
                     });
                     newRow.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet, "MISCODE"),
-                        Value = i.MISCode
+                        ColumnId = GetColumnIdByName(sheet, "Event Topic"),
+                        Value = i.EventTopic
+                    });
+                   
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "City"),
+                        Value = i.City
                     });
                     newRow.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"),
-                        Value = i.GONGO
+                        ColumnId = GetColumnIdByName(sheet, "State"),
+                        Value = i.State
                     });
                     newRow.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
-                        Value = i.IsItincludingGST
+                        ColumnId = GetColumnIdByName(sheet, "Start Time"),
+                        Value = i.StartTime
                     });
                     newRow.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
-                        Value = i.AgreementAmount
+                        ColumnId = GetColumnIdByName(sheet, "End Time"),
+                        Value = i.EndTime
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Venue Name"),
+                        Value = i.VenueName
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Total Travel & Accomodation Spend"),
+                        Value = i.TotalTravelAndAccomodationSpend
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Total Honorarium Spend"),
+                        Value = i.TotalHonorariumSpend
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                        Value = i.TotalSpend
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Total Local Conveyance"),
+                        Value = i.TotalLocalConveyance
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Brands"),
+                        Value = brand
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Invitees"),
+                        Value = Invitees
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Panelists"),
+                        Value = HCPd
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Initiator Name"),
+                        Value = i.InitiatorName
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Initiator Email"),
+                        Value = i.InitiatorEmail
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "RBM/BM"),
+                        Value = i.RBMorBM
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Compliance"),
+                        Value = i.Compliance
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Finance Accounts"),
+                        Value = i.FinanceAccounts
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Finance Treasury"),
+                        Value = i.FinanceTreasury
                     });
 
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Panelists & Agreements"),
+                        Value = slideKit
+                    });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet, "Honorarium Submitted?"),
+                        Value = i.HonarariumSubmitted
+                    });
 
 
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
