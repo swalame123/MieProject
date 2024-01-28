@@ -429,7 +429,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Spend"),
-                    Value = FormattedTotal
+                    Value = total
                 });
 
 
@@ -837,7 +837,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     var t = int.Parse(formdata.TravelAmount) + int.Parse(formdata.AccomdationAmount);
                     var y = string.Format(hindi, "{0:#,#}", t);
                    
-                    string rowData = $"{hcpNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {x} |Trav.&Acc.Amt: {y} ";
+                    string rowData = $"{hcpNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {HM} |Trav.&Acc.Amt: {t} ";
 
                     HCP.AppendLine(rowData);
                     hcpNo++;
