@@ -1364,11 +1364,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     Value = formData.PostEventSubmitted
                 });
 
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "RBM/BM"),
-                //    Value = formData.RBMorBM
-                //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "RBM/BM"),
+                    Value = formData.RBMorBM
+                });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "Compliance"),
