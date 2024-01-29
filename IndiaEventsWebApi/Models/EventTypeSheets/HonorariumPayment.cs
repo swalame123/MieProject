@@ -28,6 +28,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string Compliance { get; set; }
         public string FinanceAccounts { get; set; }
         public string FinanceTreasury { get; set; }
+        public string slideKits { get; set; }
     }
 
 
@@ -40,29 +41,29 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string IsInclidingGst { get; set; }
         public string AgreementAmount { get; set; }
     }
-    public class Branddetails
-    {
-        public string BrandName { get; set; }
-        public string PercentAllocation { get; set; }
-        public string ProjectId { get; set; }
-    }
-    public class Invitees
-    {
+    //public class Branddetails
+    //{
+    //    public string BrandName { get; set; }
+    //    public string PercentAllocation { get; set; }
+    //    public string ProjectId { get; set; }
+    //}
+    //public class Invitees
+    //{
        
-        public string InviteeName { get; set; }
-        public string MISCode { get; set; }
-        public string LocalConveyance { get; set; }
+    //    public string InviteeName { get; set; }
+    //    public string MISCode { get; set; }
+    //    public string LocalConveyance { get; set; }
         
-    }
-    public  class Panalist
-    {
-        public string HcpRole { get; set; }
-        public string HcpName { get; set; }
-        public string HonarariumAmount { get; set; }
-        public string TravelAmount { get; set; }
-        public string AccomdationAmount { get; set; }
+    //}
+    //public  class Panalist
+    //{
+    //    public string HcpRole { get; set; }
+    //    public string HcpName { get; set; }
+    //    public string HonarariumAmount { get; set; }
+    //    public string TravelAmount { get; set; }
+    //    public string AccomdationAmount { get; set; }
 
-    }
+    //}
     //public class ExpenseSheet
     //{
         
@@ -73,25 +74,25 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
       
     //}
 
-    public class HCPSlideKit
-    {
+    //public class HCPSlideKit
+    //{
         
-        public string MIS { get; set; }
-        public string SlideKitType { get; set; }
-        public string SlideKitDocument { get; set; }
+    //    public string MIS { get; set; }
+    //    public string SlideKitType { get; set; }
+    //    public string SlideKitDocument { get; set; }
 
 
-    }
+    //}
 
     public class HonorariumPaymentList
     {
-        public List<HonorariumPayment>? RequestHonorariumList { get; set; }
+        public HonorariumPayment RequestHonorariumList { get; set; }
         public List<HCPDetails>? HcpRoles { get; set; }
-        public List<Branddetails>? BrandDetails { get; set; }
-        public List<Invitees>? Invitees { get; set; }
-        public List<Panalist>? panalist { get; set; }
+        //public List<Branddetails>? BrandDetails { get; set; }
+        //public List<Invitees>? Invitees { get; set; }
+        //public List<Panalist>? panalist { get; set; }
         //public List<ExpenseSheet>? expenseSheet { get; set; }
-        public List<HCPSlideKit>? hCPSlideKits { get; set; }
+        //public List<HCPSlideKit>? hCPSlideKits { get; set; }
 
 
     }

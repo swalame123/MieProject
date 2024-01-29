@@ -2,7 +2,7 @@
 {
     public class EventSettlement
     {
-        public List<Invitees> Invitee { get; set; }
+       // public List<Invitees> Invitee { get; set; }
         public List<ExpenseSheet> expenseSheets { get; set; }
         public List<Panalists> panalists { get; set; }
         public List<Branddetail> branddetails { get; set; }
