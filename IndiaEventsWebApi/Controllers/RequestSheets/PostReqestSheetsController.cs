@@ -935,17 +935,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    ColumnId = GetColumnIdByName(sheet, "Expenses"),
                     Value = formData.RequestHonorariumList.Expenses
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    ColumnId = GetColumnIdByName(sheet, "Total Travel Spend"),
                     Value = formData.RequestHonorariumList.TotalTravelSpend
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    ColumnId = GetColumnIdByName(sheet, "Total Accomodation Spend"),
                     Value = formData.RequestHonorariumList.TotalAccomodationSpend
                 });
                 newRow.Cells.Add(new Cell
