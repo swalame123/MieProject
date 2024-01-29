@@ -949,6 +949,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     Value = formData.RequestHonorariumList.TotalAccomodationSpend
                 });
                 newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Expenses"),
+                    Value = formData.RequestHonorariumList.TotalExpenses
+                });
+                newRow.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet, "Total Local Conveyance"),
                         Value = formData.RequestHonorariumList.TotalLocalConveyance
