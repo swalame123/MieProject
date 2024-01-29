@@ -1153,22 +1153,22 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
 
-                StringBuilder addedBrandsData = new StringBuilder();
+                //StringBuilder addedBrandsData = new StringBuilder();
                 StringBuilder addedInviteesData = new StringBuilder();
-                StringBuilder addedHcpData = new StringBuilder();
-                StringBuilder addedSlideKitData = new StringBuilder();
+                //StringBuilder addedHcpData = new StringBuilder();
+                //StringBuilder addedSlideKitData = new StringBuilder();
                 StringBuilder addedExpences = new StringBuilder();
-                StringBuilder HCP = new StringBuilder();
+                //StringBuilder HCP = new StringBuilder();
 
-                int addedSlideKitDataNo = 1;
-                int addedHcpDataNo = 1;
+                //int addedSlideKitDataNo = 1;
+                //int addedHcpDataNo = 1;
                 int addedInviteesDataNo = 1;
-                int addedBrandsDataNo = 1;
+                //int addedBrandsDataNo = 1;
                 int addedExpencesNo = 1;
-                int hcpNo = 1;
+                //int hcpNo = 1;
 
 
-                CultureInfo hindi = new CultureInfo("hi-IN");
+                //CultureInfo hindi = new CultureInfo("hi-IN");
                 //foreach (var i in formData.HcpRoles)
                 //{
 

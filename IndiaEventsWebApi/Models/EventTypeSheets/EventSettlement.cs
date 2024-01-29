@@ -19,8 +19,8 @@
         public string? State { get; set; }
         public string? City { get; set; }
         public string? Attended { get; set; }
-        public string? InviteesParticipated { get; set; }
-        public string? ExpenseParticipated { get; set; }
+        //public string? InviteesParticipated { get; set; }
+        //public string? ExpenseParticipated { get; set; }
         public string? Brands { get; set; }
         public string? Panalists { get; set; }
         public string? SlideKits { get; set; }
