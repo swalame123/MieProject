@@ -382,7 +382,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Finance"),
+                    ColumnId = GetColumnIdByName(sheet1, "Finance Accounts"),
                     Value = formDataList.class1.Finance
                 });
                 newRow.Cells.Add(new Cell

@@ -4,10 +4,7 @@
     {
         public List<Invitee> Invitee { get; set; }
         public List<ExpenseSheet> expenseSheets { get; set; }
-        //public List<Panalists> panalists { get; set; }
-        //public List<Branddetail> branddetails { get; set; }
-        //public List<HCPSlideKits> hCPSlideKits { get; set; }
-        //public List<Branddetail> branddetails { get; set; }
+       
         public string? EventId { get; set; }
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
