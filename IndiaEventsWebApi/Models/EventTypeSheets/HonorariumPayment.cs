@@ -29,6 +29,10 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string FinanceAccounts { get; set; }
         public string FinanceTreasury { get; set; }
         public string slideKits { get; set; }
+        public string Expenses { get; set; }
+        public string TotalTravelSpend { get; set; }
+        public string TotalAccomodationSpend { get; set; }
+        public string TotalExpenses { get; set; }
     }
 
 

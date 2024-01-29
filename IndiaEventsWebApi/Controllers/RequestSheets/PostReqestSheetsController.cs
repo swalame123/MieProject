@@ -933,7 +933,22 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         ColumnId = GetColumnIdByName(sheet, "Total Spend"),
                         Value = formData.RequestHonorariumList.TotalSpend
                     });
-                    newRow.Cells.Add(new Cell
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    Value = formData.RequestHonorariumList.Expenses
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    Value = formData.RequestHonorariumList.TotalTravelSpend
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    Value = formData.RequestHonorariumList.TotalAccomodationSpend
+                });
+                newRow.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet, "Total Local Conveyance"),
                         Value = formData.RequestHonorariumList.TotalLocalConveyance
@@ -1165,14 +1180,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 //string slideKit = addedHcpData.ToString();
 
 
-                foreach (var formdata in formData.branddetails)
-                {
+                //foreach (var formdata in formData.branddetails)
+                //{
 
-                    string rowData = $"{addedBrandsDataNo}. {formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
-                    addedBrandsData.AppendLine(rowData);
-                    addedBrandsDataNo++;
-                }
-                string brand = addedBrandsData.ToString();
+                //    string rowData = $"{addedBrandsDataNo}. {formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
+                //    addedBrandsData.AppendLine(rowData);
+                //    addedBrandsDataNo++;
+                //}
+                //string brand = addedBrandsData.ToString();
 
                 //foreach (var formdata in formData.Invitee)
                 //{
@@ -1185,31 +1200,31 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 //string Invitees = addedInviteesData.ToString();
 
 
-                foreach (var formdata in formData.panalists)
-                {
+                //foreach (var formdata in formData.panalists)
+                //{
 
 
-                    //var HM = int.Parse(formdata.HonarariumAmount);
-                    //var x = string.Format(hindi, "{0:#,#}", HM);
-                    //var t = int.Parse(formdata.TravelAmount) + int.Parse(formdata.AccomdationAmount);
-                    //var y = string.Format(hindi, "{0:#,#}", t);
+                //    //var HM = int.Parse(formdata.HonarariumAmount);
+                //    //var x = string.Format(hindi, "{0:#,#}", HM);
+                //    //var t = int.Parse(formdata.TravelAmount) + int.Parse(formdata.AccomdationAmount);
+                //    //var y = string.Format(hindi, "{0:#,#}", t);
 
-                    string rowData = $"{hcpNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.&Acc.Amt: {formdata.TravelAmount} ";
+                //    string rowData = $"{hcpNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.&Acc.Amt: {formdata.TravelAmount} ";
 
-                    HCP.AppendLine(rowData);
-                    hcpNo++;
+                //    HCP.AppendLine(rowData);
+                //    hcpNo++;
 
-                }
-                string HCPd = HCP.ToString();
+                //}
+                //string HCPd = HCP.ToString();
 
-                foreach (var formdata in formData.hCPSlideKits)
-                {
+                //foreach (var formdata in formData.hCPSlideKits)
+                //{
 
-                    string rowData = $"{addedSlideKitDataNo}. {formdata.MIS} | {formdata.SlideKitType}";
-                    addedSlideKitData.AppendLine(rowData);
-                    addedSlideKitDataNo++;
-                }
-                string slideKits = addedSlideKitData.ToString();
+                //    string rowData = $"{addedSlideKitDataNo}. {formdata.MIS} | {formdata.SlideKitType}";
+                //    addedSlideKitData.AppendLine(rowData);
+                //    addedSlideKitDataNo++;
+                //}
+                //string slideKits = addedSlideKitData.ToString();
 
 
 
@@ -1223,17 +1238,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 string Expense = addedExpences.ToString();
 
 
-                //foreach (var formdata in formData.Invitee)
-                //{
-                   
-                //    string rowData = $"{addedInviteesDataNo}. {formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance}";
-                //    addedInviteesData.AppendLine(rowData);
-                //    addedInviteesDataNo++;
-                //}
-                //string Invitee = addedInviteesData.ToString();
+                foreach (var formdata in formData.Invitee)
+                {
+
+                    string rowData = $"{addedInviteesDataNo}. {formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance}";
+                    addedInviteesData.AppendLine(rowData);
+                    addedInviteesDataNo++;
+                }
+                string Invitee = addedInviteesData.ToString();
 
 
-// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 var newRow = new Row();
                 newRow.Cells = new List<Cell>();
@@ -1288,11 +1303,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     ColumnId = GetColumnIdByName(sheet, "Attended"),
                     Value = formData.Attended
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "InviteesParticipated"),
-                //    Value = Invitees
-                //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "InviteesParticipated"),
+                    Value = Invitee
+                });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "ExpenseDetails"),
@@ -1316,22 +1331,22 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "Brands"),
-                    Value = brand
+                    Value = formData.Brands
                 });
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet, "Invitees"),
-                //    Value = Invitees
-                //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Invitees"),
+                    Value = Invitee
+                });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "Panelists"),
-                    Value = HCPd
+                    Value = formData.Panalists
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "SlideKits"),
-                    Value = slideKits
+                    Value = formData.SlideKits
                 });
                 newRow.Cells.Add(new Cell
                 {

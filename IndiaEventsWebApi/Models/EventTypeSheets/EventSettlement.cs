@@ -2,12 +2,12 @@
 {
     public class EventSettlement
     {
-       // public List<Invitees> Invitee { get; set; }
+        public List<Invitee> Invitee { get; set; }
         public List<ExpenseSheet> expenseSheets { get; set; }
-        public List<Panalists> panalists { get; set; }
-        public List<Branddetail> branddetails { get; set; }
-        public List<HCPSlideKits> hCPSlideKits { get; set; }
-       // public List<Branddetail> branddetails { get; set; }
+        //public List<Panalists> panalists { get; set; }
+        //public List<Branddetail> branddetails { get; set; }
+        //public List<HCPSlideKits> hCPSlideKits { get; set; }
+        //public List<Branddetail> branddetails { get; set; }
         public string? EventId { get; set; }
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
@@ -21,6 +21,9 @@
         public string? Attended { get; set; }
         public string? InviteesParticipated { get; set; }
         public string? ExpenseParticipated { get; set; }
+        public string? Brands { get; set; }
+        public string? Panalists { get; set; }
+        public string? SlideKits { get; set; }
         public string? TotalExpense { get; set; }
         public string? Advance { get; set; }
         public string? InitiatorEmail { get; set; }
@@ -43,15 +46,15 @@
 
 
     }
-    public class Panalists
-    {
-        public string HcpRole { get; set; }
-        public string HcpName { get; set; }
-        public string HonarariumAmount { get; set; }
-        public string TravelAmount { get; set; }
-        public string AccomdationAmount { get; set; }
+    //public class Panalists
+    //{
+    //    public string HcpRole { get; set; }
+    //    public string HcpName { get; set; }
+    //    public string HonarariumAmount { get; set; }
+    //    public string TravelAmount { get; set; }
+    //    public string AccomdationAmount { get; set; }
 
-    }
+    //}
     public class Invitee
     {
 
@@ -70,19 +73,19 @@
         public string BtcorBte { get; set; }
 
     }
-    public class Branddetail
-    {
-        public string BrandName { get; set; }
-        public string PercentAllocation { get; set; }
-        public string ProjectId { get; set; }
-    }
-    public class HCPSlideKits
-    {
+    //public class Branddetail
+    //{
+    //    public string BrandName { get; set; }
+    //    public string PercentAllocation { get; set; }
+    //    public string ProjectId { get; set; }
+    //}
+    //public class HCPSlideKits
+    //{
 
-        public string MIS { get; set; }
-        public string SlideKitType { get; set; }
-        public string SlideKitDocument { get; set; }
+    //    public string MIS { get; set; }
+    //    public string SlideKitType { get; set; }
+    //    public string SlideKitDocument { get; set; }
 
 
-    }
+    //}
 }
