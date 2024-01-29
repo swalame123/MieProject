@@ -38,8 +38,15 @@
         public string IsAdvanceRequired { get; set; }
         public string totalInvitees { get; set; }
         public string TotalAttendees { get; set; }
+        public string TotalTravelSpend { get; set; }
+        public string TotalAccomodationSpend { get; set; }
+        public string TotalExpenses { get; set; }
+        public string TotalTravelAndAccomodationSpend { get; set; }
+        public string TotalHonorariumSpend { get; set; }
+        public string TotalSpend { get; set; }
+        public string TotalLocalConveyance { get; set; }
         //public string FinanceHead { get; set; }
-        
+
 
 
     }

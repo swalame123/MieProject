@@ -1431,6 +1431,42 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     Value = formData.FinanceHead
                 });
 
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Travel Spend"),
+                    Value = formData.TotalTravelSpend
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Accomodation Spend"),
+                    Value = formData.TotalAccomodationSpend
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Expenses"),
+                    Value = formData.TotalExpenses
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Travel & Accomodation Spend"),
+                    Value = formData.TotalTravelAndAccomodationSpend
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Honorarium Spend"),
+                    Value = formData.TotalHonorariumSpend
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Spend"),
+                    Value = formData.TotalSpend
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Total Local Conveyance"),
+                        Value = formData.TotalLocalConveyance
+                    });
+
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
 
