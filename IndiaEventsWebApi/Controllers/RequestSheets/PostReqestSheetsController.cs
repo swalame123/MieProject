@@ -950,7 +950,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet, "Total Expenses"),
+                    ColumnId = GetColumnIdByName(sheet, "Total Expense"),
                     Value = formData.RequestHonorariumList.TotalExpenses
                 });
                 newRow.Cells.Add(new Cell
