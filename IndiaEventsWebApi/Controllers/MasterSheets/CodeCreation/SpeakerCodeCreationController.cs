@@ -22,7 +22,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
         }
 
         [HttpPost("AddSpeakersData")]
-        public IActionResult AddSpeakersData(SpeakerCodeGeneration[] formData)
+        public IActionResult AddSpeakersData(SpeakerCodeGeneration formData)
         {
             try
             {
@@ -35,63 +35,93 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
-                foreach (var i in formData)
+
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                newRow.Cells.Add(new Cell
                 {
-                    //var newRow = new Row();
-                    //newRow.Cells = new List<Cell>();
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "HCP Name"),
-                    //    Value = i.EventId
-                    //});
+                    ColumnId = GetColumnIdByName(sheet, "Speaker Name"),
+                    Value = formData.SpeakerName
+                });
 
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"),
-                    //    Value = i.Expense
-                    //});
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "EventType"),
-                    //    Value = i.Amount
-                    //});
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "HCPRole"),
-                    //    Value = i.AmountExcludingTax
-                    //});
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "MISCODE"),
-                    //    Value = i.BtcorBte
-                    //});
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"),
-                    //    Value = i.BtcAmount
-                    //});
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
-                    //    Value = i.BteAmount
-                    //});
-                    //newRow.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
-                    //    Value = i.BudgetAmount
-                    //});
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Speaker Code"),
+                    Value = formData.SpeakerCode
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "MIS Code"),
+                    Value = formData.MISCode
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Division"),
+                    Value = formData.Division
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Speciality"),
+                    Value = formData.Speciality
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Qualification"),
+                    Value = formData.Qualification
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Address"),
+                    Value = formData.Address
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "City"),
+                    Value = formData.City
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "State"),
+                    Value = formData.State
+
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Country"),
+                    Value = formData.Country
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Contact Number"),
+                    Value = formData.Contact_Number
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "GO/NGO"),
+                    Value = formData.GOorNGO
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "PAN Card"),
+                    Value = formData.PAN_Card
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "Speaker Criteria"),
+                    Value = formData.Speaker_Criteria
+                });
 
 
 
-                    //var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-                    //var eventId = i.EventId;
+                var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+               
 
 
 
 
 
 
-                }
+
 
 
 
@@ -116,4 +146,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
             return 0;
         }
     }
+  
 }
+
+
