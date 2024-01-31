@@ -4,7 +4,7 @@
     {
         public string? EventId { get; set; }
 
-        public string? EventTopic { get; set; }       
+        public string? EventTopic { get; set; }
         public string? EventType { get; set; }
         public DateTime? EventDate { get; set; }
         public string? StartTime { get; set; }
@@ -15,7 +15,7 @@
         public string? BrandName { get; set; }
         public string? PercentAllocation { get; set; }
         public string? ProjectId { get; set; }
-        public string? HCPRole { get; set; }       
+        public string? HCPRole { get; set; }
         public string? IsAdvanceRequired { get; set; }
         public string? EventOpen30days { get; set; }
         public string? EventWithin7days { get; set; }
@@ -25,5 +25,14 @@
         public string? Finance { get; set; }
         public string? InitiatorName { get; set; }
         public string? Initiator_Email { get; set; }
+        public List<string>? Files { get; set; }
+        public List<string>? DeviationFiles { get; set; }
+    }
+    public class Class11
+    {
+        public string? EventId { get; set; }
+
+      
+        public List<string>? File { get; set; }
     }
 }

@@ -33,6 +33,9 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string TotalTravelSpend { get; set; }
         public string TotalAccomodationSpend { get; set; }
         public string TotalExpenses { get; set; }
+
+        public List<string>? Files { get; set; }
+        public List<string>? DeviationFiles { get; set; }
     }
 
 

@@ -40,12 +40,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
             string sheetId5 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpSlideKit").Value;
             string sheetId6 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+            string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
+
+
+
             long.TryParse(sheetId1, out long parsedSheetId1);
             long.TryParse(sheetId2, out long parsedSheetId2);
             long.TryParse(sheetId3, out long parsedSheetId3);
             long.TryParse(sheetId4, out long parsedSheetId4);
             long.TryParse(sheetId5, out long parsedSheetId5);
             long.TryParse(sheetId6, out long parsedSheetId6);
+            long.TryParse(sheetId7, out long parsedSheetId7);
 
             Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
             Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);
@@ -53,6 +58,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Sheet sheet4 = smartsheet.SheetResources.GetSheet(parsedSheetId4, null, null, null, null, null, null, null);
             Sheet sheet5 = smartsheet.SheetResources.GetSheet(parsedSheetId5, null, null, null, null, null, null, null);
             Sheet sheet6 = smartsheet.SheetResources.GetSheet(parsedSheetId6, null, null, null, null, null, null, null);
+            Sheet sheet7 = smartsheet.SheetResources.GetSheet(parsedSheetId7, null, null, null, null, null, null, null);
 
             StringBuilder addedBrandsData = new StringBuilder();
             StringBuilder addedInviteesData = new StringBuilder();
@@ -439,28 +445,203 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
+                                                     
+                      
+                     
+                var x = 1;
+                foreach (var p in formDataList.class1.Files)
+                {
 
-                //if (formDataList.formFile != null && formDataList.formFile.Length > 0)
-                //{
-                //    var fileName = formDataList.formFile.FileName;
-                //    var folderName = Path.Combine("Resources", "Images");
-                //    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                //    var fullPath = Path.Combine(pathToSave, fileName);
+
+
+                    byte[] fileBytes = Convert.FromBase64String(p);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = val + "-" + x + " AttachedFile." + fileType;
+                   // string fileName = val+x + ": AttachedFile." + fileType;
+                    string filePath = Path.Combine(pathToSave, fileName);
+
                    
-                //    if (!Directory.Exists(pathToSave))
-                //    {
-                //        Directory.CreateDirectory(pathToSave);
-                //    }
+                    var addedRow = addedRows[0];
 
-                //    using (var fileStream = new FileStream(fullPath, FileMode.Create))
-                //    {
-                //        formDataList.formFile.CopyTo(fileStream);
-                //    }
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
+                    x++;
+                }
 
-                //    var addedRow = addedRows[0];
-                //    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                //        parsedSheetId1, addedRow.Id.Value, fullPath, "application/msword");
-                //}
+
+
+
+                if (formDataList.class1.EventOpen30days == "Yes" || formDataList.class1.EventWithin7days == "Yes")
+                {
+                    var eventId = val;
+                    try
+                    {
+
+                        var newRow7 = new Row();
+                        newRow7.Cells = new List<Cell>();
+
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"),
+                            Value = eventId
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "Event Topic"),
+                            Value = formDataList.class1.EventTopic
+                        });
+
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "EventType"),
+                            Value = formDataList.class1.EventType
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "EventDate"),
+                            Value = formDataList.class1.EventDate
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "StartTime"),
+                            Value = formDataList.class1.StartTime
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "EndTime"),
+                            Value = formDataList.class1.EndTime
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "VenueName"),
+                            Value = formDataList.class1.VenueName
+                        });
+
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "City"),
+                            Value = formDataList.class1.City
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "State"),
+                            Value = formDataList.class1.State
+                        });
+                      
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"),
+                            Value = formDataList.class1.EventOpen30days
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"),
+                            Value = formDataList.class1.EventWithin7days
+                        });
+                       
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "Sales Head"),
+                            Value = formDataList.class1.Sales_Head
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "Finance Head"),
+                            Value = formDataList.class1.Sales_Head
+                        });
+                       
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "InitiatorName"),
+                            Value = formDataList.class1.InitiatorName
+                        });
+                        newRow7.Cells.Add(new Cell
+                        {
+                            ColumnId = GetColumnIdByName(sheet7, "Initiator Email"),
+                            Value = formDataList.class1.Initiator_Email
+                        });
+                       
+
+                        var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
+
+
+
+
+                        var j = 1;
+                        foreach (var p in formDataList.class1.DeviationFiles)
+                        {
+
+
+
+                            byte[] fileBytes = Convert.FromBase64String(p);
+                            var folderName = Path.Combine("Resources", "Images");
+                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                            if (!Directory.Exists(pathToSave))
+                            {
+                                Directory.CreateDirectory(pathToSave);
+                            }
+
+                            string fileType = GetFileType(fileBytes);
+                            string fileName = eventId + "-" + j + " AttachedFile." + fileType;
+                            // string fileName = val+x + ": AttachedFile." + fileType;
+                            string filePath = Path.Combine(pathToSave, fileName);
+
+
+                            var addedRow = addeddeviationrow[0];
+
+                            System.IO.File.WriteAllBytes(filePath, fileBytes);
+                            string type = GetContentType(fileType);
+                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+                            j++;
+                        }
+                    }
+                    catch(Exception ex) 
+                    {
+                        return BadRequest(ex.Message);
+                    }
+                }
+
+                    
+
+                    
+                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -775,11 +956,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 string sheetId = configuration.GetSection("SmartsheetSettings:HonorariumPayment").Value;
                 string sheetId1 = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
+                string sheetId2 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
 
                 long.TryParse(sheetId, out long parsedSheetId);
                 long.TryParse(sheetId1, out long parsedSheetId1);
+                long.TryParse(sheetId2, out long parsedSheetId2);
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
+                Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);
 
                 //StringBuilder addedBrandsData = new StringBuilder();
                 //StringBuilder addedInviteesData = new StringBuilder();
@@ -1018,7 +1202,45 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var eventId = formData.RequestHonorariumList.EventId;
-                    var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
+                var x = 1;
+                foreach (var p in formData.RequestHonorariumList.Files)
+                {
+
+
+
+                    byte[] fileBytes = Convert.FromBase64String(p);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = eventId + "-" + x + " AttachedFile." + fileType;
+                   
+                    string filePath = Path.Combine(pathToSave, fileName);
+
+
+                    var addedRow = addedRows[0];
+
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
+                    x++;
+                }
+
+
+
+
+
+
+
+
+
+
+                var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
                     
                     if (targetRow != null)
                     {
@@ -1036,6 +1258,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         }
 
                         smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRow });
+
 
                     }
                     
@@ -1470,9 +1693,43 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
 
-                //var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
-                //var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
-                //var val = eventIdCell.DisplayValue;
+                var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
+                var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+                var val = eventIdCell.DisplayValue;
+
+                var x = 1;
+                foreach (var p in formData.Files)
+                {
+
+
+
+                    byte[] fileBytes = Convert.FromBase64String(p);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = val + "-"+x + " AttachedFile." + fileType;
+                    string filePath = Path.Combine(pathToSave, fileName);
+
+
+                    var addedRow = addedRows[0];
+
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
+                    x++;
+                }
+
+
+
+
+
+
                 //var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == val));
 
                 //if (targetRow != null)
@@ -1509,6 +1766,67 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
+
+        private string GetContentType(string fileExtension)
+        {
+            switch (fileExtension.ToLower())
+            {
+                case "jpg":
+                case "jpeg":
+                    return "image/jpeg";
+                case "pdf":
+                    return "application/pdf";
+                case "gif":
+                    return "image/gif";
+                case "png":
+                    return "image/png";
+                case "webp":
+                    return "image/webp";
+                case "doc":
+                    return "application/msword";
+                case "docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                default:
+                    return "application/octet-stream";
+            }
+        }
+
+        private string GetFileType(byte[] bytes)
+        {
+
+            if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xD8)
+            {
+                return "jpg";
+            }
+            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "%PDF")
+            {
+                return "pdf";
+            }
+            else if (bytes.Length >= 3 && Encoding.UTF8.GetString(bytes, 0, 3) == "GIF")
+            {
+                return "gif";
+            }
+            else if (bytes.Length >= 8 && Encoding.UTF8.GetString(bytes, 0, 8) == "PNG\r\n\x1A\n")
+            {
+                return "png";
+            }
+            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "RIFF" && Encoding.UTF8.GetString(bytes, 8, 4) == "WEBP")
+            {
+                return "webp";
+            }
+            else if (bytes.Length >= 4 && (bytes[0] == 0xD0 && bytes[1] == 0xCF && bytes[2] == 0x11 && bytes[3] == 0xE0))
+            {
+                return "doc"; // .doc format
+            }
+            else if (bytes.Length >= 4 && (bytes[0] == 0x50 && bytes[1] == 0x4B && bytes[2] == 0x03 && bytes[3] == 0x04))
+            {
+                return "docx"; // .docx format
+            }
+            else
+            {
+                return "unknown";
+            }
+        }
 
 
 

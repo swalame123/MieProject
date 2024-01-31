@@ -45,7 +45,9 @@
         public string TotalHonorariumSpend { get; set; }
         public string TotalSpend { get; set; }
         public string TotalLocalConveyance { get; set; }
-        //public string FinanceHead { get; set; }
+
+        public List<string>? Files { get; set; }
+        public List<string>? DeviationFiles { get; set; }
 
 
 

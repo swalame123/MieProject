@@ -16,7 +16,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-		<PackageReference Include="smartsheet-csharp-sdk" Version="3.1.1" />
+		<PackageReference Include="smartsheet-csharp-sdk" Version="2.101.0" />
 		<PackageReference Include="Smartsheet.Core" Version="2.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
@@ -24,6 +24,7 @@
 
 	<ItemGroup>
 	  <Folder Include="FilesUpload\" />
+	  <Folder Include="Resources\Images\" />
 	</ItemGroup>
 
 </Project>
