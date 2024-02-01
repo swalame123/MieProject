@@ -1,4 +1,18 @@
-﻿ [HttpGet("EventRequestsHcpRole/{eventIdorEventRequestId}")]
+﻿ done check
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ [HttpGet("EventRequestsHcpRole/{eventIdorEventRequestId}")]
         public async Task<IActionResult> GetEventRequestsHcpRoleById(string eventIdorEventRequestId)
         {
             try
