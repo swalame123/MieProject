@@ -1,66 +1,24 @@
-﻿using IndiaEventsWebApi.Models;
-using IndiaEventsWebApi.Models.MasterSheets;
+﻿using IndiaEventsWebApi.Models.MasterSheets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
-using Smartsheet.Api.OAuth;
 
 namespace IndiaEventsWebApi.Controllers.HCPMaster
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HCPController : ControllerBase
+    public class TempHcpController : ControllerBase
     {
         private readonly string accessToken;
         private readonly IConfiguration configuration;
 
-        public HCPController(IConfiguration configuration)
+        public TempHcpController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
 
         }
-        [HttpGet("GetHCPDataUsingNameAndMISCode")]
-        public IActionResult GetHCPDataUsingNameAndMISCode(string Name, string misCode)
-        {
-            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-            string[] sheetIds = {
-                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
-            };
-            foreach (string i in sheetIds)
-            {
-                long.TryParse(i, out long p);
-                Sheet sheeti = smartsheet.SheetResources.GetSheet(p, null, null, null, null, null, null, null);
-                Column hcpNameColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCPName");
-                Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "MisCode");
-
-                if (hcpNameColumn != null && misCodeColumn != null)
-                {
-                    Row existingRow = sheeti.Rows.FirstOrDefault(row =>
-                        row.Cells != null &&
-                        row.Cells.Any(cell =>
-                            cell.ColumnId == hcpNameColumn.Id && cell.Value != null && cell.Value.ToString() == Name
-                        ) &&
-                        row.Cells.Any(cell =>
-                            cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == misCode
-                        )
-                    );
-                    if (existingRow != null)
-                    {
-                        // Both Name and MISCode are present in the same row, return success
-                        return Ok("True");
-                    }
-
-                }
-            }
-            return Ok("False");
-        }
-
 
 
 
@@ -96,7 +54,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                         FirstName = worksheet.Cells[row, GetColumnIndexByName(worksheet, "FirstName")].StringValue,
                         LastName = worksheet.Cells[row, GetColumnIndexByName(worksheet, "LastName")].StringValue,
                         HCPName = worksheet.Cells[row, GetColumnIndexByName(worksheet, "HCPName")].StringValue,
-                        GOorNGO = worksheet.Cells[row, GetColumnIndexByName(worksheet, "HCP Type")].StringValue,
+                        GOorNGO = worksheet.Cells[row, GetColumnIndexByName(worksheet, "GO/Non-GO")].StringValue,
                         MISCode = worksheet.Cells[row, GetColumnIndexByName(worksheet, "MisCode")].StringValue,
                         Speciality = worksheet.Cells[row, GetColumnIndexByName(worksheet, "Speciality")].StringValue
                     };
@@ -135,7 +93,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                         newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "FirstName"), Value = i.FirstName });
                         newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "LastName"), Value = i.LastName });
                         newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCPName"), Value = i.HCPName });
-                        newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCP Type"), Value = i.GOorNGO });
+                        newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"), Value = i.GOorNGO });
                         newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = i.MISCode });
                         newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speciality"), Value = i.Speciality });
 
@@ -180,7 +138,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
         {
             return new[]
             {
-                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
@@ -190,7 +148,4 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
             };
         }
     }
-
 }
-
-

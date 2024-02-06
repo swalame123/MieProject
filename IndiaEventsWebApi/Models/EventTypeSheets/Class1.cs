@@ -3,7 +3,6 @@
     public class Class1
     {
         public string? EventId { get; set; }
-
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
         public DateTime? EventDate { get; set; }
@@ -19,6 +18,7 @@
         public string? IsAdvanceRequired { get; set; }
         public string? EventOpen30days { get; set; }
         public string? EventWithin7days { get; set; }
+        public string? FB_Expense_Excluding_Tax { get; set; }
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
         public string? Marketing_Head { get; set; }
@@ -27,6 +27,7 @@
         public string? Initiator_Email { get; set; }
         public List<string>? Files { get; set; }
         public List<string>? DeviationFiles { get; set; }
+        public string? Role { get; set; }
     }
     public class Class11
     {

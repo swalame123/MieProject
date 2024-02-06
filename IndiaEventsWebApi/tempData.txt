@@ -1,4 +1,4 @@
-﻿ done check
+﻿1 done check
  
  
  
@@ -222,4 +222,251 @@ private long GetColumnIdByName(Sheet sheet, string columnName)
                 //    var addedRow = addedRows[0];
                 //    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                 //        parsedSheetId1, addedRow.Id.Value, fullPath, "application/msword");
+                //}
+
+
+
+
+
+
+
+                
+    [HttpGet("GenerateSummaryPDF")]
+    public IActionResult GenerateSummaryPDF(string EventID)
+    {
+        try
+        {
+            EventID = "RQID95";
+
+            DataTable dtMain = new DataTable();
+            dtMain.Columns.Add("S.No");
+            dtMain.Columns.Add("HCP Name");
+            dtMain.Columns.Add("MIS Code");
+            dtMain.Columns.Add("GO/Non-GO");
+            dtMain.Columns.Add("Speciality");
+            dtMain.Columns.Add("Sign");
+            int SrNo = 1;
+
+            // ... (rest of your code)
+
+            // Use ToDictionary method to convert List<Dictionary<string, object>> to DataTable
+            DataTable dt = ToDictionary(sheetData);
+            dt.DefaultView.RowFilter = "[EventId/EventRequestID] = '" + EventID + "'";
+
+            foreach (DataRowView rowView in dt.DefaultView)
+            {
+                DataRow row = rowView.Row;
+                dtMain.Rows.Add(SrNo.ToString(), row["HCP Name"], row["MIS Code"], row["GO/Non-GO"], row["Speciality"], "");
+                SrNo++;
+            }
+
+            byte[] fileBytes = ExportPdf(dtMain);
+            string filename = "Sample_PDF_" + DateTime.Now.ToString("MMddyyyyhhmmss") + ".pdf";
+
+            var folderName = Path.Combine("Resources", "PDFs");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+
+            string filePath = Path.Combine(pathToSave, filename);
+            System.IO.File.WriteAllBytes(filePath, fileBytes);
+
+            // Save to EventRequestProcess
+
+            return File(fileBytes, "application/pdf", filename);
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions appropriately
+            return BadRequest(ex.Message);
+        }
+    }
+
+    private byte[] ExportPdf(DataTable dataTable)
+    {
+        var htmlContent = "<html><body>";
+
+        foreach (DataRow row in dataTable.Rows)
+        {
+            htmlContent += $"<tr><td>{row["S.No"]}</td><td>{row["HCP Name"]}</td><td>{row["MIS Code"]}</td><td>{row["GO/Non-GO"]}</td><td>{row["Speciality"]}</td><td>{row["Sign"]}</td></tr>";
+        }
+
+        htmlContent += "</body></html>";
+
+        var pdfBytes = pdfConverter.Convert(new HtmlToPdfDocument()
+        {
+            Objects = { new ObjectSettings { HtmlContent = htmlContent } }
+        });
+
+        return pdfBytes;
+    }
+
+    private DataTable ToDictionary(List<Dictionary<string, object>> list)
+    {
+        DataTable result = new DataTable();
+
+        if (list.Count > 0)
+        {
+            foreach (string key in list[0].Keys)
+            {
+                result.Columns.Add(key);
+            }
+
+            foreach (Dictionary<string, object> dict in list)
+            {
+                DataRow row = result.NewRow();
+
+                foreach (string key in dict.Keys)
+                {
+                    row[key] = dict[key];
+                }
+
+                result.Rows.Add(row);
+            }
+        }
+
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+    SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+string sheetId_SpeakerCode = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+long.TryParse(sheetId_SpeakerCode, out long parsedSheetId_SpeakerCode);
+Sheet sheet_SpeakerCode = smartsheet.SheetResources.GetSheet(parsedSheetId_SpeakerCode, null, null, null, null, null, null, null);
+
+List<string> requiredColumns = new List<string> { "Name", "Speciality", "GO/Non-GO" };
+
+List<Column> selectedColumns = sheet_SpeakerCode.Columns
+    .Where(column => requiredColumns.Contains(column.Title, StringComparer.OrdinalIgnoreCase))
+    .ToList();
+
+DataTable dtMain = new DataTable();
+dtMain.Columns.Add("S.No", typeof(int));
+foreach (Column column in selectedColumns)
+{
+    dtMain.Columns.Add(column.Title);
+}
+
+int SrNo = 1;
+
+foreach (Row row in sheet_SpeakerCode.Rows)
+{
+    string eventId = row.Cells
+        .FirstOrDefault(cell => sheet_SpeakerCode.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title == "EventId/EventRequestID")?.DisplayValue;
+
+    if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
+    {
+        DataRow newRow = dtMain.NewRow();
+        newRow["S.No"] = SrNo;
+
+        foreach (Cell cell in row.Cells)
+        {
+            string columnName = sheet_SpeakerCode.Columns
+                .FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
+
+            if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
+            {
+                newRow[columnName] = cell.DisplayValue;
+            }
+        }
+
+        dtMain.Rows.Add(newRow);
+        SrNo++;
+    }
+}
+
+// Now dtMain contains only the specified columns and their corresponding values for the given EventId
+// You can proceed to create the PDF using this DataTable
+byte[] fileBytes = ExportPdf(dtMain);
+// Rest of your code for saving or returning the PDF
+
+
+
+
+
+
+
+
+         //sample event id = RQID95
+                //SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                //string sheetId_SpeakerCode = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+                //long.TryParse(sheetId_SpeakerCode, out long parsedSheetId_SpeakerCode);
+                //Sheet sheet_SpeakerCode = smartsheet.SheetResources.GetSheet(parsedSheetId_SpeakerCode, null, null, null, null, null, null, null);
+
+
+                //Column SpecialityColumn = sheet_SpeakerCode.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestID", StringComparison.OrdinalIgnoreCase));
+
+                //List<Row> targetRows = sheet_SpeakerCode.Rows
+                //    .Where(row => row.Cells?.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value?.ToString() == EventID) == true)
+                //    .ToList();
+                //if (targetRows.Count != 0)
+                //{
+                //    List<string> requiredColumns = new List<string> { "HCP Name", "Speciality", "GO/Non-GO", "MIS Code" };
+
+                //    List<Column> selectedColumns = sheet_SpeakerCode.Columns
+                //        .Where(column => requiredColumns.Contains(column.Title, StringComparer.OrdinalIgnoreCase))
+                //        .ToList();
+
+                //    DataTable dtMai = new DataTable();
+                //    foreach (Column column in selectedColumns)
+                //    {
+                //        dtMai.Columns.Add(column.Title);
+                //    }
+
+                //    int Sr_No = 1;
+
+                //    foreach (Row row in sheet_SpeakerCode.Rows)
+                //    {
+                //        DataRow newRow = dtMai.NewRow();
+
+                //        foreach (Cell cell in row.Cells)
+                //        {
+                //            string columnName = sheet_SpeakerCode.Columns
+                //                .FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
+
+                //            if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
+                //            {
+                //                newRow[columnName] = cell.DisplayValue;
+                //            }
+                //        }
+
+                //        dtMai.Rows.Add(newRow);
+                //        SrNo++;
+                //    }
+                //}
+
+                //foreach (Row row in sheet_SpeakerCode.Rows)
+                //{
+                //    DataRow newRow = dtMai.NewRow();
+
+                //    foreach (Cell cell in row.Cells)
+                //    {
+                //        if (requiredColumns.Contains(cell.ColumnTitle, StringComparer.OrdinalIgnoreCase))
+                //        {
+                //            newRow[cell.ColumnTitle] = cell.Value;
+                //        }
+                //    }
+
+                //    dtMain.Rows.Add(newRow);
+                //    Sr_No++;
+                //}
+                //}
+
+                //return Ok(sheetData);
+                //foreach (var item in sheet_SpeakerCode)
+                //{
+                //    dtMain.Rows.Add(SrNo.ToString(), "A", "B", "C", "D", "");
+
+                //    SrNo++;
                 //}

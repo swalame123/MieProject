@@ -6,8 +6,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="FilesUpload\**" />
+    <Content Remove="FilesUpload\**" />
+    <EmbeddedResource Remove="FilesUpload\**" />
+    <None Remove="FilesUpload\**" />
+  </ItemGroup>
+
 	<ItemGroup>
+		<PackageReference Include="Aspose.Cells" Version="24.1.0" />
+		<PackageReference Include="Aspose.PDF" Version="24.1.0" />
+		<PackageReference Include="DinkToPdf" Version="1.0.8" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
+		<PackageReference Include="iTextSharp" Version="5.5.13.3" />
 		<PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.25" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
@@ -23,7 +34,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="FilesUpload\" />
 	  <Folder Include="Resources\Images\" />
 	</ItemGroup>
 

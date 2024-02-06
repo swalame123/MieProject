@@ -430,27 +430,35 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
             try
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:HcpMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
 
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:HcpMaster1").Value;
+                string sheetId2 = configuration.GetSection("SmartsheetSettings:HcpMaster2").Value;
+                string sheetId3 = configuration.GetSection("SmartsheetSettings:HcpMaster3").Value;
+                string sheetId4 = configuration.GetSection("SmartsheetSettings:HcpMaster4").Value;
+
+                List<string> Sheets = new List<string>() { sheetId1, sheetId2, sheetId3, sheetId4 };
+                foreach (var sheetId in Sheets)
+                {
+                    long.TryParse(sheetId, out long parsedSheetId);
+                    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                    List<string> columnNames = new List<string>();
+                    foreach (Column column in sheet.Columns)
+                    {
+                        columnNames.Add(column.Title);
                     }
-                    sheetData.Add(rowData);
+                    foreach (Row row in sheet.Rows)
+                    {
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        sheetData.Add(rowData);
+                    }
                 }
                 return Ok(sheetData);
-
             }
             catch (Exception ex)
             {
