@@ -1076,6 +1076,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+
+                    //if (System.IO.File.Exists(filePath))
+                    //{
+                    //    System.IO.File.Delete(filePath);
+                    //}
                 }
 
 

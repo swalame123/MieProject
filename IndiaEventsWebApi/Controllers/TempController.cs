@@ -412,10 +412,14 @@ namespace IndiaEventsWebApi.Controllers
                 string filePath = Path.Combine(pathToSave, filename);
                 System.IO.File.WriteAllBytes(filePath, fileBytes);
 
-                //var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                //            parsedProcessSheet, rowId, filePath, "application/msword");
+                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedProcessSheet, rowId, filePath, "application/msword");
 
 
+                //if (System.IO.File.Exists(filePath))
+                //{
+                //    System.IO.File.Delete(filePath);
+                //}
 
 
                 //List<Attachment> attachments = GetAttachmentsFromSheet(sheet_SpeakerCode, EventID, parsedSheetId_SpeakerCode);
