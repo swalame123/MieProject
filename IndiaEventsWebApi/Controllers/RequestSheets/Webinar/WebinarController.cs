@@ -1,28 +1,22 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using IndiaEventsWebApi.Models.EventTypeSheets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using IndiaEventsWebApi.Models;
-using IndiaEventsWebApi.Models.EventTypeSheets;
-using IndiaEventsWebApi.Models.RequestSheets;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
-using Smartsheet.Api.OAuth;
-using System.Text;
 using System.Globalization;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
 
-namespace IndiaEventsWebApi.Controllers.RequestSheets
+namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostReqestSheetsController : ControllerBase
+    public class WebinarController : ControllerBase
     {
 
         private readonly string accessToken;
         private readonly IConfiguration configuration;
 
-        public PostReqestSheetsController(IConfiguration configuration)
+        public WebinarController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
@@ -31,7 +25,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
         [HttpPost("AllObjModelsData")]
-        public IActionResult AllObjModelsData(AllObjModels formDataList)
+        public IActionResult AllObjModelsData(WebinarPayload formDataList)
         {
 
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
@@ -99,7 +93,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             foreach (var formdata in formDataList.EventRequestHCPSlideKits)
             {
-              
+
                 string rowData = $"{addedSlideKitDataNo}. {formdata.MIS} | {formdata.SlideKitType}";
                 addedSlideKitData.AppendLine(rowData);
                 addedSlideKitDataNo++;
@@ -108,7 +102,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             foreach (var formdata in formDataList.RequestBrandsList)
             {
-               
+
                 string rowData = $"{addedBrandsDataNo}. {formdata.BrandName} | {formdata.ProjectId} | {formdata.PercentAllocation}";
                 addedBrandsData.AppendLine(rowData);
                 addedBrandsDataNo++;
@@ -117,7 +111,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             foreach (var formdata in formDataList.EventRequestInvitees)
             {
-              
+
 
 
 
@@ -131,7 +125,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
             foreach (var formdata in formDataList.EventRequestHcpRole)
-            {  
+            {
 
                 var HM = int.Parse(formdata.HonarariumAmount);
                 var x = string.Format(hindi, "{0:#,#}", HM);
@@ -142,9 +136,9 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
-                TotalHonorariumAmount = TotalHonorariumAmount +int.Parse( formdata.HonarariumAmount);
+                TotalHonorariumAmount = TotalHonorariumAmount + int.Parse(formdata.HonarariumAmount);
                 TotalTravelAmount = TotalTravelAmount + int.Parse(formdata.Travel);
-                TotalAccomodateAmount=TotalAccomodateAmount+ int.Parse(formdata.Accomdation);
+                TotalAccomodateAmount = TotalAccomodateAmount + int.Parse(formdata.Accomdation);
                 TotalHCPLcAmount = TotalHCPLcAmount + int.Parse(formdata.LocalConveyance);
             }
             string HCP = addedHcpData.ToString();
@@ -163,7 +157,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             var FormattedTotal = string.Format(hindi, "{0:#,#}", total);
             var s = (TotalTravelAmount + TotalAccomodateAmount);
-            var FormattedTotalTAAmount = string.Format(hindi, "{0:#,#}",s );
+            var FormattedTotalTAAmount = string.Format(hindi, "{0:#,#}", s);
 
 
 
@@ -176,45 +170,45 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Event Topic"),
-                    Value = formDataList.class1.EventTopic
+                    Value = formDataList.Webinar.EventTopic
                 });
 
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventType"),
-                    Value = formDataList.class1.EventType
+                    Value = formDataList.Webinar.EventType
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventDate"),
-                    Value = formDataList.class1.EventDate
+                    Value = formDataList.Webinar.EventDate
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "StartTime"),
-                    Value = formDataList.class1.StartTime
+                    Value = formDataList.Webinar.StartTime
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EndTime"),
-                    Value = formDataList.class1.EndTime
+                    Value = formDataList.Webinar.EndTime
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "VenueName"),
-                    Value = formDataList.class1.VenueName
+                    ColumnId = GetColumnIdByName(sheet1, "Meeting Type"),
+                    Value = formDataList.Webinar.Meeting_Type
                 });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "City"),
-                    Value = formDataList.class1.City
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "State"),
-                    Value = formDataList.class1.State
-                });
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet1, "City"),
+                //    Value = formDataList.class1.City
+                //});
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet1, "State"),
+                //    Value = formDataList.class1.State
+                //});
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Brands"),
@@ -244,55 +238,55 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Role"),
-                    Value = formDataList.class1.Role
+                    Value = formDataList.Webinar.Role
                 });
 
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
-                    Value = formDataList.class1.IsAdvanceRequired
+                    Value = formDataList.Webinar.IsAdvanceRequired
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventOpen30days"),
-                    Value = formDataList.class1.EventOpen30days
+                    Value = formDataList.Webinar.EventOpen30days
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventWithin7days"),
-                    Value = formDataList.class1.EventWithin7days
+                    Value = formDataList.Webinar.EventWithin7days
                 });
 
                 // //////////////////////////////////////////////////////////////
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "RBM/BM"),
-                    Value = formDataList.class1.RBMorBM
+                    Value = formDataList.Webinar.RBMorBM
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Sales Head"),
-                    Value = formDataList.class1.Sales_Head
+                    Value = formDataList.Webinar.Sales_Head
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Marketing Head"),
-                    Value = formDataList.class1.Marketing_Head
+                    Value = formDataList.Webinar.Marketing_Head
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"),
-                    Value = formDataList.class1.Finance
+                    Value = formDataList.Webinar.Finance
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "InitiatorName"),
-                    Value = formDataList.class1.InitiatorName
+                    Value = formDataList.Webinar.InitiatorName
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Initiator Email"),
-                    Value = formDataList.class1.Initiator_Email
+                    Value = formDataList.Webinar.Initiator_Email
                 });
                 newRow.Cells.Add(new Cell
                 {
@@ -342,7 +336,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
                 var x = 1;
-                foreach (var p in formDataList.class1.Files)
+                foreach (var p in formDataList.Webinar.Files)
                 {
 
 
@@ -373,7 +367,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-                if (formDataList.class1.EventOpen30days == "Yes" || formDataList.class1.EventWithin7days == "Yes" || formDataList.class1.FB_Expense_Excluding_Tax == "Yes")
+                if (formDataList.Webinar.EventOpen30days == "Yes" || formDataList.Webinar.EventWithin7days == "Yes" || formDataList.Webinar.FB_Expense_Excluding_Tax == "Yes")
                 {
                     var eventId = val;
                     try
@@ -390,84 +384,84 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Event Topic"),
-                            Value = formDataList.class1.EventTopic
+                            Value = formDataList.Webinar.EventTopic
                         });
 
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventType"),
-                            Value = formDataList.class1.EventType
+                            Value = formDataList.Webinar.EventType
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventDate"),
-                            Value = formDataList.class1.EventDate
+                            Value = formDataList.Webinar.EventDate
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "StartTime"),
-                            Value = formDataList.class1.StartTime
+                            Value = formDataList.Webinar.StartTime
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EndTime"),
-                            Value = formDataList.class1.EndTime
+                            Value = formDataList.Webinar.EndTime
                         });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "VenueName"),
-                            Value = formDataList.class1.VenueName
-                        });
+                        //newRow7.Cells.Add(new Cell
+                        //{
+                        //    ColumnId = GetColumnIdByName(sheet7, "VenueName"),
+                        //    Value = formDataList.Webinar.VenueName
+                        //});
+
+                        //newRow7.Cells.Add(new Cell
+                        //{
+                        //    ColumnId = GetColumnIdByName(sheet7, "City"),
+                        //    Value = formDataList.Webinar.City
+                        //});
+                        //newRow7.Cells.Add(new Cell
+                        //{
+                        //    ColumnId = GetColumnIdByName(sheet7, "State"),
+                        //    Value = formDataList.class1.State
+                        //});
 
                         newRow7.Cells.Add(new Cell
                         {
-                            ColumnId = GetColumnIdByName(sheet7, "City"),
-                            Value = formDataList.class1.City
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "State"),
-                            Value = formDataList.class1.State
-                        });
-                      
-                        newRow7.Cells.Add(new Cell
-                        {
                             ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"),
-                            Value = formDataList.class1.EventOpen30days
+                            Value = formDataList.Webinar.EventOpen30days
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"),
-                            Value = formDataList.class1.EventWithin7days
+                            Value = formDataList.Webinar.EventWithin7days
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "PRE-F&B Expense Excluding Tax"),
-                            Value = formDataList.class1.FB_Expense_Excluding_Tax
+                            Value = formDataList.Webinar.FB_Expense_Excluding_Tax
                         });
 
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Sales Head"),
-                            Value = formDataList.class1.Sales_Head
+                            Value = formDataList.Webinar.Sales_Head
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Finance Head"),
-                            Value = formDataList.class1.Sales_Head
+                            Value = formDataList.Webinar.Sales_Head
                         });
-                       
+
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "InitiatorName"),
-                            Value = formDataList.class1.InitiatorName
+                            Value = formDataList.Webinar.InitiatorName
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Initiator Email"),
-                            Value = formDataList.class1.Initiator_Email
+                            Value = formDataList.Webinar.Initiator_Email
                         });
-                       
+
 
                         var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
 
@@ -475,7 +469,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
                         var j = 1;
-                        foreach (var p in formDataList.class1.DeviationFiles)
+                        foreach (var p in formDataList.Webinar.DeviationFiles)
                         {
 
 
@@ -503,16 +497,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             j++;
                         }
                     }
-                    catch(Exception ex) 
+                    catch (Exception ex)
                     {
                         return BadRequest(ex.Message);
                     }
                 }
 
-                    
 
-                    
-                      
+
+
+
 
 
 
@@ -660,7 +654,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         Value = formData.HcpName
                     });
                     // ///////////////////////////////////////////////////
-                  
+
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
 
@@ -818,10 +812,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 }
 
                 return Ok(new
-                {  Message = " Success!" });
+                { Message = " Success!" });
 
 
-               
+
             }
 
 
@@ -1254,91 +1248,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-        [HttpPost("AddEventRequestExpensesData")]
-        public IActionResult AddEventRequestExpensesData(EventRequestExpenseSheet formData)
-        {
-            try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
-
-
-                long.TryParse(sheetId, out long parsedSheetId);
-
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
-
-
-                var newRow = new Row();
-                newRow.Cells = new List<Cell>();
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "HCP Name"),
-                    Value = formData.EventId
-                });
-
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"),
-                    Value = formData.Expense
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "EventType"),
-                    Value = formData.Amount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "HCPRole"),
-                    Value = formData.AmountExcludingTax
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "MISCODE"),
-                    Value = formData.BtcorBte
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"),
-                    Value = formData.BtcAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
-                    Value = formData.BteAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
-                    Value = formData.BudgetAmount
-                });
-
-
-
-                var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-
-
-
-
-
-
-
-
-
-
-
-                return Ok(new
-                { Message = "Data added successfully." });
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
 
         [HttpPost("AddEventSettlementData")]
         public IActionResult AddEventSettlementData(EventSettlement formData)
@@ -1695,7 +1604,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         {
                             ColumnId = GetColumnIdByName(sheet7, "POST- Beyond30Days Deviation Date Trigger"),
                             Value = formData.EventOpen30Days
-                        }); 
+                        });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "POST-Lessthan5Invitees Deviation Trigger"),
@@ -1891,36 +1800,3 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
     }
 }
 
-
-
-
-
-
-
-  //var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
-  //                  var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
-  //                  var val = eventIdCell.DisplayValue;
-  //                  var IsHonorarium = "Yes";
-  //                  Row existingRow = GetRowById(smartsheet, parsedSheetId1, val);
-  //                  Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
-
-
-  //                  if (existingRow == null)
-  //                  {
-  //                      return NotFound($"Row with id {val} not found.");
-  //                  }
-
-  //                  foreach (var cell in existingRow.Cells)
-  //                  {
-  //                      if (cell.ColumnId == GetColumnIdByName(sheet, "Honorarium Submitted?"))
-  //                      {
-  //                          cell.Value = IsHonorarium;
-  //                      }
-  //                      updateRow.Cells.Add(cell);
-  //                      //else
-  //                      //{
-  //                      //    c
-  //                      //}
-
-  //                  }
-  //                  smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRow });

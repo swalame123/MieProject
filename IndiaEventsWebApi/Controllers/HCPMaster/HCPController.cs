@@ -114,7 +114,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                         long.TryParse(sheetId, out long parsedSheetId1);
                         Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
 
-                        Row existingRow = sheet.Rows.FirstOrDefault(row =>
+                        Row existingRow = sheet1.Rows.FirstOrDefault(row =>
                             row.Cells != null &&
                             row.Cells.Any(cell =>
                                 cell.Value != null &&
