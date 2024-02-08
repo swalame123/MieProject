@@ -368,6 +368,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+                    // ////////////////////////////////////////////////
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -501,6 +506,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+                            // ////////////////////////////////
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch(Exception ex) 
@@ -594,16 +604,35 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         ColumnId = GetColumnIdByName(sheet4, "HonorariumRequired"),
                         Value = formData.HonorariumRequired
                     });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HonorariumAmount"),
-                        Value = formData.HonarariumAmount
-                    });
+                    //newRow1.Cells.Add(new Cell
+                    //{
+                    //    ColumnId = GetColumnIdByName(sheet4, "HonorariumAmount"),
+                    //    Value = formData.HonarariumAmount
+                    //});
                     newRow1.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet4, "Speciality"),
                         Value = formData.Speciality
                     });
+                    if(formData.HcpRole == "Speaker")
+                    {
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4,"HCPName"), Value = formData.HcpName });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4,"Event Topic"), Value = formDataList.class1.EventTopic });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4,"Venue name"), Value = formDataList.class1.VenueName });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4,"Event Date Start"), Value = formDataList.class1.EventDate });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4,"Event End Date"), Value = formDataList.class1.EventDate });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "HonorariumAmount"), Value = formData.HonarariumAmount });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4,"PAN card name"), Value = formData.HcpName });
+                    }
+                    if(formData.HcpRole == "Trainer")
+                    {
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Venue name"), Value = formDataList.class1.VenueName });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Date Start"), Value = formDataList.class1.EventDate });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event End Date"), Value = formDataList.class1.EventDate });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "HCPName"), Value = formData.HcpName });
+                        newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Start Time"), Value = formDataList.class1.StartTime });
+
+                    }
                     newRow1.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet4, "Tier"),
@@ -654,11 +683,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         ColumnId = GetColumnIdByName(sheet4, "EventId/EventRequestId"),
                         Value = val
                     });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
+                    //newRow1.Cells.Add(new Cell
+                    //{
+                    //    ColumnId = GetColumnIdByName(sheet4, "HCPName"),
+                    //    Value = formData.HcpName
+                    //});
                     // ///////////////////////////////////////////////////
                   
 
@@ -734,6 +763,13 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         ColumnId = GetColumnIdByName(sheet3, "EventId/EventRequestId"),
                         Value = val
                     });
+                    newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "Invitee Source"), Value = formdata.InviteedFrom });
+                    if (formdata.InviteedFrom == "Other")
+                    {
+                        newRow3.Cells.Add(new Cell {ColumnId = GetColumnIdByName(sheet3, "Invitee Name"), Value = formdata.NewInviteeName });
+                        newRow3.Cells.Add(new Cell {ColumnId = GetColumnIdByName(sheet3, "Invitee Email"), Value = formdata.Email });
+                       
+                    }
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId3, new Row[] { newRow3 });
                 }
@@ -1076,6 +1112,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -1199,6 +1241,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -1632,6 +1679,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
                 if (formData.EventOpen30Days == "Yes" || formData.EventLessThan5Days == "Yes")
                 {
@@ -1757,6 +1810,13 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)

@@ -728,6 +728,13 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                         ColumnId = GetColumnIdByName(sheet3, "EventId/EventRequestId"),
                         Value = val
                     });
+                    newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "Invitee Source"), Value = formdata.InviteedFrom });
+                    if (formdata.InviteedFrom == "Others")
+                    {
+                        newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "Invitee Name"), Value = formdata.NewInviteeName });
+                        newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "Invitee Email"), Value = formdata.Email });
+                       
+                    }
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId3, new Row[] { newRow3 });
                 }

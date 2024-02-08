@@ -662,7 +662,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     // ///////////////////////////////////////////////////
 
 
-                    smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
+                    var addeddatarow=smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
 
                     var columnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                     var Cell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == columnId);
@@ -670,7 +670,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
 
                     if (FCPA == "Yes")
                     {
-                        byte[] fileBytes = Convert.FromBase64String(formDataList.HcpConsultant.BrochureFile);
+                        byte[] fileBytes = Convert.FromBase64String(formDataList.HcpConsultant.FcpaFile);
                         var folderName = Path.Combine("Resources", "Images");
                         var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                         if (!Directory.Exists(pathToSave))
@@ -679,17 +679,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         }
 
                         string fileType = GetFileType(fileBytes);
-                        string fileName = value + "-"  +DateTime.Now+ " FCPA." + fileType;
+                        string fileName = value + "-" + " FCPA." + fileType;
                         // string fileName = val+x + ": AttachedFile." + fileType;
                         string filePath = Path.Combine(pathToSave, fileName);
 
 
-                        var addedRow = addedRows[0];
+                        var addedRow = addeddatarow[0];
 
                         System.IO.File.WriteAllBytes(filePath, fileBytes);
                         string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
+                                parsedSheetId4, addedRow.Id.Value,filePath, "application/msword");
 
                     }
 
