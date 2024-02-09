@@ -925,16 +925,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                     Value = formData.RequestHonorariumList.EventTopic
                 });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "City"),
-                    Value = formData.RequestHonorariumList.City
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "State"),
-                    Value = formData.RequestHonorariumList.State
-                });
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet, "City"),
+                //    Value = formData.RequestHonorariumList.City
+                //});
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet, "State"),
+                //    Value = formData.RequestHonorariumList.State
+                //});
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "Start Time"),
@@ -945,11 +945,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                     ColumnId = GetColumnIdByName(sheet, "End Time"),
                     Value = formData.RequestHonorariumList.EndTime
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "Venue Name"),
-                    Value = formData.RequestHonorariumList.VenueName
-                });
+                //newRow.Cells.Add(new Cell
+                //{
+                //    ColumnId = GetColumnIdByName(sheet, "Venue Name"),
+                //    Value = formData.RequestHonorariumList.VenueName
+                //});
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet, "Total Travel & Accomodation Spend"),
