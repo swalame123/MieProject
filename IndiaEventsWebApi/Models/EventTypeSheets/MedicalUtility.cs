@@ -49,6 +49,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
 
     public class ExpenseListData
     {
+        public string? MisCode { get;set; }
+
         public string? Expense { get; set; }
         public string? BTC_BTE { get; set; }
         public string? TotalExpenseAmount { get; set; }

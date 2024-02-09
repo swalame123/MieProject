@@ -709,6 +709,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     var newRow6 = new Row();
                     newRow6.Cells = new List<Cell>();
+                    newRow6.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet6, "MisCode"),
+                        Value = formdata.Expense
+                    });
 
                     newRow6.Cells.Add(new Cell
                     {
