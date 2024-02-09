@@ -1,30 +1,34 @@
-﻿using IndiaEventsWebApi.Models;
-using IndiaEventsWebApi.Models.EventTypeSheets;
+﻿using IndiaEventsWebApi.Models.EventTypeSheets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.Globalization;
 using System.Text;
+//using static IndiaEventsWebApi.Models.EventTypeSheets.MedicalUtility;
 
-namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
+namespace IndiaEventsWebApi.Controllers.RequestSheets
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HCPConsultantController : ControllerBase
+    public class medicalPreUtilityController : ControllerBase
     {
-
         private readonly string accessToken;
         private readonly IConfiguration configuration;
 
-        public HCPConsultantController(IConfiguration configuration)
+        public medicalPreUtilityController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
 
         }
-        [HttpPost("HCPConsultant")]
-        public IActionResult AllObjModelsData(HCPConsultantPayload formDataList)
+        //[HttpPost("PreEventData")]
+        //public IActionResult PreEventData(MedicalPreEventPayload formDataList)
+        //{
+        //    return Ok(formDataList);
+        //}
+        [HttpPost("PreEventData")]
+        public IActionResult PreEventData(MedicalUtilityPreEventPayload formDataList)
         {
 
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
@@ -60,17 +64,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             //StringBuilder addedSlideKitData = new StringBuilder();
             StringBuilder addedExpences = new StringBuilder();
 
-            int addedSlideKitDataNo = 1;
+            // int addedSlideKitDataNo = 1;
             int addedHcpDataNo = 1;
-            int addedInviteesDataNo = 1;
+            //  int addedInviteesDataNo = 1;
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
 
-            var TotalHonorariumAmount = 0;
-            var TotalTravelAmount = 0;
-            var TotalAccomodateAmount = 0;
-            var TotalHCPLcAmount = 0;
-            var TotalInviteesLcAmount = 0;
+            //var TotalHonorariumAmount = 0;
+            //var TotalTravelAmount = 0;
+            //var TotalAccomodateAmount = 0;
+            //var TotalHCPLcAmount = 0;
+            //var TotalInviteesLcAmount = 0;
             var TotalExpenseAmount = 0;
 
             CultureInfo hindi = new CultureInfo("hi-IN");
@@ -78,10 +82,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
 
             var EventOpen30Days = "";
             var EventWithin7Days = "";
-            var BrouchereUpload = "";
+            var UploadDeviationFile = "";
             var FCPA = "";
             //var InvoiceUpload = "";
-            if (formDataList.HcpConsultant.EventWithin7days != "")
+            if (formDataList.MedicalUtilityData.EventWithin7daysFile != "")
             {
                 EventWithin7Days = "Yes";
             }
@@ -89,7 +93,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             {
                 EventWithin7Days = "No";
             }
-            if (formDataList.HcpConsultant.EventOpen30days != "")
+            if (formDataList.MedicalUtilityData.EventOpen30daysFile != "")
             {
                 EventOpen30Days = "Yes";
             }
@@ -97,38 +101,30 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             {
                 EventOpen30Days = "No";
             }
-            if (formDataList.HcpConsultant.BrochureFile != "")
+            if (formDataList.MedicalUtilityData.UploadDeviationFile != "")
             {
-                BrouchereUpload = "Yes";
+                UploadDeviationFile = "Yes";
             }
             else
             {
-                BrouchereUpload = "No";
+                UploadDeviationFile = "No";
             }
-            if (formDataList.HcpConsultant.FcpaFile != "")
-            {
-                FCPA = "Yes";
-            }
-            else
-            {
-                FCPA = "No";
-            }
-           
+
 
 
 
             foreach (var formdata in formDataList.ExpenseSheet)
             {
-                string rowData = $"{addedExpencesNo}. {formdata.Expense} | RegstAmount: {formdata.RegstAmount}| {formdata.BTC_BTE}";
+                string rowData = $"{addedExpencesNo}. {formdata.Expense} | TotalAmount: {formdata.TotalExpenseAmount}| {formdata.BTC_BTE}";
                 addedExpences.AppendLine(rowData);
                 addedExpencesNo++;
-                var amount = int.Parse(formdata.RegstAmount);
+                var amount = int.Parse(formdata.TotalExpenseAmount);
                 TotalExpenseAmount = TotalExpenseAmount + amount;
 
             }
             string Expense = addedExpences.ToString();
 
-          
+
 
             foreach (var formdata in formDataList.BrandsList)
             {
@@ -139,36 +135,24 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             }
             string brand = addedBrandsData.ToString();
 
-           
+
 
 
             foreach (var formdata in formDataList.HcpList)
             {
-
-                var HM = int.Parse(formdata.RegistrationAmount);
-                var x = string.Format(hindi, "{0:#,#}", HM);
-                var t = int.Parse(formdata.TravelAmount) + int.Parse(formdata.AccomAmount);
-                var y = string.Format(hindi, "{0:#,#}", t);
-                //string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |Name: {formdata.HcpName} | Honr.Amt: {formdata.HonarariumAmount} |Trav.Amt: {formdata.Travel} |Acco.Amt: {formdata.Accomdation} ";
-                string rowData = $"{addedHcpDataNo}. {formdata.MisCode} |{formdata.HcpName} | Regst.Amt: {x} |Trav.&Acc.Amt: {y} ";
+                string rowData = $"{addedHcpDataNo}. {formdata.MisCode} |{formdata.HcpName} |Speciality: {formdata.Speciality} |Tier: {formdata.Tier} ";
 
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
-                TotalHonorariumAmount = TotalHonorariumAmount + int.Parse(formdata.RegistrationAmount);
-                TotalTravelAmount = TotalTravelAmount + int.Parse(formdata.TravelAmount);
-                TotalAccomodateAmount = TotalAccomodateAmount + int.Parse(formdata.AccomAmount);
-                TotalHCPLcAmount = TotalHCPLcAmount + int.Parse(formdata.LcAmount);
+
             }
             string HCP = addedHcpData.ToString();
 
 
-            var c = TotalHCPLcAmount + TotalInviteesLcAmount;
-          
-            var total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
 
-           
-            var s = (TotalTravelAmount + TotalAccomodateAmount);
-           
+            var total = TotalExpenseAmount;
+
+
 
 
 
@@ -181,49 +165,45 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Event Topic"),
-                    Value = formDataList.HcpConsultant.EventTopic
+                    Value = formDataList.MedicalUtilityData.EventTopic
                 });
 
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventType"),
-                    Value = formDataList.HcpConsultant.EventType
+                    Value = formDataList.MedicalUtilityData.EventType
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventDate"),
-                    Value = formDataList.HcpConsultant.EventDate
+                    Value = formDataList.MedicalUtilityData.EventDate
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "StartTime"),
-                    Value = formDataList.HcpConsultant.StartTime
+                    ColumnId = GetColumnIdByName(sheet1, "Valid From"),
+                    Value = formDataList.MedicalUtilityData.ValidFrom
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "EndTime"),
-                    Value = formDataList.HcpConsultant.EndTime
+                    ColumnId = GetColumnIdByName(sheet1, "Valid To"),
+                    Value = formDataList.MedicalUtilityData.ValidTill
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "VenueName"),
-                    Value = formDataList.HcpConsultant.VenueName
+                    ColumnId = GetColumnIdByName(sheet1, "Medical Utility Type"),
+                    Value = formDataList.MedicalUtilityData.MedicalUtilityType
                 });
 
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Sponsorship Society Name"),
-                    Value = formDataList.HcpConsultant.SponsorshipSocietyName
+                    ColumnId = GetColumnIdByName(sheet1, "Medical Utility Description"),
+                    Value = formDataList.MedicalUtilityData.MedicalUtilityDescription
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Venue Country"),
-                    Value = formDataList.HcpConsultant.Country
-                });
+
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
-                    Value = formDataList.HcpConsultant.IsAdvanceRequired
+                    Value = formDataList.MedicalUtilityData.IsAdvanceRequired
                 });
                 newRow.Cells.Add(new Cell
                 {
@@ -240,14 +220,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     ColumnId = GetColumnIdByName(sheet1, "Panelists"),
                     Value = HCP
                 });
-             
+
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Role"),
-                    Value = formDataList.HcpConsultant.Role
+                    Value = formDataList.MedicalUtilityData.Role
                 });
 
-             
+
                 //newRow.Cells.Add(new Cell
                 //{
                 //    ColumnId = GetColumnIdByName(sheet1, "EventOpen30days"),
@@ -259,63 +239,38 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 //    Value = formDataList.HcpConsultant.EventWithin7days
                 //});
 
-              
+
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "RBM/BM"),
-                    Value = formDataList.HcpConsultant.RBMorBM
+                    Value = formDataList.MedicalUtilityData.RBMorBM
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Sales Head"),
-                    Value = formDataList.HcpConsultant.Sales_Head
+                    Value = formDataList.MedicalUtilityData.Sales_Head
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Marketing Head"),
-                    Value = formDataList.HcpConsultant.Marketing_Head
+                    Value = formDataList.MedicalUtilityData.Marketing_Head
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"),
-                    Value = formDataList.HcpConsultant.Finance
+                    Value = formDataList.MedicalUtilityData.Finance
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "InitiatorName"),
-                    Value = formDataList.HcpConsultant.InitiatorName
+                    Value = formDataList.MedicalUtilityData.InitiatorName
                 });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Initiator Email"),
-                    Value = formDataList.HcpConsultant.Initiator_Email
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total HCP Registration Spend"),
-                    Value = TotalHonorariumAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
-                    Value = TotalTravelAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accomodation Spend"),
-                    Value = s
+                    Value = formDataList.MedicalUtilityData.Initiator_Email
                 });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Spend"),
-                    Value = TotalAccomodateAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Local Conveyance"),
-                    Value = c
-                });
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
@@ -335,35 +290,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
 
-                if (BrouchereUpload == "Yes")
-                {
-                    byte[] fileBytes = Convert.FromBase64String(formDataList.HcpConsultant.BrochureFile);
-                    var folderName = Path.Combine("Resources", "Images");
-                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                    if (!Directory.Exists(pathToSave))
-                    {
-                        Directory.CreateDirectory(pathToSave);
-                    }
-
-                    string fileType = GetFileType(fileBytes);
-                    string fileName = val + "-" + " Brochure." + fileType;
-                    // string fileName = val+x + ": AttachedFile." + fileType;
-                    string filePath = Path.Combine(pathToSave, fileName);
-
-
-                    var addedRow = addedRows[0];
-
-                    System.IO.File.WriteAllBytes(filePath, fileBytes);
-                    string type = GetContentType(fileType);
-                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                            parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
-                 
-                }
 
 
 
 
-                if (formDataList.HcpConsultant.EventOpen30days == "Yes" || formDataList.HcpConsultant.EventWithin7days == "Yes" || formDataList.HcpConsultant.AggregateDeviation == "Yes")
+
+                if (formDataList.MedicalUtilityData.EventOpen30daysFile == "Yes" || formDataList.MedicalUtilityData.EventWithin7daysFile == "Yes" || formDataList.MedicalUtilityData.IsDeviationUpload == "Yes")
                 {
                     var eventId = val;
                     try
@@ -380,90 +312,64 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Event Topic"),
-                            Value = formDataList.HcpConsultant.EventTopic
+                            Value = formDataList.MedicalUtilityData.EventTopic
                         });
 
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventType"),
-                            Value = formDataList.HcpConsultant.EventType
+                            Value = formDataList.MedicalUtilityData.EventType
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventDate"),
-                            Value = formDataList.HcpConsultant.EventDate
+                            Value = formDataList.MedicalUtilityData.EventDate
                         });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "StartTime"),
-                            Value = formDataList.HcpConsultant.StartTime
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EndTime"),
-                            Value = formDataList.HcpConsultant.EndTime
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "VenueName"),
-                            Value = formDataList.HcpConsultant.VenueName
-                        });
-
-                        //newRow7.Cells.Add(new Cell
-                        //{
-                        //    ColumnId = GetColumnIdByName(sheet7, "City"),
-                        //    Value = formDataList.class1.City
-                        //});
-                        //newRow7.Cells.Add(new Cell
-                        //{
-                        //    ColumnId = GetColumnIdByName(sheet7, "State"),
-                        //    Value = formDataList.class1.State
-                        //});
 
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"),
-                            Value = formDataList.HcpConsultant.EventOpen30days
+                            Value = formDataList.MedicalUtilityData.EventOpen30daysFile
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"),
-                            Value = formDataList.HcpConsultant.EventWithin7days
+                            Value = formDataList.MedicalUtilityData.EventWithin7daysFile
                         });
                         newRow7.Cells.Add(new Cell
                         {
-                            ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 5,00,000 Trigger"),
-                            Value = formDataList.HcpConsultant.AggregateDeviation
+                            ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 1,00,000 Trigger"),
+                            Value = formDataList.MedicalUtilityData.UploadDeviationFile
                         });
 
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Sales Head"),
-                            Value = formDataList.HcpConsultant.Sales_Head
+                            Value = formDataList.MedicalUtilityData.Sales_Head
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Finance Head"),
-                            Value = formDataList.HcpConsultant.Sales_Head
+                            Value = formDataList.MedicalUtilityData.Sales_Head
                         });
 
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "InitiatorName"),
-                            Value = formDataList.HcpConsultant.InitiatorName
+                            Value = formDataList.MedicalUtilityData.InitiatorName
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "Initiator Email"),
-                            Value = formDataList.HcpConsultant.Initiator_Email
+                            Value = formDataList.MedicalUtilityData.Initiator_Email
                         });
 
 
                         var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
-                        
+
                         if (EventWithin7Days == "Yes")
                         {
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.HcpConsultant.EventWithin7days);
+                            byte[] fileBytes = Convert.FromBase64String(formDataList.MedicalUtilityData.EventWithin7daysFile);
                             var folderName = Path.Combine("Resources", "Images");
                             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                             if (!Directory.Exists(pathToSave))
@@ -487,7 +393,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         }
                         if (EventOpen30Days == "Yes")
                         {
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.HcpConsultant.EventOpen30days);
+                            byte[] fileBytes = Convert.FromBase64String(formDataList.MedicalUtilityData.EventOpen30daysFile);
                             var folderName = Path.Combine("Resources", "Images");
                             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                             if (!Directory.Exists(pathToSave))
@@ -509,37 +415,31 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
 
                         }
-                        if(formDataList.HcpConsultant.AggregateDeviation == "Yes")
+                        if (UploadDeviationFile == "Yes")
                         {
-                            var j = 1;
-                            foreach (var p in formDataList.HcpConsultant.AggregateDeviationFiles)
+                            byte[] fileBytes = Convert.FromBase64String(formDataList.MedicalUtilityData.UploadDeviationFile);
+                            var folderName = Path.Combine("Resources", "Images");
+                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                            if (!Directory.Exists(pathToSave))
                             {
-
-
-
-                                byte[] fileBytes = Convert.FromBase64String(p);
-                                var folderName = Path.Combine("Resources", "Images");
-                                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                                if (!Directory.Exists(pathToSave))
-                                {
-                                    Directory.CreateDirectory(pathToSave);
-                                }
-
-                                string fileType = GetFileType(fileBytes);
-                                string fileName = eventId + "-" + j + " Agregatedeviation." + fileType;
-                                // string fileName = val+x + ": AttachedFile." + fileType;
-                                string filePath = Path.Combine(pathToSave, fileName);
-
-
-                                var addedRow = addeddeviationrow[0];
-
-                                System.IO.File.WriteAllBytes(filePath, fileBytes);
-                                string type = GetContentType(fileType);
-                                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                        parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-                                j++;
+                                Directory.CreateDirectory(pathToSave);
                             }
+
+                            string fileType = GetFileType(fileBytes);
+                            string fileName = val + "-" + " UploadDeviationFile." + fileType;
+                            // string fileName = val+x + ": AttachedFile." + fileType;
+                            string filePath = Path.Combine(pathToSave, fileName);
+
+
+                            var addedRow = addeddeviationrow[0];
+
+                            System.IO.File.WriteAllBytes(filePath, fileBytes);
+                            string type = GetContentType(fileType);
+                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+
                         }
+
 
 
                     }
@@ -548,37 +448,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         return BadRequest(ex.Message);
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -593,7 +462,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         ColumnId = GetColumnIdByName(sheet4, "HCPName"),
                         Value = formData.HcpName
                     });
-                   
+
 
                     newRow1.Cells.Add(new Cell
                     {
@@ -607,30 +476,27 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     });
                     newRow1.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet4, "Travel"),
-                        Value = formData.TravelAmount
+                        ColumnId = GetColumnIdByName(sheet4, "Speciality"),
+                        Value = formData.Speciality
                     });
-                  
+
                     newRow1.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet4, "Accomodation"),
-                        Value = formData.AccomAmount
+                        ColumnId = GetColumnIdByName(sheet4, "Tier"),
+                        Value = formData.Tier
                     });
+
                     newRow1.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet4, "LocalConveyance"),
-                        Value = formData.LcAmount
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Registration Amount"),
-                        Value = formData.RegistrationAmount
+                        ColumnId = GetColumnIdByName(sheet4, "Medical Utility Cost"),
+                        Value = formData.MedicalUtilityCostAmount
                     });
                     newRow1.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet4, "TotalSpend"),
-                        Value = formData.BudgetAmount
+                        ColumnId = GetColumnIdByName(sheet4, "Medical Utility Type"),
+                        Value = formDataList.MedicalUtilityData.MedicalUtilityType
                     });
+
                     newRow1.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet4, "Legitimate Need"),
@@ -651,26 +517,64 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         ColumnId = GetColumnIdByName(sheet4, "FCPA Date"),
                         Value = formData.Fcpadate
                     });
-                   
-                   
+
+
                     newRow1.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet4, "EventId/EventRequestId"),
                         Value = val
                     });
-                   
-                    // ///////////////////////////////////////////////////
 
 
-                    var addeddatarow=smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
+                    var addeddatarows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
+
+                    var FCPAFile = "";
+                    var UploadWrittenRequestDate = "";
+                    var UploadHCPRequestDate = "";
+                    var Invoice_Brouchere_Quotation = "";
+
+                    if (formData.UploadFCPA != "")
+                    {
+                        FCPAFile = "Yes";
+                    }
+                    else
+                    {
+                        FCPAFile = "No";
+                    }
+                    if (formData.UploadWrittenRequestDate != "")
+                    {
+                        UploadWrittenRequestDate = "Yes";
+                    }
+                    else
+                    {
+                        UploadWrittenRequestDate = "No";
+                    }
+                    if (formData.UploadHCPRequestDate != "")
+                    {
+                        UploadHCPRequestDate = "Yes";
+                    }
+                    else
+                    {
+                        UploadHCPRequestDate = "No";
+                    }
+                    if (formData.Invoice_Brouchere_Quotation != "")
+                    {
+                        Invoice_Brouchere_Quotation = "Yes";
+                    }
+                    else
+                    {
+                        Invoice_Brouchere_Quotation = "No";
+                    }
+
+
 
                     var columnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                     var Cell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == columnId);
                     var value = Cell.DisplayValue;
 
-                    if (FCPA == "Yes")
+                    if (FCPAFile == "Yes")
                     {
-                        byte[] fileBytes = Convert.FromBase64String(formDataList.HcpConsultant.FcpaFile);
+                        byte[] fileBytes = Convert.FromBase64String(formData.UploadFCPA);
                         var folderName = Path.Combine("Resources", "Images");
                         var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                         if (!Directory.Exists(pathToSave))
@@ -684,12 +588,84 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         string filePath = Path.Combine(pathToSave, fileName);
 
 
-                        var addedRow = addeddatarow[0];
+                        var addedRow = addeddatarows[0];
 
                         System.IO.File.WriteAllBytes(filePath, fileBytes);
                         string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                parsedSheetId4, addedRow.Id.Value,filePath, "application/msword");
+                                parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
+
+                    }
+                    if (UploadWrittenRequestDate == "Yes")
+                    {
+                        byte[] fileBytes = Convert.FromBase64String(formData.UploadWrittenRequestDate);
+                        var folderName = Path.Combine("Resources", "Images");
+                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                        if (!Directory.Exists(pathToSave))
+                        {
+                            Directory.CreateDirectory(pathToSave);
+                        }
+
+                        string fileType = GetFileType(fileBytes);
+                        string fileName = value + "-" + " UploadWrittenRequestDate." + fileType;
+                        // string fileName = val+x + ": AttachedFile." + fileType;
+                        string filePath = Path.Combine(pathToSave, fileName);
+
+
+                        var addedRow = addeddatarows[0];
+
+                        System.IO.File.WriteAllBytes(filePath, fileBytes);
+                        string type = GetContentType(fileType);
+                        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
+
+                    }
+                    if (UploadHCPRequestDate == "Yes")
+                    {
+                        byte[] fileBytes = Convert.FromBase64String(formData.UploadHCPRequestDate);
+                        var folderName = Path.Combine("Resources", "Images");
+                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                        if (!Directory.Exists(pathToSave))
+                        {
+                            Directory.CreateDirectory(pathToSave);
+                        }
+
+                        string fileType = GetFileType(fileBytes);
+                        string fileName = value + "-" + " UploadHCPRequestDate." + fileType;
+                        // string fileName = val+x + ": AttachedFile." + fileType;
+                        string filePath = Path.Combine(pathToSave, fileName);
+
+
+                        var addedRow = addeddatarows[0];
+
+                        System.IO.File.WriteAllBytes(filePath, fileBytes);
+                        string type = GetContentType(fileType);
+                        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
+
+                    }
+                    if (Invoice_Brouchere_Quotation == "Yes")
+                    {
+                        byte[] fileBytes = Convert.FromBase64String(formData.Invoice_Brouchere_Quotation);
+                        var folderName = Path.Combine("Resources", "Images");
+                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                        if (!Directory.Exists(pathToSave))
+                        {
+                            Directory.CreateDirectory(pathToSave);
+                        }
+
+                        string fileType = GetFileType(fileBytes);
+                        string fileName = value + "-" + " Invoice_Brouchere_Quotation." + fileType;
+                        // string fileName = val+x + ": AttachedFile." + fileType;
+                        string filePath = Path.Combine(pathToSave, fileName);
+
+
+                        var addedRow = addeddatarows[0];
+
+                        System.IO.File.WriteAllBytes(filePath, fileBytes);
+                        string type = GetContentType(fileType);
+                        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
 
                     }
 
@@ -727,7 +703,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId2, new Row[] { newRow2 });
 
                 }
-               
+
 
                 foreach (var formdata in formDataList.ExpenseSheet)
                 {
@@ -744,7 +720,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         ColumnId = GetColumnIdByName(sheet6, "EventId/EventRequestID"),
                         Value = val
                     });
-                 
+
                     newRow6.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"),
@@ -752,174 +728,22 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     });
                     newRow6.Cells.Add(new Cell
                     {
-                        ColumnId = GetColumnIdByName(sheet6, "Registration Amount"),
-                        Value = formdata.RegstAmount
+                        ColumnId = GetColumnIdByName(sheet6, "Amount"),
+                        Value = formdata.TotalExpenseAmount
                     });
-                    //newRow6.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet6, "BTCAmount"),
-                    //    Value = formdata.BtcAmount
-                    //});
-                    //newRow6.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet6, "BTEAmount"),
-                    //    Value = formdata.BteAmount
-                    //});
+
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
                 }
 
                 return Ok(new
                 { Message = " Success!" });
-
-
-
             }
-
-
 
             catch (Exception ex)
             {
                 return BadRequest($"Could not find {ex.Message}");
             }
-
-
-
-
-
-
-
-
-
-
-
-
         }
-
-
-        [HttpGet("HcpFollowUpData")]
-        public IActionResult GetEventRequestWebData()
-        {
-            try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:HcpFollowup").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
-                return Ok(sheetData);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpPost("HcpFollowup")]
-        public IActionResult HcpFollowup(List<HCPfollow_upsheet> formDataList)
-        {
-            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-            string sheetId1 = configuration.GetSection("SmartsheetSettings:HcpFollowup").Value;
-            long.TryParse(sheetId1, out long parsedSheetId1);
-            Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
-
-            foreach (var formdata in formDataList)
-            {
-                try
-                {
-
-                    var newRow = new Row();
-                    newRow.Cells = new List<Cell>();
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "HCP Name"),
-                        Value = formdata.HCPName
-                    });
-
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "MIS Code"),
-                        Value = formdata.MisCode
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "GO/N-GO"),
-                        Value = formdata.GO_NGO
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "Country"),
-                        Value = formdata.Country
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "How many days since the parent event Completes"),
-                        Value = formdata.How_many_days_since_the_parent_event_completes
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "Follow-up Event Date"),
-                        Value = formdata.Follow_up_Event_Date
-                    });
-
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet1, "Follow-up Event Code"),
-                        Value = formdata.Follow_up_Event
-                    });
-                    var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
-
-                    if (formdata.AgreementFile != "")
-                    {
-                        byte[] fileBytes = Convert.FromBase64String(formdata.AgreementFile);
-                        var folderName = Path.Combine("Resources", "Images");
-                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                        if (!Directory.Exists(pathToSave))
-                        {
-                            Directory.CreateDirectory(pathToSave);
-                        }
-
-                        string fileType = GetFileType(fileBytes);
-                        string fileName = "AgreementFile." + fileType;
-                        // string fileName = val+x + ": AttachedFile." + fileType;
-                        string filePath = Path.Combine(pathToSave, fileName);
-
-
-                        var addedRow = addedRows[0];
-
-                        System.IO.File.WriteAllBytes(filePath, fileBytes);
-                        string type = GetContentType(fileType);
-                        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
-
-                    }
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-            return Ok(new { Message = " success!" });
-        }
-
 
 
         private string GetContentType(string fileExtension)
@@ -983,9 +807,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             }
         }
 
-
-
-
         private long GetColumnIdByName(Sheet sheet, string columnname)
         {
             foreach (var column in sheet.Columns)
@@ -997,30 +818,5 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             }
             return 0;
         }
-        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string val)
-        {
-            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
-
-            // Assuming you have a column named "Id"
-
-            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Honorarium Submitted?");
-
-            if (idColumn != null)
-            {
-                foreach (var row in sheet.Rows)
-                {
-                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == val);
-
-                    if (cell != null)
-                    {
-                        return row;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-
     }
 }
