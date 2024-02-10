@@ -232,7 +232,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
 
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
                     if (IsPanCardDocument == "Yes")
                     {
@@ -257,7 +260,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         // string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
 
                     } 
                     if (IsTaxResidenceCertificate == "Yes")
@@ -283,7 +289,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         // string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
 
                     }
 

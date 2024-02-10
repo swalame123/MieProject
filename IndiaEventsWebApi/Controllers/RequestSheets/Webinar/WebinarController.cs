@@ -362,6 +362,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -495,6 +500,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -1077,6 +1086,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -1200,6 +1214,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -1548,6 +1567,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
                 if (formData.EventOpen30Days == "Yes" || formData.EventLessThan5Days == "Yes")
                 {
@@ -1673,6 +1697,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Webinar
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)

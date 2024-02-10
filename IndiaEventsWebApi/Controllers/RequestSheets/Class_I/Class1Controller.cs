@@ -240,10 +240,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Class_I
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
                     x++;
 
-                    //if (System.IO.File.Exists(filePath))
-                    //{
-                    //    System.IO.File.Delete(filePath);
-                    //}
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -302,10 +302,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Class_I
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
 
-                            //if(System.IO.File.Exists(filePath))
-                            //{
-                            //    System.IO.File.Delete(filePath);
-                            //}
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -736,10 +736,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Class_I
                     x++;
 
 
-                    //if (System.IO.File.Exists(filePath))
-                    //{
-                    //    System.IO.File.Delete(filePath);
-                    //}
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -863,6 +863,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Class_I
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -1337,6 +1343,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.Class_I
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)

@@ -251,6 +251,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
                 if (InvoiceUpload == "Yes")
                 {
@@ -278,6 +283,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
                     x++;
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -387,6 +397,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                         if (EventWithin7Days == "Yes")
                         {
@@ -414,6 +429,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             j++;
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                     }
                     catch (Exception ex)

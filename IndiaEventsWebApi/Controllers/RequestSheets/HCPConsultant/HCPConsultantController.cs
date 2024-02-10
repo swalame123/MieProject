@@ -76,43 +76,43 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
             CultureInfo hindi = new CultureInfo("hi-IN");
 
 
-            var EventOpen30Days = "";
-            var EventWithin7Days = "";
-            var BrouchereUpload = "";
-            var FCPA = "";
-            //var InvoiceUpload = "";
-            if (formDataList.HcpConsultant.EventWithin7days != "")
-            {
-                EventWithin7Days = "Yes";
-            }
-            else
-            {
-                EventWithin7Days = "No";
-            }
-            if (formDataList.HcpConsultant.EventOpen30days != "")
-            {
-                EventOpen30Days = "Yes";
-            }
-            else
-            {
-                EventOpen30Days = "No";
-            }
-            if (formDataList.HcpConsultant.BrochureFile != "")
-            {
-                BrouchereUpload = "Yes";
-            }
-            else
-            {
-                BrouchereUpload = "No";
-            }
-            if (formDataList.HcpConsultant.FcpaFile != "")
-            {
-                FCPA = "Yes";
-            }
-            else
-            {
-                FCPA = "No";
-            }
+            var EventOpen30Days = !string.IsNullOrEmpty(formDataList.HcpConsultant.EventOpen30days) ? "Yes" : "No";
+            var EventWithin7Days = !string.IsNullOrEmpty(formDataList.HcpConsultant.EventWithin7days) ? "Yes" : "No";
+            var BrouchereUpload = !string.IsNullOrEmpty(formDataList.HcpConsultant.BrochureFile) ? "Yes" : "No";
+            var FCPA = !string.IsNullOrEmpty(formDataList.HcpConsultant.FcpaFile) ? "Yes" : "No";
+            ////var InvoiceUpload = "";
+            //if (formDataList.HcpConsultant.EventWithin7days != "")
+            //{
+            //    EventWithin7Days = "Yes";
+            //}
+            //else
+            //{
+            //    EventWithin7Days = "No";
+            //}
+            //if (formDataList.HcpConsultant.EventOpen30days != "")
+            //{
+            //    EventOpen30Days = "Yes";
+            //}
+            //else
+            //{
+            //    EventOpen30Days = "No";
+            //}
+            //if (formDataList.HcpConsultant.BrochureFile != "")
+            //{
+            //    BrouchereUpload = "Yes";
+            //}
+            //else
+            //{
+            //    BrouchereUpload = "No";
+            //}
+            //if (formDataList.HcpConsultant.FcpaFile != "")
+            //{
+            //    FCPA = "Yes";
+            //}
+            //else
+            //{
+            //    FCPA = "No";
+            //}
            
 
 
@@ -193,6 +193,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventDate"),
                     Value = formDataList.HcpConsultant.EventDate
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Event End Date"),
+                    Value = formDataList.HcpConsultant.EventEndDate
                 });
                 newRow.Cells.Add(new Cell
                 {
@@ -357,7 +362,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     string type = GetContentType(fileType);
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
-                 
+
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
                 }
 
 
@@ -484,6 +494,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
 
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+
                         }
                         if (EventOpen30Days == "Yes")
                         {
@@ -507,6 +522,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                             string type = GetContentType(fileType);
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
 
                         }
                         if(formDataList.HcpConsultant.AggregateDeviation == "Yes")
@@ -538,6 +558,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                                 var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                         parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                                 j++;
+                                if (System.IO.File.Exists(filePath))
+                                {
+                                    System.IO.File.Delete(filePath);
+                                }
                             }
                         }
 

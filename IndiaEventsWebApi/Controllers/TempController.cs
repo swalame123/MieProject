@@ -406,10 +406,10 @@ namespace IndiaEventsWebApi.Controllers
                             parsedProcessSheet, rowId, filePath, "application/msword");
 
 
-                //if (System.IO.File.Exists(filePath))
-                //{
-                //    System.IO.File.Delete(filePath);
-                //}
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
 
 
                 //List<Attachment> attachments = GetAttachmentsFromSheet(sheet_SpeakerCode, EventID, parsedSheetId_SpeakerCode);

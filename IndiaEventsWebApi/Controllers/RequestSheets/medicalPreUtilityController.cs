@@ -390,6 +390,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
 
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                         if (EventOpen30Days == "Yes")
                         {
@@ -414,6 +418,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
 
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
                         if (UploadDeviationFile == "Yes")
                         {
@@ -437,7 +445,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             string type = GetContentType(fileType);
                             var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
                         }
 
 
@@ -594,7 +605,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
                     if (UploadWrittenRequestDate == "Yes")
                     {
@@ -618,7 +632,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
                     if (UploadHCPRequestDate == "Yes")
                     {
@@ -642,7 +659,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         string type = GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
                     if (Invoice_Brouchere_Quotation == "Yes")
                     {
@@ -667,6 +687,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
 
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
 
 

@@ -255,7 +255,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
 
-
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
                     if (IsTrainerCertificate == "Yes")
                     {
@@ -282,6 +285,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
 
 
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
 
 
