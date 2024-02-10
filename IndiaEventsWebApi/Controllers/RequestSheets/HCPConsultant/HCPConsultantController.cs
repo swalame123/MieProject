@@ -297,23 +297,23 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total HCP Registration Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total HCP Registration Amount"),
                     Value = TotalHonorariumAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Travel Amount"),
                     Value = TotalTravelAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accomodation Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accommodation Amount"),
                     Value = s
                 });
 
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Amount"),
                     Value = TotalAccomodateAmount
                 });
                 newRow.Cells.Add(new Cell
@@ -328,7 +328,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Budget"),
                     Value = total
                 });
 
