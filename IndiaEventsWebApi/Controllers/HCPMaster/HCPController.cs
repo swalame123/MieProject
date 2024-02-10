@@ -63,6 +63,77 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
 
 
 
+        [HttpGet("GetRowDataUsingMISCode")]
+        public IActionResult GetRowDataUsingMISCode( string misCode)
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string[] sheetIds = {
+                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
+                configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
+            };
+            foreach (string i in sheetIds)
+            {
+                long.TryParse(i, out long p);
+                Sheet sheeti = smartsheet.SheetResources.GetSheet(p, null, null, null, null, null, null, null);
+                Column hcpNameColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCPName");
+                Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "MisCode");
+                Column Firstname = sheeti.Columns.FirstOrDefault(column => column.Title == "FirstName");
+                Column LastName = sheeti.Columns.FirstOrDefault(column => column.Title == "LastName");
+                Column gongoColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCP Type");
+
+                if (hcpNameColumn != null && misCodeColumn != null)
+                {
+                    Row existingRow = sheeti.Rows.FirstOrDefault(row =>
+                        row.Cells != null &&
+                        //row.Cells.Any(cell =>
+                        //    cell.ColumnId == hcpNameColumn.Id && cell.Value != null && cell.Value.ToString() == Name
+                        //) &&
+                        row.Cells.Any(cell =>
+                            cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == misCode
+                        )
+                    );
+                    if (existingRow != null)
+                    {
+                        // Both Name and MISCode are present in the same row, return success
+                        //return Ok(existingRow);
+                        //var data = existingRow.Cells.ToDictionary(cell => sheeti.Columns.First(col => col.Id == cell.ColumnId).Title, cell => cell.Value.ToString());
+                        //return Ok(data);
+                        // Retrieve specific cell values for columns "HCPName" and "Gongo"
+                        var hcpNameValue = existingRow.Cells
+                            .FirstOrDefault(cell => cell.ColumnId == hcpNameColumn.Id)?.Value.ToString();
+
+                        var gongoValue = existingRow.Cells
+                            .FirstOrDefault(cell => cell.ColumnId == gongoColumn.Id)?.Value.ToString();
+                        var Mis = existingRow.Cells
+                           .FirstOrDefault(cell => cell.ColumnId == misCodeColumn.Id)?.Value.ToString();
+                        var firstName = existingRow.Cells
+                            .FirstOrDefault(cell => cell.ColumnId == Firstname.Id)?.Value.ToString();
+                        var lastName = existingRow.Cells
+                           .FirstOrDefault(cell => cell.ColumnId == LastName.Id)?.Value.ToString();
+
+                        // Create a dictionary with column names and corresponding cell values
+                        var cellData = new Dictionary<string, string>
+                        {
+                            { "MIS Code", Mis },
+                            { "FirstName", firstName },
+                            { "LastName", lastName },
+                            { "HCPName", hcpNameValue },
+                            { "HcpType", gongoValue }
+                        };
+
+                        return Ok(cellData);
+                    }
+
+                }
+            }
+            return Ok("False");
+        }
+
+
+
 
         [HttpPost("PostHcpData")]
         public IActionResult PostHcpData1(IFormFile file)
