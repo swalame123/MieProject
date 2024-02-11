@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using IndiaEventsWebApi.Models;
 using DinkToPdf.Contracts;
 using DinkToPdf;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -53,10 +54,24 @@ IHostBuilder CreateHostBuilder(string[] args) =>
 });
 
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Console();
+}, preserveStaticLogger: true);
+
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 var app = builder.Build();
 
@@ -70,7 +85,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("MyPolicy");
-
+app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
