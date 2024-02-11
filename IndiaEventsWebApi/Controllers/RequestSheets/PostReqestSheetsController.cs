@@ -252,6 +252,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
                     Value = formDataList.class1.IsAdvanceRequired
                 });
+               
                 newRow.Cells.Add(new Cell
                 {
                     ColumnId = GetColumnIdByName(sheet1, "EventOpen30days"),
@@ -296,24 +297,44 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Honorarium Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Advance Amount"),
+                    Value = formDataList.class1.AdvanceAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Expense BTC"),
+                    Value = formDataList.class1.TotalExpenseBTC
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Expense BTE"),
+                    Value = formDataList.class1.TotalExpenseBTE
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Honorarium Amount"),
                     Value = TotalHonorariumAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Travel Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Travel Amount"),
                     Value = TotalTravelAmount
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accomodation Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Travel & Accomodation Amount"),
                     Value = s
                 });
 
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Accomodation Amount"),
                     Value = TotalAccomodateAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet1, "Total Budget"),
+                    Value = total
                 });
                 newRow.Cells.Add(new Cell
                 {
@@ -325,11 +346,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
                     Value = TotalExpenseAmount
                 });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Spend"),
-                    Value = total
-                });
+
 
 
 
@@ -338,7 +355,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
-
+                //var val = "";
 
 
                 var x = 1;
@@ -366,7 +383,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     System.IO.File.WriteAllBytes(filePath, fileBytes);
                     string type = GetContentType(fileType);
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                            parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
+                           parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
                     x++;
                     // ////////////////////////////////////////////////
                     if (System.IO.File.Exists(filePath))
