@@ -585,12 +585,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Start Time"), Value = formData.RequestHonorariumList.StartTime });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "End Time"), Value = formData.RequestHonorariumList.EndTime });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Venue Name"), Value = formData.RequestHonorariumList.VenueName });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Travel & Accomodation Spend"), Value = formData.RequestHonorariumList.TotalTravelAndAccomodationSpend });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Honorarium Spend"), Value = formData.RequestHonorariumList.TotalHonorariumSpend });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Spend"), Value = formData.RequestHonorariumList.TotalSpend });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Travel & Accommodation Amount"), Value = formData.RequestHonorariumList.TotalTravelAndAccomodationSpend });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Honorarium Amount"), Value = formData.RequestHonorariumList.TotalHonorariumSpend });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Budget"), Value = formData.RequestHonorariumList.TotalSpend });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Expenses"), Value = formData.RequestHonorariumList.Expenses });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Travel Spend"), Value = formData.RequestHonorariumList.TotalTravelSpend });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Accomodation Spend"), Value = formData.RequestHonorariumList.TotalAccomodationSpend });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Travel Amount"), Value = formData.RequestHonorariumList.TotalTravelSpend });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Accommodation Amount"), Value = formData.RequestHonorariumList.TotalAccomodationSpend });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Expense"), Value = formData.RequestHonorariumList.TotalExpenses });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Total Local Conveyance"), Value = formData.RequestHonorariumList.TotalLocalConveyance });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Brands"), Value = formData.RequestHonorariumList.Brands });
