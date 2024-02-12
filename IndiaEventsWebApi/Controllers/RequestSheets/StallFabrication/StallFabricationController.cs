@@ -29,18 +29,18 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
             string sheetId1 = configuration.GetSection("SmartsheetSettings:Class1").Value;
-            string sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestBrandsList").Value;       
+            string sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestBrandsList").Value;
             string sheetId6 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
             string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
             long.TryParse(sheetId1, out long parsedSheetId1);
-            long.TryParse(sheetId2, out long parsedSheetId2);          
+            long.TryParse(sheetId2, out long parsedSheetId2);
             long.TryParse(sheetId6, out long parsedSheetId6);
             long.TryParse(sheetId7, out long parsedSheetId7);
             Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
-            Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);            
+            Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);
             Sheet sheet6 = smartsheet.SheetResources.GetSheet(parsedSheetId6, null, null, null, null, null, null, null);
             Sheet sheet7 = smartsheet.SheetResources.GetSheet(parsedSheetId7, null, null, null, null, null, null, null);
-            StringBuilder addedBrandsData = new StringBuilder();         
+            StringBuilder addedBrandsData = new StringBuilder();
             StringBuilder addedExpences = new StringBuilder();
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
@@ -96,7 +96,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
             }
             string Expense = addedExpences.ToString();
 
-           
+
             foreach (var formdata in formDataList.EventBrands)
             {
 
@@ -107,8 +107,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
             string brand = addedBrandsData.ToString();
 
             var FormattedTotalExpenseAmount = string.Format(hindi, "{0:#,#}", TotalExpenseAmount);
-         
-            var total =  TotalExpenseAmount;
+
+            var total = TotalExpenseAmount;
 
             var FormattedTotal = string.Format(hindi, "{0:#,#}", total);
 
@@ -119,101 +119,24 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
                 var newRow = new Row();
                 newRow.Cells = new List<Cell>();
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Event Topic"),
-                    Value = formDataList.StallFabrication.EventName
-                });
-
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "EventType"),
-                    Value = formDataList.StallFabrication.EventType
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "EventDate"),
-                    Value = formDataList.StallFabrication.EventDate
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "StartTime"),
-                    Value = formDataList.StallFabrication.StartTime
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "EndTime"),
-                    Value = formDataList.StallFabrication.EndTime
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Class III Event Code"),
-                    Value = formDataList.StallFabrication.Class_III_EventCode
-                });
-
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Brands"),
-                    Value = brand
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Expenses"),
-                    Value = Expense
-                });
-               
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Role"),
-                    Value = formDataList.StallFabrication.Role
-                });
-
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "RBM/BM"),
-                    Value = formDataList.StallFabrication.RBMorBM
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Sales Head"),
-                    Value = formDataList.StallFabrication.Sales_Head
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Marketing Head"),
-                    Value = formDataList.StallFabrication.Marketing_Head
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"),
-                    Value = formDataList.StallFabrication.Finance
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "InitiatorName"),
-                    Value = formDataList.StallFabrication.InitiatorName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Initiator Email"),
-                    Value = formDataList.StallFabrication.Initiator_Email
-                });
-               
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
-                    Value = TotalExpenseAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Budget"),
-                    Value = total
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
-                    Value = formDataList.StallFabrication.IsAdvanceRequired
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event Topic"), Value = formDataList.StallFabrication.EventName });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.StallFabrication.EventType });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.StallFabrication.EventDate });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "StartTime"), Value = formDataList.StallFabrication.StartTime });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EndTime"), Value = formDataList.StallFabrication.EndTime });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Class III Event Code"), Value = formDataList.StallFabrication.Class_III_EventCode });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Brands"), Value = brand });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Expenses"), Value = Expense });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.StallFabrication.Role });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.StallFabrication.RBMorBM });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Marketing Head"), Value = formDataList.StallFabrication.Marketing_Head });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"), Value = formDataList.StallFabrication.Finance });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Expense"), Value = TotalExpenseAmount });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Budget"), Value = total });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"), Value = formDataList.StallFabrication.IsAdvanceRequired });
 
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
@@ -225,7 +148,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
 
                 var x = 1;
-                if(BrouchereUpload =="Yes")
+                if (BrouchereUpload == "Yes")
                 {
 
 
@@ -272,7 +195,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
                     string fileType = GetFileType(fileBytes);
                     string fileName = val + "-" + x + " Invoice_Quotation." + fileType;
-                   
+
                     string filePath = Path.Combine(pathToSave, fileName);
 
 
@@ -302,76 +225,26 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                         var newRow7 = new Row();
                         newRow7.Cells = new List<Cell>();
 
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"),
-                            Value = eventId
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Event Topic"),
-                            Value = formDataList.StallFabrication.EventName
-                        });
-
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventType"),
-                            Value = formDataList.StallFabrication.EventType
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventDate"),
-                            Value = formDataList.StallFabrication.EventDate
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "StartTime"),
-                            Value = formDataList.StallFabrication.StartTime
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EndTime"),
-                            Value = formDataList.StallFabrication.EndTime
-                        });
-                       
-
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"),
-                            Value = uploadDeviationForTableContainsData
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"),
-                            Value = EventWithin7Days
-                        });
-                      
-
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Sales Head"),
-                            Value = formDataList.StallFabrication.Sales_Head
-                        });
-                       
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "InitiatorName"),
-                            Value = formDataList.StallFabrication.InitiatorName
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Initiator Email"),
-                            Value = formDataList.StallFabrication.Initiator_Email
-                        });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.StallFabrication.EventName });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.StallFabrication.EventType });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.StallFabrication.EventDate });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "StartTime"), Value = formDataList.StallFabrication.StartTime });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EndTime"), Value = formDataList.StallFabrication.EndTime });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = uploadDeviationForTableContainsData });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
 
 
                         var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
 
-                        
+
 
 
                         var j = 1;
-                       if(uploadDeviationForTableContainsData == "Yes")
+                        if (uploadDeviationForTableContainsData == "Yes")
                         {
 
 
@@ -385,7 +258,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                             }
 
                             string fileType = GetFileType(fileBytes);
-                            string fileName = eventId  + " 30days deviation." + fileType;
+                            string fileName = eventId + " 30days deviation." + fileType;
                             // string fileName = val+x + ": AttachedFile." + fileType;
                             string filePath = Path.Combine(pathToSave, fileName);
 
@@ -447,77 +320,30 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 {
                     var newRow2 = new Row();
                     newRow2.Cells = new List<Cell>();
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "% Allocation"),
-                        Value = formdata.PercentAllocation
-                    });
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "Brands"),
-                        Value = formdata.BrandName
-                    });
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "Project ID"),
-                        Value = formdata.ProjectId
-                    });
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "EventId/EventRequestId"),
-                        Value = val
-                    });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "% Allocation"), Value = formdata.PercentAllocation });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "Brands"), Value = formdata.BrandName });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "Project ID"), Value = formdata.ProjectId });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "EventId/EventRequestId"), Value = val });
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId2, new Row[] { newRow2 });
 
                 }
-              
+
 
                 foreach (var formdata in formDataList.ExpenseSheets)
                 {
                     var newRow6 = new Row();
                     newRow6.Cells = new List<Cell>();
 
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "Expense"),
-                        Value = formdata.Expense
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "EventId/EventRequestID"),
-                        Value = val
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "AmountExcludingTax?"),
-                        Value = formdata.AmountExcludingTax
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "Amount"),
-                        Value = formdata.Amount
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"),
-                        Value = formdata.BtcorBte
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "BudgetAmount"),
-                        Value = formdata.BudgetAmount
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "BTCAmount"),
-                        Value = formdata.BtcAmount
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "BTEAmount"),
-                        Value = formdata.BteAmount
-                    });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "Expense"), Value = formdata.Expense });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "EventId/EventRequestID"), Value = val });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "AmountExcludingTax?"), Value = formdata.AmountExcludingTax });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "Amount"), Value = formdata.Amount });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"), Value = formdata.BtcorBte });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "BudgetAmount"), Value = formdata.BudgetAmount });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "BTCAmount"), Value = formdata.BtcAmount });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "BTEAmount"), Value = formdata.BteAmount });
+
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
                 }
 
