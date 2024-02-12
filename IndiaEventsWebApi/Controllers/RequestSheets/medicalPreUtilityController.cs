@@ -560,14 +560,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     {
                         UploadWrittenRequestDate = "No";
                     }
-                    if (formData.UploadHCPRequestDate != "")
-                    {
-                        UploadHCPRequestDate = "Yes";
-                    }
-                    else
-                    {
-                        UploadHCPRequestDate = "No";
-                    }
+                    //if (formData.UploadHCPRequestDate != "")
+                    //{
+                    //    UploadHCPRequestDate = "Yes";
+                    //}
+                    //else
+                    //{
+                    //    UploadHCPRequestDate = "No";
+                    //}
                     if (formData.Invoice_Brouchere_Quotation != "")
                     {
                         Invoice_Brouchere_Quotation = "Yes";
@@ -637,33 +637,33 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             System.IO.File.Delete(filePath);
                         }
                     }
-                    if (UploadHCPRequestDate == "Yes")
-                    {
-                        byte[] fileBytes = Convert.FromBase64String(formData.UploadHCPRequestDate);
-                        var folderName = Path.Combine("Resources", "Images");
-                        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                        if (!Directory.Exists(pathToSave))
-                        {
-                            Directory.CreateDirectory(pathToSave);
-                        }
+                    //if (UploadHCPRequestDate == "Yes")
+                    //{
+                    //    byte[] fileBytes = Convert.FromBase64String(formData.UploadHCPRequestDate);
+                    //    var folderName = Path.Combine("Resources", "Images");
+                    //    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    //    if (!Directory.Exists(pathToSave))
+                    //    {
+                    //        Directory.CreateDirectory(pathToSave);
+                    //    }
 
-                        string fileType = GetFileType(fileBytes);
-                        string fileName = value + "-" + " UploadHCPRequestDate." + fileType;
-                        // string fileName = val+x + ": AttachedFile." + fileType;
-                        string filePath = Path.Combine(pathToSave, fileName);
+                    //    string fileType = GetFileType(fileBytes);
+                    //    string fileName = value + "-" + " UploadHCPRequestDate." + fileType;
+                    //    // string fileName = val+x + ": AttachedFile." + fileType;
+                    //    string filePath = Path.Combine(pathToSave, fileName);
 
 
-                        var addedRow = addeddatarows[0];
+                    //    var addedRow = addeddatarows[0];
 
-                        System.IO.File.WriteAllBytes(filePath, fileBytes);
-                        string type = GetContentType(fileType);
-                        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
-                        if (System.IO.File.Exists(filePath))
-                        {
-                            System.IO.File.Delete(filePath);
-                        }
-                    }
+                    //    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    //    string type = GetContentType(fileType);
+                    //    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                    //            parsedSheetId4, addedRow.Id.Value, filePath, "application/msword");
+                    //    if (System.IO.File.Exists(filePath))
+                    //    {
+                    //        System.IO.File.Delete(filePath);
+                    //    }
+                    //}
                     if (Invoice_Brouchere_Quotation == "Yes")
                     {
                         byte[] fileBytes = Convert.FromBase64String(formData.Invoice_Brouchere_Quotation);

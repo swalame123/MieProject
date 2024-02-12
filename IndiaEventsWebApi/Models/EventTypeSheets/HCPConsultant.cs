@@ -84,7 +84,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
     {
         public string? HCPName { get; set; }
         public string? MisCode { get; set; }
-        public DateTime? GO_NGO { get; set; }
+        public string? GO_NGO { get; set; }
         public string? Country { get; set; }
         public string? How_many_days_since_the_parent_event_completes { get; set; }
         public string? Follow_up_Event { get; set; }

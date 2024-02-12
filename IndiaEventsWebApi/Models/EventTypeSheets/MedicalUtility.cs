@@ -39,7 +39,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? Rationale { get; set; }
         public string? UploadFCPA { get; set; }
         public string? UploadWrittenRequestDate { get; set; }
-        public string? UploadHCPRequestDate { get; set; }
+        public DateTime? HCPRequestDate { get; set; }
         public string? Invoice_Brouchere_Quotation { get; set; }
         public string? MedicalUtilityCostAmount { get; set; }
         public string? Legitimate { get; set; }
