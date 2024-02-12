@@ -19,6 +19,9 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? ProjectId { get; set; }
         public string? HCPRole { get; set; }
         public string? IsAdvanceRequired { get; set; }
+        public string? AdvanceAmount { get; set; }
+        public string? TotalExpenseBTC { get; set; }
+        public string? TotalExpenseBTE { get; set; }
         public string? EventOpen30days { get; set; }
         public string? EventWithin7days { get; set; }
         public string? FB_Expense_Excluding_Tax { get; set; }

@@ -768,67 +768,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-        [HttpPost("AddEventRequestExpensesData")]
-        public IActionResult AddEventRequestExpensesData(EventRequestExpenseSheet formData)
-        {
-            try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
-
-
-                long.TryParse(sheetId, out long parsedSheetId);
-
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
-
-
-                var newRow = new Row();
-                newRow.Cells = new List<Cell>();
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCP Name"), Value = formData.EventId });
-
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"), Value = formData.Expense });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "EventType"), Value = formData.Amount });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCPRole"), Value = formData.AmountExcludingTax });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MISCODE"), Value = formData.BtcorBte });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"), Value = formData.BtcAmount });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
-                    Value = formData.BteAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
-                    Value = formData.BudgetAmount
-                });
-
-
-
-                var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
-
-
-
-
-
-
-
-
-
-
-
-                return Ok(new
-                { Message = "Data added successfully." });
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
 
         [HttpPost("AddEventSettlementData")]
         public IActionResult AddEventSettlementData(EventSettlement formData)
@@ -1063,6 +1002,70 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
+
+
+
+
+        [HttpPost("AddEventRequestExpensesData")]
+        public IActionResult AddEventRequestExpensesData(EventRequestExpenseSheet formData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+
+
+                long.TryParse(sheetId, out long parsedSheetId);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+
+
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCP Name"), Value = formData.EventId });
+
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId"), Value = formData.Expense });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "EventType"), Value = formData.Amount });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCPRole"), Value = formData.AmountExcludingTax });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MISCODE"), Value = formData.BtcorBte });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "GO/Non-GO"), Value = formData.BtcAmount });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "IsItincludingGST?"),
+                    Value = formData.BteAmount
+                });
+                newRow.Cells.Add(new Cell
+                {
+                    ColumnId = GetColumnIdByName(sheet, "AgreementAmount"),
+                    Value = formData.BudgetAmount
+                });
+
+
+
+                var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
+
+
+
+
+
+
+
+
+
+
+
+                return Ok(new
+                { Message = "Data added successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
 

@@ -44,7 +44,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? MedicalUtilityCostAmount { get; set; }
         public string? Legitimate { get; set; }
         public string? Objective { get; set; }
-        public DateTime? Fcpadate { get; set; }
+        //public DateTime? Fcpadate { get; set; }
     }
 
     public class ExpenseListData
