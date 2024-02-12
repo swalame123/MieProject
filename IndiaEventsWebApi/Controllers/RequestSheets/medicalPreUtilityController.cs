@@ -278,7 +278,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Budget"),
                     Value = total
                 });
 
