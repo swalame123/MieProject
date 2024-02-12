@@ -89,6 +89,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? How_many_days_since_the_parent_event_completes { get; set; }
         public string? Follow_up_Event { get; set; }
         public DateTime? Follow_up_Event_Date { get; set; }
+        public DateTime? Event_Date { get; set; }
         public string? AgreementFile { get; set; }
     }
 }

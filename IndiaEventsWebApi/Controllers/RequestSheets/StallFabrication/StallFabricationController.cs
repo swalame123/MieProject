@@ -206,7 +206,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 });
                 newRow.Cells.Add(new Cell
                 {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Spend"),
+                    ColumnId = GetColumnIdByName(sheet1, "Total Budget"),
                     Value = total
                 });
                 newRow.Cells.Add(new Cell

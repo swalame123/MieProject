@@ -900,6 +900,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         ColumnId = GetColumnIdByName(sheet1, "Follow-up Event Date"),
                         Value = formdata.Follow_up_Event_Date
                     });
+                    newRow.Cells.Add(new Cell
+                    {
+                        ColumnId = GetColumnIdByName(sheet1, "Event Date"),
+                        Value = formdata.Event_Date
+                    });
 
                     newRow.Cells.Add(new Cell
                     {
