@@ -416,19 +416,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             Column SpecialityColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
             Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "TotalSpend", StringComparison.OrdinalIgnoreCase));
+            //Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "PresentationDuration", StringComparison.OrdinalIgnoreCase));
 
             if (targetColumn != null && SpecialityColumn != null)
-            {
-                // Find all rows with the specified speciality
+            {               
                 List<Row> targetRows = sheet.Rows
                     .Where(row => row.Cells.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value.ToString() == EventID))
                     .ToList();
 
                 if (targetRows.Any())
-                {
-                    // Retrieve and sum up the values of the specified column for the given speciality
+                {                   
                     decimal totalValue = targetRows.Sum(row => Convert.ToDecimal(row.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value ?? 0));
-
                     return Ok(totalValue);
                 }
                 else
@@ -441,9 +439,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return NotFound("NotFound");
             }
         }
-
-
-
         [HttpGet("GetEventRequestsInviteesLcAmountValue")]
         public IActionResult GetEventRequestsInviteesLcAmountValue(string EventID)
         {
@@ -458,14 +453,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             if (targetColumn != null && SpecialityColumn != null)
             {
-                // Find all rows with the specified speciality
+               
                 List<Row> targetRows = sheet.Rows
                     .Where(row => row.Cells.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value.ToString() == EventID))
                     .ToList();
 
                 if (targetRows.Any())
                 {
-                    // Retrieve and sum up the values of the specified column for the given speciality
+                   
                     decimal totalValue = targetRows.Sum(row => Convert.ToDecimal(row.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value ?? 0));
 
                     return Ok(totalValue);
@@ -497,14 +492,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             if (targetColumn != null && SpecialityColumn != null)
             {
-                // Find all rows with the specified speciality
+               
                 List<Row> targetRows = sheet.Rows
                     .Where(row => row.Cells?.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value?.ToString() == EventID)==true)
                     .ToList();
 
                 if (targetRows.Any() == true)
                 {
-                    // Retrieve and sum up the values of the specified column for the given speciality
+                    
                     decimal totalValue = targetRows.Sum(row => Convert.ToDecimal(row.Cells?.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value ?? 0));
 
                     return Ok(totalValue);
