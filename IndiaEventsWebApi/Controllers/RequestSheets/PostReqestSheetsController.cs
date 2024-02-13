@@ -11,6 +11,7 @@ using Smartsheet.Api.OAuth;
 using System.Text;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Controllers.RequestSheets
 {
@@ -377,6 +378,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "SpeakerCode"), Value = formData.SpeakerCode });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "TrainerCode"), Value = formData.TrainerCode });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "HonorariumRequired"), Value = formData.HonorariumRequired });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "AgreementAmount"), Value = formData.HonarariumAmount });
                     //newRow1.Cells.Add(new Cell                 //{
                     //    ColumnId = GetColumnIdByName(sheet4, "HonorariumAmount"),
                     //    Value = formData.HonarariumAmount                    //});
