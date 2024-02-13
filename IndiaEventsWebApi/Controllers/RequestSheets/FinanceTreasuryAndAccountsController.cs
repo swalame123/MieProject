@@ -126,9 +126,89 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
         }
 
-      
 
 
+
+        [HttpPut("UpdateFinanceTreasuryPanelSheet")]
+        public IActionResult UpdateFinanceTreasuryPanelSheet(FinanceTreasury[] updatedFormData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                foreach (var f in updatedFormData)
+                {
+
+                    Row existingRow = GetRowByIdHCP(smartsheet, parsedSheetId, f.Id);
+                    Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+
+
+                    // Row existingRow = smartsheet.SheetResources.RowResources.GetRow(sheetId, rowId, null, null, null, null, null).Data;
+
+
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
+
+
+
+                    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+                }
+
+                return Ok(new { Message = "Data Updated successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpPut("UpdateFinanceTreasuryExpenseSheet")]
+        public IActionResult UpdateFinanceTreasuryExpenseSheet(FinanceTreasury[] updatedFormData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                foreach (var f in updatedFormData)
+                {
+
+                    Row existingRow = GetRowByIdEXP(smartsheet, parsedSheetId, f.Id);
+                    Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+
+
+                    // Row existingRow = smartsheet.SheetResources.RowResources.GetRow(sheetId, rowId, null, null, null, null, null).Data;
+
+
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
+
+
+
+                    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+                }
+
+                return Ok(new { Message = "Data Updated successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
 
 
 
