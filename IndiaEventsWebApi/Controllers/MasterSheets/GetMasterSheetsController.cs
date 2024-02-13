@@ -372,7 +372,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if ((columnNames[i] == "EventTypeId")|| (columnNames[i] == "EventType"))
+                        if ((columnNames[i] == "EventTypeId")|| (columnNames[i] == "EventType") || (columnNames[i] == "Roles"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
