@@ -9,7 +9,7 @@
     
         public string? Id { get; set; }
         public string? JVNumber { get; set; }
-        public string? JVDate { get; set; }
+        public DateTime? JVDate { get; set; }
     }
 
 
@@ -18,9 +18,9 @@
 
         public string? Id { get; set; }
         public string? PVNumber { get; set; }
-        public string? PVDate { get; set; }
+        public DateTime? PVDate { get; set; }
         public string? BankReferenceNumber { get; set; }
-        public string? BankReferenceDate { get; set; }
+        public DateTime? BankReferenceDate { get; set; }
     }
 
 }

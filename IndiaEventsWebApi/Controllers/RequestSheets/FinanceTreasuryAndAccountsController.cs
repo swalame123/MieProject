@@ -47,97 +47,86 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
         //}
 
-        //[HttpPut("Update")]
-        //public void UpdateRow( FinanceAccounts updatedFormData)
-        //{
-        //    SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-        //    string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
-        //    long.TryParse(sheetId, out long parsedSheetId);
-
-        //    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-        //    Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedFormData.Id);
-
-
-          
-        //   // Row existingRow = smartsheet.SheetResources.RowResources.GetRow(sheetId, rowId, null, null, null, null, null).Data;
-
-           
-        //    existingRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "pvnumber"), Value = updatedFormData.JVNumber });
-        //    existingRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "pvdate"), Value = updatedFormData.JVDate });
-
-        //    // Update the existing values if needed
-        //    existingRow.Cells.Find(cell => cell.ColumnId == GetColumnIdByName(sheet6, "Expense")).Value = updatedFormData.Expense;
-        //    existingRow.Cells.Find(cell => cell.ColumnId == GetColumnIdByName(sheet6, "AmountExcludingTax")).Value = updatedFormData.AmountExcludingTax;
-          
-
-        //    // Perform the update
-        //    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { existingRow });
-        //}
-
-
-        [HttpPut("UpdateData")]
-        public IActionResult UpdateData([FromBody] UserRoleMaster updatedData)
+        [HttpPut("UpdateFinanceAccountPanelSheet")]
+        public IActionResult UpdateFinanceAccountPanelSheet(FinanceAccounts[] updatedFormData)
         {
             try
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:UserRoleMaster").Value;
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
                 long.TryParse(sheetId, out long parsedSheetId);
 
-                // Retrieve the sheet and find the row by id
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                Row existingRow = GetRowById(smartsheet, parsedSheetId, updatedData.Email);
-                Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
 
-                if (existingRow == null)
+                foreach (var f in updatedFormData)
                 {
-                    return NotFound($"Row with id {updatedData.Id} not found.");
-                }
-                foreach (var cell in existingRow.Cells)
-                {
-                    if (cell.ColumnId == GetColumnIdByName(sheet, "Email"))
-                    {
-                        cell.Value = updatedData.Email;
-                    }
-                    else if (cell.ColumnId == GetColumnIdByName(sheet, "FirstName"))
-                    {
-                        cell.Value = updatedData.FirstName;
-                    }
-                    else if (cell.ColumnId == GetColumnIdByName(sheet, "LastName"))
-                    {
-                        cell.Value = updatedData.LastName;
-                    }
-                    else if (cell.ColumnId == GetColumnIdByName(sheet, "EmployeeId"))
-                    {
-                        cell.Value = updatedData.EmployeeId;
-                    }
-                    else if (cell.ColumnId == GetColumnIdByName(sheet, "RoleId"))
-                    {
-                        cell.Value = updatedData.RoleId;
-                    }
-                    else if (cell.ColumnId == GetColumnIdByName(sheet, "RoleName"))
-                    {
-                        cell.Value = updatedData.RoleName;
-                    }
-                    else if (cell.ColumnId == GetColumnIdByName(sheet, "CreatedBy"))
-                    {
-                        cell.Value = updatedData.CreatedBy;
-                    }
-                    updateRow.Cells.Add(cell);
+
+                    Row existingRow = GetRowByIdHCP(smartsheet, parsedSheetId, f.Id);
+                    Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
 
 
+                    // Row existingRow = smartsheet.SheetResources.RowResources.GetRow(sheetId, rowId, null, null, null, null, null).Data;
+
+
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "JV Number"), Value = f.JVNumber });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "JV Date"), Value = f.JVDate });
+                    
+
+                    
+                    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
                 }
 
+                return Ok(new { Message = "Data Updated successfully." });
 
-                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
-                return Ok(new { Message = "Data updated successfully." });
+            }
+            catch (Exception ex)
+            {
+               return  BadRequest(ex.Message);
+            }
+            
+        }
+
+
+        [HttpPut("UpdateFinanceAccountExpenseSheet")]
+        public IActionResult UpdateFinanceAccountExpenseSheet(FinanceAccounts[] updatedFormData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                foreach (var f in updatedFormData)
+                {
+
+                    Row existingRow = GetRowByIdEXP(smartsheet, parsedSheetId, f.Id);
+                    Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+
+
+                    // Row existingRow = smartsheet.SheetResources.RowResources.GetRow(sheetId, rowId, null, null, null, null, null).Data;
+
+
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "JV Number"), Value = f.JVNumber });
+                    updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "JV Date"), Value = f.JVDate });
+
+
+
+                    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+                }
+
+                return Ok(new { Message = "Data Updated successfully." });
+
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
         }
 
+      
 
 
 
@@ -173,13 +162,38 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
         }
 
 
-        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
+        private Row GetRowByIdHCP(SmartsheetClient smartsheet, long sheetId, string email)
         {
             Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
 
-            // Assuming you have a column named "Id"
+          
 
-            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Email");
+            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Panelist ID");
+
+            if (idColumn != null)
+            {
+                foreach (var row in sheet.Rows)
+                {
+                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == email);
+
+                    if (cell != null)
+                    {
+                        return row;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+        private Row GetRowByIdEXP(SmartsheetClient smartsheet, long sheetId, string email)
+        {
+            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+
+
+
+            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "Expenses ID");
 
             if (idColumn != null)
             {
@@ -198,3 +212,39 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
