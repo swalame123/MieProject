@@ -204,6 +204,9 @@ namespace IndiaEventsWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+
         [HttpDelete("DeleteData/{email}")]
         public IActionResult DeleteData(string email)
         {

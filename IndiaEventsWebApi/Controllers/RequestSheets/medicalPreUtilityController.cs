@@ -295,7 +295,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-                if (formDataList.MedicalUtilityData.EventOpen30daysFile == "Yes" || formDataList.MedicalUtilityData.EventWithin7daysFile == "Yes" || formDataList.MedicalUtilityData.IsDeviationUpload == "Yes")
+                if (EventOpen30Days == "Yes" || EventWithin7Days == "Yes" || UploadDeviationFile == "Yes")
                 {
                     var eventId = val;
                     try
@@ -329,17 +329,17 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"),
-                            Value = formDataList.MedicalUtilityData.EventOpen30daysFile
+                            Value =EventOpen30Days
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"),
-                            Value = formDataList.MedicalUtilityData.EventWithin7daysFile
+                            Value = EventWithin7Days
                         });
                         newRow7.Cells.Add(new Cell
                         {
                             ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 1,00,000 Trigger"),
-                            Value = formDataList.MedicalUtilityData.UploadDeviationFile
+                            Value = UploadDeviationFile
                         });
 
                         newRow7.Cells.Add(new Cell
