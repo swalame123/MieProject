@@ -454,7 +454,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     { ColumnId = GetColumnIdByName(sheet3, "LcAmount"), Value = formdata.LcAmount });
                     newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "EventId/EventRequestId"), Value = val });
                     newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "Invitee Source"), Value = formdata.InviteedFrom });
-                    if (formdata.InviteedFrom == "Other")
+                    if (formdata.InviteedFrom == "Others")
                     {
                         newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "Speciality"), Value = formdata.Speciality });
                         newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "HCP Type"), Value = formdata.HCPType });
