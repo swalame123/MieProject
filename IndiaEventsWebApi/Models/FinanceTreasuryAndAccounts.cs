@@ -8,6 +8,8 @@
     {
     
         public string? Id { get; set; }
+        public string? HCPName { get; set; }
+        public string? MISCode { get; set; }
         public string? JVNumber { get; set; }
         public DateTime? JVDate { get; set; }
     }
