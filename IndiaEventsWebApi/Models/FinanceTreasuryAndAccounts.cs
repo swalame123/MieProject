@@ -17,6 +17,9 @@
     {
 
         public string? Id { get; set; }
+        public string? HCPName { get; set; }
+        public string? MISCode { get; set; }
+
         public string? PVNumber { get; set; }
         public DateTime? PVDate { get; set; }
         public string? BankReferenceNumber { get; set; }

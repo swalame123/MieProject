@@ -182,9 +182,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.HcpConsultant.EventType });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.HcpConsultant.EventDate });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event End Date"), Value = formDataList.HcpConsultant.EventEndDate });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "VenueName"), Value = formDataList.HcpConsultant.VenueName });
+
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "StartTime"), Value = formDataList.HcpConsultant.StartTime });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EndTime"), Value = formDataList.HcpConsultant.EndTime });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "VenueName"), Value = formDataList.HcpConsultant.VenueName });
+              
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sponsorship Society Name"), Value = formDataList.HcpConsultant.SponsorshipSocietyName });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Venue Country"), Value = formDataList.HcpConsultant.Country });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"), Value = formDataList.HcpConsultant.IsAdvanceRequired });
@@ -279,16 +281,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                         newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EndTime"), Value = formDataList.HcpConsultant.EndTime });
                         newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "VenueName"), Value = formDataList.HcpConsultant.VenueName });
 
-                        //newRow7.Cells.Add(new Cell
-                        //{
-                        //    ColumnId = GetColumnIdByName(sheet7, "City"),
-                        //    Value = formDataList.class1.City
-                        //});
-                        //newRow7.Cells.Add(new Cell
-                        //{
-                        //    ColumnId = GetColumnIdByName(sheet7, "State"),
-                        //    Value = formDataList.class1.State
-                        //});
+                  
 
                         newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = formDataList.HcpConsultant.EventOpen30days });
                         newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = formDataList.HcpConsultant.EventWithin7days });
@@ -419,6 +412,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "MISCode"), Value = formData.MisCode });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "HCP Type"), Value = formData.HcpType });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Travel"), Value = formData.TravelAmount });
+                    // newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.HcpConsultant.EventType });
+
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Topic"), Value = formDataList.HcpConsultant.EventTopic });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "EventType"), Value = formDataList.HcpConsultant.EventType });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Date Start"), Value = formDataList.HcpConsultant.EventDate });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event End Date"), Value = formDataList.HcpConsultant.EventEndDate });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Venue name"), Value = formDataList.HcpConsultant.VenueName });
+
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Accomodation"), Value = formData.AccomAmount });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "LocalConveyance"), Value = formData.LcAmount });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Registration Amount"), Value = formData.RegistrationAmount });

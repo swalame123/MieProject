@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using System.Text;
 using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Controllers.RequestSheets
@@ -46,7 +47,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
         //}
-
+        StringBuilder addedBrandsData = new StringBuilder();
+        StringBuilder addedInviteesData = new StringBuilder();
+        StringBuilder addedHcpData = new StringBuilder();
+       
         [HttpPut("UpdateFinanceAccountPanelSheet")]
         public IActionResult UpdateFinanceAccountPanelSheet(FinanceAccounts[] updatedFormData)
         {
@@ -57,6 +61,23 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 long.TryParse(sheetId, out long parsedSheetId);
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                StringBuilder FinanceAccountHonorDetails = new StringBuilder();
+                int FANo = 1;
+
+
+                //foreach (var formdata in updatedFormData)
+                //{
+                //    string rowData = $"{FANo}. {formdata.H} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
+                //    addedExpences.AppendLine(rowData);
+                //    addedExpencesNo++;
+                //    var amount = int.Parse(formdata.Amount);
+                //    TotalExpenseAmount = TotalExpenseAmount + amount;
+
+                //}
+                //string Expense = addedExpences.ToString();
+
+
 
                 foreach (var f in updatedFormData)
                 {
@@ -136,9 +157,30 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             {
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:HonorariumPayment").Value;
                 long.TryParse(sheetId, out long parsedSheetId);
+                long.TryParse(sheetId1, out long parsedSheetId1);
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
+
+
+                StringBuilder FinanceTreasuryHonorDetails = new StringBuilder();
+                int FTNo = 1;
+
+
+
+                foreach (var formdata in updatedFormData)
+                {
+                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| PV Number: {formdata.PVNumber} | PV Date: {formdata.PVDate} | Bank Reference Number: {formdata.BankReferenceNumber} | Bank Reference Date: {formdata.BankReferenceDate}";
+                    FinanceTreasuryHonorDetails.AppendLine(rowData);
+                    FTNo++;
+                   
+
+                }
+                string FinanceTreasury = FinanceTreasuryHonorDetails.ToString();
+
+
 
                 foreach (var f in updatedFormData)
                 {
@@ -157,7 +199,40 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-                    smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+                    var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+
+                    var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
+                    var eventIdCell = updatedRow[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+                    var val = eventIdCell.DisplayValue;
+
+
+
+
+                    var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == val));
+
+                    if (targetRow != null)
+                    {
+                        long honorariumSubmittedColumnId = GetColumnIdByName(sheet1, "Finance Treasury Given Details");
+                        var cellToUpdateB = new Cell
+                        {
+                            ColumnId = honorariumSubmittedColumnId,
+                            Value = FinanceTreasury
+                        };
+                        Row updateRowCell = new Row { Id = targetRow.Id, Cells = new Cell[] { cellToUpdateB } };
+                        var cellToUpdate = targetRow.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
+                        if (cellToUpdate != null)
+                        {
+                            cellToUpdate.Value = FinanceTreasury;
+                        }
+
+                        smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRowCell });
+
+
+                    }
+                    else
+                    {
+                        return Ok(new { Error = "Invalid Event ID." });
+                    }
                 }
 
                 return Ok(new { Message = "Data Updated successfully." });

@@ -122,6 +122,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event Topic"), Value = formDataList.StallFabrication.EventName });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.StallFabrication.EventType });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.StallFabrication.EventDate });
+
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "StartTime"), Value = formDataList.StallFabrication.StartTime });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EndTime"), Value = formDataList.StallFabrication.EndTime });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Class III Event Code"), Value = formDataList.StallFabrication.Class_III_EventCode });
