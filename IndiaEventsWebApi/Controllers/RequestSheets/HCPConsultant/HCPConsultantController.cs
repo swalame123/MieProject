@@ -124,11 +124,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 addedExpencesNo++;
                 var amount = int.Parse(formdata.RegstAmount);
                 TotalExpenseAmount = TotalExpenseAmount + amount;
-
             }
             string Expense = addedExpences.ToString();
-
-
 
             foreach (var formdata in formDataList.BrandsList)
             {
@@ -183,10 +180,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.HcpConsultant.EventDate });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event End Date"), Value = formDataList.HcpConsultant.EventEndDate });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "VenueName"), Value = formDataList.HcpConsultant.VenueName });
-
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "StartTime"), Value = formDataList.HcpConsultant.StartTime });
-                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EndTime"), Value = formDataList.HcpConsultant.EndTime });
-              
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EndTime"), Value = formDataList.HcpConsultant.EndTime });              
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sponsorship Society Name"), Value = formDataList.HcpConsultant.SponsorshipSocietyName });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Venue Country"), Value = formDataList.HcpConsultant.Country });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"), Value = formDataList.HcpConsultant.IsAdvanceRequired });
@@ -194,20 +189,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Expenses"), Value = Expense });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Panelists"), Value = HCP });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.HcpConsultant.Role });
-
-
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet1, "EventOpen30days"),
-                //    Value = formDataList.HcpConsultant.EventOpen30days
-                //});
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet1, "EventWithin7days"),
-                //    Value = formDataList.HcpConsultant.EventWithin7days
-                //});
-
-
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.HcpConsultant.RBMorBM });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.HcpConsultant.Sales_Head });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Marketing Head"), Value = formDataList.HcpConsultant.Marketing_Head });
@@ -263,7 +244,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
 
 
 
-                if (formDataList.HcpConsultant.EventOpen30days == "Yes" || formDataList.HcpConsultant.EventWithin7days == "Yes" || formDataList.HcpConsultant.AggregateDeviation == "Yes")
+                if (EventOpen30Days == "Yes" || EventWithin7Days == "Yes" || formDataList.HcpConsultant.AggregateDeviation == "Yes")
                 {
                     var eventId = val;
                     try
@@ -283,8 +264,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
 
                   
 
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = formDataList.HcpConsultant.EventOpen30days });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = formDataList.HcpConsultant.EventWithin7days });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = EventOpen30Days });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
                         newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 5,00,000 Trigger"), Value = formDataList.HcpConsultant.AggregateDeviation });
 
                         newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.HcpConsultant.Sales_Head });
