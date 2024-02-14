@@ -415,7 +415,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     // newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.HcpConsultant.EventType });
 
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Topic"), Value = formDataList.HcpConsultant.EventTopic });
-                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "EventType"), Value = formDataList.HcpConsultant.EventType });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Type"), Value = formDataList.HcpConsultant.EventType });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Date Start"), Value = formDataList.HcpConsultant.EventDate });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event End Date"), Value = formDataList.HcpConsultant.EventEndDate });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Venue name"), Value = formDataList.HcpConsultant.VenueName });

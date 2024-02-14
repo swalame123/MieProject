@@ -741,7 +741,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     newRow6.Cells.Add(new Cell
                     {
                         ColumnId = GetColumnIdByName(sheet6, "MisCode"),
-                        Value = formdata.Expense
+                        Value = formdata.MisCode
                     });
 
                     newRow6.Cells.Add(new Cell

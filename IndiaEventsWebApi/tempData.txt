@@ -1,8 +1,70 @@
-﻿1 done check  
+﻿1 done check  21
  
  
  
  
+
+
+        [HttpPost("AddFile")]
+        public IActionResult AddFormData(Class11 i)
+        {
+            try
+            {
+
+
+                var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+                var sheetId1 = 6857973674495876;
+                Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId1, null, null, null, null, null, null, null);
+
+                var newRow = new Smartsheet.Api.Models.Row();
+                newRow.Cells = new List<Cell>();
+
+                var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Smartsheet.Api.Models.Row[] { newRow });
+                var x = 1;
+                foreach (var p in i.File)
+                {
+
+
+
+                    byte[] fileBytes = Convert.FromBase64String(p);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = x + " ConvertedFile." + fileType;
+                    string filePath = Path.Combine(pathToSave, fileName);
+
+                    //string type = k.ContentType;//fileUploadModel.File.ContentType;
+                    var addedRow = addedRows[0];
+
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            sheetId1, addedRow.Id.Value, filePath, "application/msword");
+                    x++;
+                }
+
+
+                return Ok(new { Message = "Conversion successful" });
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+
+
+
+
+
  
  
  

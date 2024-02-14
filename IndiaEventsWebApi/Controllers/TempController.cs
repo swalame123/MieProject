@@ -15,224 +15,12 @@ namespace IndiaEventsWebApi.Controllers
     [ApiController]
     public class TempController : ControllerBase
     {
-
-
-
-
-
-        [HttpPost("AddFile")]
-        public IActionResult AddFormData(Class11 i)
-        {
-            try
-            {
-
-
-                var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-                var sheetId1 = 6857973674495876;
-                Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId1, null, null, null, null, null, null, null);
-
-                var newRow = new Smartsheet.Api.Models.Row();
-                newRow.Cells = new List<Cell>();
-
-                var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Smartsheet.Api.Models.Row[] { newRow });
-                var x = 1;
-                foreach (var p in i.File)
-                {
-
-
-
-                    byte[] fileBytes = Convert.FromBase64String(p);
-                    var folderName = Path.Combine("Resources", "Images");
-                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                    if (!Directory.Exists(pathToSave))
-                    {
-                        Directory.CreateDirectory(pathToSave);
-                    }
-
-                    string fileType = GetFileType(fileBytes);
-                    string fileName = x + " ConvertedFile." + fileType;
-                    string filePath = Path.Combine(pathToSave, fileName);
-
-                    //string type = k.ContentType;//fileUploadModel.File.ContentType;
-                    var addedRow = addedRows[0];
-
-                    System.IO.File.WriteAllBytes(filePath, fileBytes);
-                    string type = GetContentType(fileType);
-                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                            sheetId1, addedRow.Id.Value, filePath, "application/msword");
-                    x++;
-                }
-
-
-                return Ok(new { Message = "Conversion successful" });
-
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error: {ex.Message}");
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        // ////////////////////////////////////////////////SINGLE FILE UPLOAD
-
-
-        //[HttpPost("AddFile")]
-        //public IActionResult AddFormData(Class11 i)
-        //{
-        //    try
-        //    {
-
-
-        //        var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
-        //        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-        //        var sheetId1 = 6857973674495876;
-        //        Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId1, null, null, null, null, null, null, null);
-
-        //        var newRow = new Row();
-        //        newRow.Cells = new List<Cell>();
-
-        //        var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Row[] { newRow });
-
-
-        //        byte[] fileBytes = Convert.FromBase64String(i.File);
-        //        var folderName = Path.Combine("Resources", "Images");
-        //        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-        //        if (!Directory.Exists(pathToSave))
-        //        {
-        //            Directory.CreateDirectory(pathToSave);
-        //        }
-
-        //        string fileType = GetFileType(fileBytes);
-        //        string fileName = "ConvertedFile." + fileType;
-        //        string filePath = Path.Combine(pathToSave, fileName);
-
-        //        //string type = k.ContentType;//fileUploadModel.File.ContentType;
-        //        var addedRow = addedRows[0];
-
-        //        System.IO.File.WriteAllBytes(filePath, fileBytes);
-        //        string type = GetContentType(fileType);
-        //        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-        //                sheetId1, addedRow.Id.Value, filePath, "application/msword");
-
-
-
-
-        //        return Ok(new { Message = "Conversion successful", FilePath = filePath });
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest($"Error: {ex.Message}");
-        //    }
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private string GetContentType(string fileExtension)
-        {
-            switch (fileExtension.ToLower())
-            {
-                case "jpg":
-                case "jpeg":
-                    return "image/jpeg";
-                case "pdf":
-                    return "application/pdf";
-                case "gif":
-                    return "image/gif";
-                case "png":
-                    return "image/png";
-                case "webp":
-                    return "image/webp";
-                case "doc":
-                    return "application/msword";
-                case "docx":
-                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-                default:
-                    return "application/octet-stream";
-            }
-        }
-
-        private string GetFileType(byte[] bytes)
-        {
-
-            if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xD8)
-            {
-                return "jpg";
-            }
-            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "%PDF")
-            {
-                return "pdf";
-            }
-            else if (bytes.Length >= 3 && Encoding.UTF8.GetString(bytes, 0, 3) == "GIF")
-            {
-                return "gif";
-            }
-            else if (bytes.Length >= 8 && Encoding.UTF8.GetString(bytes, 0, 8) == "PNG\r\n\x1A\n")
-            {
-                return "png";
-            }
-            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "RIFF" && Encoding.UTF8.GetString(bytes, 8, 4) == "WEBP")
-            {
-                return "webp";
-            }
-            else if (bytes.Length >= 4 && (bytes[0] == 0xD0 && bytes[1] == 0xCF && bytes[2] == 0x11 && bytes[3] == 0xE0))
-            {
-                return "doc";
-            }
-            else if (bytes.Length >= 4 && (bytes[0] == 0x50 && bytes[1] == 0x4B && bytes[2] == 0x03 && bytes[3] == 0x04))
-            {
-                return "docx"; 
-            }
-            else
-            {
-                return "unknown";
-            }
-        }
-        private long GetColumnIdByName(Sheet sheet, string columnname)
-        {
-            foreach (var column in sheet.Columns)
-            {
-                if (column.Title == columnname)
-                {
-                    return column.Id.Value;
-                }
-            }
-            return 0;
-        }
-
         private readonly string accessToken;
         private readonly IConfiguration configuration;
         public TempController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
-
         }
         [HttpGet("GenerateSummaryPDF")]
         public void GenerateSummaryPDF(string EventID)
@@ -244,8 +32,6 @@ namespace IndiaEventsWebApi.Controllers
                 var EventName = "";
                 var EventDate = "";
                 var EventVenue = "";
-
-
 
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
 
@@ -301,26 +87,12 @@ namespace IndiaEventsWebApi.Controllers
                         EventName = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn1.Id)?.Value?.ToString();
                         EventDate = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn2.Id)?.Value?.ToString();
                         EventVenue = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn3.Id)?.Value?.ToString();
-
-
                     }
-
-
-
                 }
 
-
-
-
-
-
-
                 List<string> requiredColumns = new List<string> { "HCPName", "MISCode", "Speciality", "HCP Type" };
-
                 List<Column> selectedColumns = sheet_SpeakerCode.Columns
-                    .Where(column => requiredColumns.Contains(column.Title, StringComparer.OrdinalIgnoreCase))
-                    .ToList();
-
+                    .Where(column => requiredColumns.Contains(column.Title, StringComparer.OrdinalIgnoreCase)).ToList();
                 DataTable dtMai = new DataTable();
                 dtMai.Columns.Add("S.No", typeof(int));
                 foreach (Column column in selectedColumns)
@@ -329,31 +101,22 @@ namespace IndiaEventsWebApi.Controllers
                 }
                 dtMai.Columns.Add("Sign");
                 int Sr_No = 1;
-
-
                 foreach (Row row in sheet_SpeakerCode.Rows)
                 {
                     string eventId = row.Cells
                         .FirstOrDefault(cell => sheet_SpeakerCode.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title == "EventId/EventRequestId")?.DisplayValue;
-
                     if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
                     {
-
                         DataRow newRow = dtMai.NewRow();
                         newRow["S.No"] = Sr_No;
-
                         foreach (Cell cell in row.Cells)
                         {
-                            string columnName = sheet_SpeakerCode.Columns
-                                .FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
-
+                            string columnName = sheet_SpeakerCode.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
                             if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
                             {
                                 newRow[columnName] = cell.DisplayValue;
                             }
-
                         }
-
                         dtMai.Rows.Add(newRow);
                         Sr_No++;
                     }
@@ -361,37 +124,26 @@ namespace IndiaEventsWebApi.Controllers
 
                 foreach (Row row in sheet.Rows)
                 {
-                    string eventId = row.Cells
-                        .FirstOrDefault(cell => sheet.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title == "EventId/EventRequestId")?.DisplayValue;
-
+                    string eventId = row.Cells.FirstOrDefault(cell => sheet.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title == "EventId/EventRequestId")?.DisplayValue;
                     if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
                     {
                         DataRow newRow = dtMai.NewRow();
                         newRow["S.No"] = Sr_No;
-
                         foreach (Cell cell in row.Cells)
                         {
                             string columnName = sheet.Columns
                                 .FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
-
                             if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
                             {
                                 newRow[columnName] = cell.DisplayValue;
                             }
-
                         }
-
                         dtMai.Rows.Add(newRow);
                         Sr_No++;
                     }
                 }
-
-
-
-
                 byte[] fileBytes = exportpdf(dtMai, EventCode, EventName, EventDate, EventVenue);
                 string filename = "Sample_PDF_" + EventID + ".pdf";
-
                 var folderName = Path.Combine("Resources", "Images");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 if (!Directory.Exists(pathToSave))
@@ -401,20 +153,12 @@ namespace IndiaEventsWebApi.Controllers
                 string fileType = GetFileType(fileBytes);
                 string filePath = Path.Combine(pathToSave, filename);
                 System.IO.File.WriteAllBytes(filePath, fileBytes);
-
-                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                            parsedProcessSheet, rowId, filePath, "application/msword");
-
-
+                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(parsedProcessSheet, rowId, filePath, "application/msword");
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
-                }
-
-
-                //List<Attachment> attachments = GetAttachmentsFromSheet(sheet_SpeakerCode, EventID, parsedSheetId_SpeakerCode);
+                }               
                 List<Attachment> attachments = new List<Attachment>();
-
 
                 foreach (Row row in sheet_SpeakerCode.Rows)
                 {
@@ -424,9 +168,7 @@ namespace IndiaEventsWebApi.Controllers
                     {
                         var Id = (long)row.Id;
                         string eventId = matchingCell.Value.ToString();
-
                         if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
-
                         {
                             var a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(parsedSheetId_SpeakerCode, Id, null);
                             var url = "";
@@ -437,16 +179,13 @@ namespace IndiaEventsWebApi.Controllers
                                     var AID = (long)x.Id;
                                     var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(parsedSheetId_SpeakerCode, AID);
                                     url = file.Url;
-
                                 }
-
                                 if (url != "")
                                 {
                                     using (HttpClient client = new HttpClient())
                                     {
                                         byte[] data = client.GetByteArrayAsync(url).Result;
                                         string base64 = Convert.ToBase64String(data);
-
                                         byte[] xy = Convert.FromBase64String(base64);
                                         var f = Path.Combine("Resources", "Images");
                                         var ps = Path.Combine(Directory.GetCurrentDirectory(), f);
@@ -454,36 +193,19 @@ namespace IndiaEventsWebApi.Controllers
                                         {
                                             Directory.CreateDirectory(ps);
                                         }
-
                                         string ft = GetFileType(xy);
                                         string fileName = eventId + "-" + x + " AttachedFile." + ft;
-
                                         string fp = Path.Combine(ps, fileName);
-
                                         var addedRow = rowId;
-
                                         System.IO.File.WriteAllBytes(fp, xy);
                                         string type = GetContentType(ft);
-                                        var z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                                parsedProcessSheet, addedRow, fp, "application/msword");
-                                    }
-                                    ////string bs64 = ConvertImageURLToBase64(url);
+                                        var z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(parsedProcessSheet, addedRow, fp, "application/msword");
+                                    }                                    
                                     var bs64 = "";
-
-
-
-
-
-                                    //////smartsheet.SheetResources.RowResources.AttachmentResources.AttachUrl(parsedProcessSheet, Id, url);
-                                    //smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(parsedProcessSheet, Id, url, "application/msword");
-                                    ////url = "";
-
                                 }
-
                             }
                         }
                     }
-
                 }
             }
             catch (Exception ex)
@@ -505,7 +227,7 @@ namespace IndiaEventsWebApi.Controllers
 
             return result;
         }
-       
+
         private byte[] exportpdf(DataTable dtEmployee, string EventCode, string EventName, string EventDate, string EventVenue)
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
@@ -560,63 +282,132 @@ namespace IndiaEventsWebApi.Controllers
             byte[] result = ms.ToArray();
             return result;
         }
-     
+        private string GetContentType(string fileExtension)
+        {
+            switch (fileExtension.ToLower())
+            {
+                case "jpg":
+                case "jpeg":
+                    return "image/jpeg";
+                case "pdf":
+                    return "application/pdf";
+                case "gif":
+                    return "image/gif";
+                case "png":
+                    return "image/png";
+                case "webp":
+                    return "image/webp";
+                case "doc":
+                    return "application/msword";
+                case "docx":
+                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                default:
+                    return "application/octet-stream";
+            }
+        }
 
-        //private List<Attachment> GetAttachmentsFromSheet(Sheet sheet, string eventID ,long sheetId)
-        //{
-        //    List<Attachment> attachments = new List<Attachment>();
+        private string GetFileType(byte[] bytes)
+        {
 
+            if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xD8)
+            {
+                return "jpg";
+            }
+            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "%PDF")
+            {
+                return "pdf";
+            }
+            else if (bytes.Length >= 3 && Encoding.UTF8.GetString(bytes, 0, 3) == "GIF")
+            {
+                return "gif";
+            }
+            else if (bytes.Length >= 8 && Encoding.UTF8.GetString(bytes, 0, 8) == "PNG\r\n\x1A\n")
+            {
+                return "png";
+            }
+            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "RIFF" && Encoding.UTF8.GetString(bytes, 8, 4) == "WEBP")
+            {
+                return "webp";
+            }
+            else if (bytes.Length >= 4 && (bytes[0] == 0xD0 && bytes[1] == 0xCF && bytes[2] == 0x11 && bytes[3] == 0xE0))
+            {
+                return "doc";
+            }
+            else if (bytes.Length >= 4 && (bytes[0] == 0x50 && bytes[1] == 0x4B && bytes[2] == 0x03 && bytes[3] == 0x04))
+            {
+                return "docx";
+            }
+            else
+            {
+                return "unknown";
+            }
+        }
+        private long GetColumnIdByName(Sheet sheet, string columnname)
+        {
+            foreach (var column in sheet.Columns)
+            {
+                if (column.Title == columnname)
+                {
+                    return column.Id.Value;
+                }
+            }
+            return 0;
+        }
       
-        //    foreach (Row row in sheet.Rows)
-        //    {
-        //        Cell matchingCell = row.Cells.FirstOrDefault(cell => cell.DisplayValue == eventID);
-
-        //        if (matchingCell != null && matchingCell.Value != null)
-        //        {
-        //            var rowId = row.Id;
-        //            string eventId = matchingCell.Value.ToString();
-
-        //            if (!string.IsNullOrEmpty(eventId) && eventId.Equals(eventID, StringComparison.OrdinalIgnoreCase))
-
-        //            {
-        //                var a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheetId, rowId, null);
-        //                if (row.Attachments != null)
-        //                {
-        //                    attachments.AddRange(row.Attachments);
-        //                }
-                      
-        //            }
-        //        }
-        //    }
-
-        //    return attachments;
-        //}
-        //private getIds(Sheet sheet, string eventId)
-        //{
-        //    Column processIdColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
-        //    if (processIdColumn != null)
-        //    {
-        //        // Find all rows with the specified speciality
-        //        List<Row> targetRows = sheet.Rows
-        //            .Where(row => row.Cells.Any(cell => cell.ColumnId == processIdColumn.Id && cell.Value.ToString() == eventId))
-        //            .ToList();
-
-        //        if (targetRows.Any())
-        //        {
-        //            var rowIds = targetRows.Select(row => row.Id).ToList();
-        //            var rowId = (long)rowIds[0];
-        //            ;
-        //        }
-
-        //    }
-        //}
 
     }
 }
- // /////////  //////////////////////////////////////////////////////////////// /// ///// //// //// //// /// ////// ////// //// //// //////////
+// /////////  //////////////////////////////////////////////////////////////// /// ///// //// //// //// /// ////// ////// //// //// //////////
 
 
+//private List<Attachment> GetAttachmentsFromSheet(Sheet sheet, string eventID ,long sheetId)
+//{
+//    List<Attachment> attachments = new List<Attachment>();
 
+
+//    foreach (Row row in sheet.Rows)
+//    {
+//        Cell matchingCell = row.Cells.FirstOrDefault(cell => cell.DisplayValue == eventID);
+
+//        if (matchingCell != null && matchingCell.Value != null)
+//        {
+//            var rowId = row.Id;
+//            string eventId = matchingCell.Value.ToString();
+
+//            if (!string.IsNullOrEmpty(eventId) && eventId.Equals(eventID, StringComparison.OrdinalIgnoreCase))
+
+//            {
+//                var a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheetId, rowId, null);
+//                if (row.Attachments != null)
+//                {
+//                    attachments.AddRange(row.Attachments);
+//                }
+
+//            }
+//        }
+//    }
+
+//    return attachments;
+//}
+//private getIds(Sheet sheet, string eventId)
+//{
+//    Column processIdColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
+//    if (processIdColumn != null)
+//    {
+//        // Find all rows with the specified speciality
+//        List<Row> targetRows = sheet.Rows
+//            .Where(row => row.Cells.Any(cell => cell.ColumnId == processIdColumn.Id && cell.Value.ToString() == eventId))
+//            .ToList();
+
+//        if (targetRows.Any())
+//        {
+//            var rowIds = targetRows.Select(row => row.Id).ToList();
+//            var rowId = (long)rowIds[0];
+//            ;
+//        }
+
+//    }
+//}
 
 
 
@@ -1029,3 +820,86 @@ namespace IndiaEventsWebApi.Controllers
 
 ////}
 ////}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ////////////////////////////////////////////////SINGLE FILE UPLOAD
+
+
+//[HttpPost("AddFile")]
+//public IActionResult AddFormData(Class11 i)
+//{
+//    try
+//    {
+
+
+//        var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
+//        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+//        var sheetId1 = 6857973674495876;
+//        Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId1, null, null, null, null, null, null, null);
+
+//        var newRow = new Row();
+//        newRow.Cells = new List<Cell>();
+
+//        var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Row[] { newRow });
+
+
+//        byte[] fileBytes = Convert.FromBase64String(i.File);
+//        var folderName = Path.Combine("Resources", "Images");
+//        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+//        if (!Directory.Exists(pathToSave))
+//        {
+//            Directory.CreateDirectory(pathToSave);
+//        }
+
+//        string fileType = GetFileType(fileBytes);
+//        string fileName = "ConvertedFile." + fileType;
+//        string filePath = Path.Combine(pathToSave, fileName);
+
+//        //string type = k.ContentType;//fileUploadModel.File.ContentType;
+//        var addedRow = addedRows[0];
+
+//        System.IO.File.WriteAllBytes(filePath, fileBytes);
+//        string type = GetContentType(fileType);
+//        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+//                sheetId1, addedRow.Id.Value, filePath, "application/msword");
+
+
+
+
+//        return Ok(new { Message = "Conversion successful", FilePath = filePath });
+
+
+//    }
+//    catch (Exception ex)
+//    {
+//        return BadRequest($"Error: {ex.Message}");
+//    }
+//}
+
+
+
+
