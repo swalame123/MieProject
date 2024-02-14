@@ -47,7 +47,6 @@
         public string? TotalLocalConveyance { get; set; }
         public string? IsDeviationUpload { get; set; }
 
-
         public List<string>? Files { get; set; }
         public List<string>? DeviationFiles { get; set; }
 
