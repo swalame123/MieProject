@@ -162,70 +162,22 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 var newRow = new Row();
                 newRow.Cells = new List<Cell>();
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Event Topic"),
-                    Value = formDataList.MedicalUtilityData.EventTopic
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event Topic"), Value = formDataList.MedicalUtilityData.EventTopic });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "EventType"),
-                    Value = formDataList.MedicalUtilityData.EventType
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "EventDate"),
-                    Value = formDataList.MedicalUtilityData.EventDate
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Valid From"),
-                    Value = formDataList.MedicalUtilityData.ValidFrom
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Valid To"),
-                    Value = formDataList.MedicalUtilityData.ValidTill
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Medical Utility Type"),
-                    Value = formDataList.MedicalUtilityData.MedicalUtilityType
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.MedicalUtilityData.EventType });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.MedicalUtilityData.EventDate });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Valid From"), Value = formDataList.MedicalUtilityData.ValidFrom });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Valid To"), Value = formDataList.MedicalUtilityData.ValidTill });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Medical Utility Type"), Value = formDataList.MedicalUtilityData.MedicalUtilityType });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Medical Utility Description"),
-                    Value = formDataList.MedicalUtilityData.MedicalUtilityDescription
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Medical Utility Description"), Value = formDataList.MedicalUtilityData.MedicalUtilityDescription });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"),
-                    Value = formDataList.MedicalUtilityData.IsAdvanceRequired
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Brands"),
-                    Value = brand
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Expenses"),
-                    Value = Expense
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Panelists"),
-                    Value = HCP
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"), Value = formDataList.MedicalUtilityData.IsAdvanceRequired });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Brands"), Value = brand });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Expenses"), Value = Expense });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Panelists"), Value = HCP });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Role"),
-                    Value = formDataList.MedicalUtilityData.Role
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.MedicalUtilityData.Role });
 
 
                 //newRow.Cells.Add(new Cell
@@ -240,47 +192,15 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 //});
 
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "RBM/BM"),
-                    Value = formDataList.MedicalUtilityData.RBMorBM
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Sales Head"),
-                    Value = formDataList.MedicalUtilityData.Sales_Head
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Marketing Head"),
-                    Value = formDataList.MedicalUtilityData.Marketing_Head
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"),
-                    Value = formDataList.MedicalUtilityData.Finance
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "InitiatorName"),
-                    Value = formDataList.MedicalUtilityData.InitiatorName
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Initiator Email"),
-                    Value = formDataList.MedicalUtilityData.Initiator_Email
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.MedicalUtilityData.RBMorBM });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Marketing Head"), Value = formDataList.MedicalUtilityData.Marketing_Head });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"), Value = formDataList.MedicalUtilityData.Finance });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "InitiatorName"), Value = formDataList.MedicalUtilityData.InitiatorName });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.MedicalUtilityData.Initiator_Email });
 
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Expense"),
-                    Value = TotalExpenseAmount
-                });
-                newRow.Cells.Add(new Cell
-                {
-                    ColumnId = GetColumnIdByName(sheet1, "Total Budget"),
-                    Value = total
-                });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Expense"), Value = TotalExpenseAmount });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Budget"), Value = total });
 
 
 
@@ -304,65 +224,21 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         var newRow7 = new Row();
                         newRow7.Cells = new List<Cell>();
 
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"),
-                            Value = eventId
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Event Topic"),
-                            Value = formDataList.MedicalUtilityData.EventTopic
-                        });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.MedicalUtilityData.EventTopic });
 
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventType"),
-                            Value = formDataList.MedicalUtilityData.EventType
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventDate"),
-                            Value = formDataList.MedicalUtilityData.EventDate
-                        });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.MedicalUtilityData.EventType });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.MedicalUtilityData.EventDate });
 
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"),
-                            Value =EventOpen30Days
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"),
-                            Value = EventWithin7Days
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 1,00,000 Trigger"),
-                            Value = UploadDeviationFile
-                        });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = EventOpen30Days });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 1,00,000 Trigger"), Value = UploadDeviationFile });
 
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Sales Head"),
-                            Value = formDataList.MedicalUtilityData.Sales_Head
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Finance Head"),
-                            Value = formDataList.MedicalUtilityData.Sales_Head
-                        });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Finance Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
 
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "InitiatorName"),
-                            Value = formDataList.MedicalUtilityData.InitiatorName
-                        });
-                        newRow7.Cells.Add(new Cell
-                        {
-                            ColumnId = GetColumnIdByName(sheet7, "Initiator Email"),
-                            Value = formDataList.MedicalUtilityData.Initiator_Email
-                        });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.MedicalUtilityData.InitiatorName });
+                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.MedicalUtilityData.Initiator_Email });
 
 
                         var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
@@ -468,78 +344,29 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     var newRow1 = new Row();
                     newRow1.Cells = new List<Cell>();
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCPName"),
-                        Value = formData.HcpName
-                    });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "HCPName"), Value = formData.HcpName });
 
 
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "MISCode"),
-                        Value = formData.MisCode
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "HCP Type"),
-                        Value = formData.HcpType
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Speciality"),
-                        Value = formData.Speciality
-                    });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "MISCode"), Value = formData.MisCode });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "HCP Type"), Value = formData.HcpType });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Speciality"), Value = formData.Speciality });
 
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Tier"),
-                        Value = formData.Tier
-                    });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Tier"), Value = formData.Tier });
 
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Medical Utility Cost"),
-                        Value = formData.MedicalUtilityCostAmount
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Medical Utility Type"),
-                        Value = formDataList.MedicalUtilityData.MedicalUtilityType
-                    });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Medical Utility Cost"), Value = formData.MedicalUtilityCostAmount });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Medical Utility Type"), Value = formDataList.MedicalUtilityData.MedicalUtilityType });
 
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Legitimate Need"),
-                        Value = formData.Legitimate
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Objective Criteria"),
-                        Value = formData.Objective
-                    });
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "Rationale"),
-                        Value = formData.Rationale
-                    });
-                    //newRow1.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet4, "FCPA Date"),
-                    //    Value = formData.Fcpadate
-                    //});
-                    //newRow1.Cells.Add(new Cell
-                    //{
-                    //    ColumnId = GetColumnIdByName(sheet4, "FCPA Date"),
-                    //    Value = formData.Fcpadate
-                    //});
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Legitimate Need"), Value = formData.Legitimate });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Objective Criteria"), Value = formData.Objective });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Rationale"), Value = formData.Rationale });
 
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Topic"), Value = formDataList.MedicalUtilityData.EventTopic });
 
-                    newRow1.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet4, "EventId/EventRequestId"),
-                        Value = val
-                    });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Type"), Value = formDataList.MedicalUtilityData.EventType });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Date Start"), Value = formDataList.MedicalUtilityData.ValidFrom });
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event End Date"), Value = formDataList.MedicalUtilityData.ValidTill });
+
+                    newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "EventId/EventRequestId"), Value = val });
 
 
                     var addeddatarows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId4, new Row[] { newRow1 });
@@ -708,26 +535,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     var newRow2 = new Row();
                     newRow2.Cells = new List<Cell>();
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "% Allocation"),
-                        Value = formdata.PercentAllocation
-                    });
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "Brands"),
-                        Value = formdata.BrandName
-                    });
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "Project ID"),
-                        Value = formdata.ProjectId
-                    });
-                    newRow2.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet2, "EventId/EventRequestId"),
-                        Value = val
-                    });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "% Allocation"), Value = formdata.PercentAllocation });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "Brands"), Value = formdata.BrandName });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "Project ID"), Value = formdata.ProjectId });
+                    newRow2.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet2, "EventId/EventRequestId"), Value = val });
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId2, new Row[] { newRow2 });
 
@@ -738,33 +549,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 {
                     var newRow6 = new Row();
                     newRow6.Cells = new List<Cell>();
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "MisCode"),
-                        Value = formdata.MisCode
-                    });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "MisCode"), Value = formdata.MisCode });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "Expense"), Value = formdata.Expense });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "EventId/EventRequestID"), Value = val });
 
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "Expense"),
-                        Value = formdata.Expense
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "EventId/EventRequestID"),
-                        Value = val
-                    });
-
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"),
-                        Value = formdata.BTC_BTE
-                    });
-                    newRow6.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet6, "Amount"),
-                        Value = formdata.TotalExpenseAmount
-                    });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "BTC/BTE"), Value = formdata.BTC_BTE });
+                    newRow6.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet6, "Amount"), Value = formdata.TotalExpenseAmount });
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
                 }
