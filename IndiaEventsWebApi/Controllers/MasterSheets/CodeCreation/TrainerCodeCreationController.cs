@@ -67,13 +67,13 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 string[] sheetIds = {
                 //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster4").Value,
-                configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value,
-                configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value,
-                configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value
+                //configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster4").Value,
+                //configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value,
+                configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value
+                //configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value
 
                 };
                 var mis = "";
@@ -99,7 +99,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         {
                             mis = formData.MisCode;
                             sheetval = sheeti.Name;
-                            
+
 
                         }
                     }
@@ -127,108 +127,36 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     }
                     else
                     {
-                    IsTrainerCertificate = "No";
+                        IsTrainerCertificate = "No";
                     }
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer Name"),
-                        Value = formData.TrainerName
-                    });
 
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer Code"),
-                        Value = formData.TrainerCode
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer Brand"),
-                        Value = formData.TrainerBrand
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "MisCode"),
-                        Value = formData.MisCode
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Division"),
-                        Value = formData.Division
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Speciality"),
-                        Value = formData.Speciality
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Qualification"),
-                        Value = formData.Qualification
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Address"),
-                        Value = formData.Address
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "City"),
-                        Value = formData.City
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "State"),
-                        Value = formData.State
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
 
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Country"),
-                        Value = formData.Country
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Contact Number"),
-                        Value = formData.Contact_Number
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer Type"),
-                        Value = formData.TrainerType
-                    });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Sales Head"), Value = formData.SalesHead });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Medical Affairs Head"), Value = formData.MedicalAffairsHead });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Name"), Value = formData.TrainerName });
+                    //newRow.Cells.Add(new Cell  { ColumnId = GetColumnIdByName(sheet, "Trainer Code"),  Value = formData.TrainerCode });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Brand"), Value = formData.TrainerBrand });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Division"), Value = formData.Division });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speciality"), Value = formData.Speciality });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Qualification"), Value = formData.Qualification });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Address"), Value = formData.Address });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "City"), Value = formData.City });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "State"), Value = formData.State });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Country"), Value = formData.Country });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Contact Number"), Value = formData.Contact_Number });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Type"), Value = formData.TrainerType });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trained by"), Value = formData.Trainedby });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer CV"), Value = IsTrainerCV });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer certificate"), Value = IsTrainerCertificate });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trained on"), Value = formData.Trainedon });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Category"), Value = formData.Trainer_Category });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Criteria"), Value = formData.Trainer_Criteria });
 
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trained by"),
-                        Value = formData.Trainedby
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer CV"),
-                        Value = IsTrainerCV
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer certificate"),
-                        Value = IsTrainerCertificate
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trained on"),
-                        Value = formData.Trainedon
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer Category"),
-                        Value = formData.Trainer_Category
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Trainer Criteria"),
-                        Value = formData.Trainer_Criteria
-                    });
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var RowId = addedRows[0].Id.Value;
                     if (IsTrainerCV == "Yes")
@@ -393,15 +321,15 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
         }
         //private string GetLastTrainerCode(long sheetId, string trainerType, SmartsheetClient smartsheet)
         //{
-            
-            
+
+
         //    Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
 
         //    List<Column> columnsList = sheet.Columns.ToList();
-            
+
         //    int trainerCodeColumnIndex = columnsList.FindIndex(column => column.Title == "Trainer Code");
 
-            
+
         //    string lastTrainerCode = null;
 
         //    foreach (Row row in sheet.Rows.OrderByDescending(r => r.CreatedAt))
@@ -425,14 +353,14 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
         //private string IncrementTrainerCode(string lastTrainerCode)
         //{
-           
+
         //    string trainerType = Regex.Match(lastTrainerCode, @"([a-zA-Z]+)").Value;
         //    string numericPart = Regex.Match(lastTrainerCode, @"(\d+)").Value;
 
-            
+
         //    int incrementedNumericPart = int.Parse(numericPart) + 1;
 
-           
+
         //    string newTrainerCode = $"{trainerType}{incrementedNumericPart:D2}";
 
         //    return newTrainerCode;

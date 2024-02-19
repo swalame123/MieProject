@@ -65,12 +65,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 string[] sheetIds = {
                 //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
-                configuration.GetSection("SmartsheetSettings:HcpMaster4").Value,
-                configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value,
-                configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
+                //configuration.GetSection("SmartsheetSettings:HcpMaster4").Value,
+                //configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value,
+                //configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value,
                 configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value
                 };
                 var mis = "";
@@ -136,81 +136,34 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     }
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "VendorAccount"),
-                        Value = formData.VendorAccount
-                    });
 
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "MisCode"),
-                        Value = formData.MisCode
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"),
-                        Value = formData.BenificiaryName
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "PanCardName"),
-                        Value = formData.PanCardName
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "PanNumber"),
-                        Value = formData.PanNumber
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"),
-                        Value = formData.BankAccountNumber
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "IfscCode"),
-                        Value = formData.IfscCode
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Swift Code"),
-                        Value = formData.SwiftCode
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
 
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "IBN Number"),
-                        Value = formData.IbnNumber
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Email "),
-                        Value = formData.Email
-                    });
-                   
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
 
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Cheque Document"),
-                        Value =IsChequeDocument
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Pancard Document"),
-                        Value = IsPanCardDocument
-                    });
-                    newRow.Cells.Add(new Cell
-                    {
-                        ColumnId = GetColumnIdByName(sheet, "Tax Residence Certificate"),
-                        Value = IsTaxResidenceCertificate
-                    });
-                   
+
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
+
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+
+
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Cheque Document"), Value = IsChequeDocument });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Pancard Document"), Value = IsPanCardDocument });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Tax Residence Certificate"), Value = IsTaxResidenceCertificate });
+
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var RowId = addedRows[0].Id.Value;
                     if (IsChequeDocument == "Yes")
                     {
-                       
+
                         byte[] fileBytes = Convert.FromBase64String(formData.ChequeDocument);
                         var folderName = Path.Combine("Resources", "Images");
                         var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -221,7 +174,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                         string fileType = GetFileType(fileBytes);
                         string fileName = " ChequeDocument." + fileType;
-                        
+
                         string filePath = Path.Combine(pathToSave, fileName);
 
 
@@ -265,7 +218,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                             System.IO.File.Delete(filePath);
                         }
 
-                    } 
+                    }
                     if (IsTaxResidenceCertificate == "Yes")
                     {
                         //var addFile = AddFile(formData.TrainerCV,RowId );

@@ -2,6 +2,11 @@
 {
     public class SpeakerCodeGeneration
     {
+        public string? InitiatorNameName { get; set; }
+        public string? InitiatorEmail { get; set; }
+        public string? SalesHead { get; set; }
+        public string? MedicalAffairsHead { get; set; }
+
         public string? SpeakerName { get; set; }
         public string? SpeakerCode { get; set; }
         public string? MISCode { get; set; }

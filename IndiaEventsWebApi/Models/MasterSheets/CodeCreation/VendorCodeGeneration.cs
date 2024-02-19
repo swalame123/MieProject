@@ -2,6 +2,10 @@
 {
     public class VendorCodeGeneration
     {
+        public string? InitiatorNameName { get; set; }
+        public string? InitiatorEmail { get; set; }
+
+
         public string? VendorAccount { get; set; }
         public string? MisCode { get; set; }
         public string? BenificiaryName { get; set; }

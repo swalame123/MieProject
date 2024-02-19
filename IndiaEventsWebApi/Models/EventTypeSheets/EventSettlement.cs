@@ -28,6 +28,18 @@
         public string? SalesHead { get; set; }
         public string? MarkeringHead { get; set; }
         public string? Compliance { get; set; }
+        //public string? MedicalAffairsEmail { get; set; }
+
+
+        //public string? MedicalAffairsEmail { get; set; }
+        public string? ReportingManagerEmail { get; set; }
+        public string? FirstLevelEmail { get; set; }
+        //public string? ComplianceEmail { get; set; }
+        public string? FinanceTreasuryEmail { get; set; }
+        //public string? FinanceAccountsEmail { get; set; }
+        public string? SalesCoordinatorEmail { get; set; }
+        public string? Role { get; set; }
+
         public string? FinanceAccounts { get; set; }
         public string? FinanceTreasury { get; set; }
         public string? MedicalAffairsHead { get; set; }
@@ -44,8 +56,13 @@
         public string? TotalTravelAndAccomodationSpend { get; set; }
         public string? TotalHonorariumSpend { get; set; }
         public string? TotalSpend { get; set; }
+        public string? TotalActuals { get; set; }
+        public string? AdvanceUtilizedForEvents { get; set; }
+        public string? PayBackAmountToCompany { get; set; }
+        public string? AdditionalAmountNeededToPayForInitiator { get; set; }
         public string? TotalLocalConveyance { get; set; }
         public string? IsDeviationUpload { get; set; }
+        //public string? Role { get; set; }
 
         public List<string>? Files { get; set; }
         public List<string>? DeviationFiles { get; set; }

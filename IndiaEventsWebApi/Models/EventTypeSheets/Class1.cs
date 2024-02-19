@@ -24,13 +24,26 @@
         public string? FB_Expense_Excluding_Tax { get; set; }
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
+
+
+        public string? MedicalAffairsEmail { get; set; }
+        public string? ReportingManagerEmail { get; set; }
+        public string? FirstLevelEmail { get; set; }
+        public string? ComplianceEmail { get; set; }
+        //public string? FinanceTreasuryEmail { get; set; }
+        public string? FinanceAccountsEmail { get; set; }
+        public string? SalesCoordinatorEmail { get; set; }
+     
+        public string? Role { get; set; }
+
+
         public string? Marketing_Head { get; set; }
         public string? Finance { get; set; }
         public string? InitiatorName { get; set; }
         public string? Initiator_Email { get; set; }
         public List<string>? Files { get; set; }
         public List<string>? DeviationFiles { get; set; }
-        public string? Role { get; set; }
+        
     }
     public class Class11
     {

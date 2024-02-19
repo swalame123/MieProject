@@ -72,7 +72,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 foreach (var formdata in updatedFormData)
                 {
-                    string rowData = $"{FTNo}. JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
+                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
                     FinanceAccountsHonorDetails.AppendLine(rowData);
                     FTNo++;
 
@@ -168,7 +168,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 foreach (var formdata in updatedFormData)
                 {
-                    string rowData = $"{FTNo}. JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
+                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
                     FinanceAccountsPostDetails.AppendLine(rowData);
                     FTNo++;
 

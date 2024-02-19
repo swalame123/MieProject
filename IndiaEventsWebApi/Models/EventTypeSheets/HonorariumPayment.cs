@@ -23,9 +23,22 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string Invitees { get; set; }
         public string Panelists { get; set; }
         public string InitiatorName { get; set; }
+      
         public string InitiatorEmail { get; set; }
         public string RBMorBM { get; set; }
         public string Compliance { get; set; }
+        //public string? FinanceTreasuryEmail { get; set; }
+
+        public string? MedicalAffairsEmail { get; set; }
+        public string? ReportingManagerEmail { get; set; }
+        public string? FirstLevelEmail { get; set; }
+        public string? SalesCoordinatorEmail { get; set; }
+        // public string? ComplianceEmail { get; set; }
+        // public string? FinanceTreasuryEmail { get; set; }
+        public string? MarketingHeadEmail { get; set; }
+        public string? SalesHeadEmail { get; set; }
+        public string? Role { get; set; }
+
         public string FinanceAccounts { get; set; }
         public string FinanceTreasury { get; set; }
         public string slideKits { get; set; }
@@ -34,6 +47,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string TotalAccomodationSpend { get; set; }
         public string TotalExpenses { get; set; }
         public string? IsDeviationUpload { get; set; }
+        //public string? Role { get; set; }
 
 
         public List<string>? Files { get; set; }
