@@ -842,9 +842,11 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 }
                 foreach (Row row in sheet.Rows)
                 {
+                    //var includeRow = true;
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
+                        
                         rowData[columnNames[i]] = row.Cells[i].Value;
 
                     }

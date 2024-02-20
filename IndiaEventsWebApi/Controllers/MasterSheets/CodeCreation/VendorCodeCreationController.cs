@@ -1,9 +1,11 @@
-﻿using IndiaEventsWebApi.Models.MasterSheets.CodeCreation;
+﻿using IndiaEventsWebApi.Models;
+using IndiaEventsWebApi.Models.MasterSheets.CodeCreation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.Text;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 {
@@ -161,6 +163,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var RowId = addedRows[0].Id.Value;
+
                     if (IsChequeDocument == "Yes")
                     {
 
@@ -261,6 +264,171 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpPut("UpdateVendorDatausingVendorId")]
+        public IActionResult UpdateVendorDatausingVendorId(UpdateVendorCodeGeneration formData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:HonorariumPayment").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                long.TryParse(sheetId1, out long parsedSheetId1);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
+
+
+                StringBuilder FinanceTreasuryHonorDetails = new StringBuilder();
+                int FTNo = 1;
+
+
+
+                
+               
+
+
+                
+
+                Row existingRow = GetRowById(smartsheet, parsedSheetId, formData.VendorId);
+                Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+
+
+
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
+
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
+
+
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
+
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+
+
+                var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+
+                    var eventIdColumnId = GetColumnIdByName(sheet, "EventId/EventRequestId");
+                    var eventIdCell = updatedRow[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
+                    var val = eventIdCell.DisplayValue;
+
+
+
+
+                    var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == val));
+
+                
+
+                return Ok(new { Message = "Data Updated successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+
+
+
+
+        [HttpGet("GetHCPDataUsingVendorId")]
+        public IActionResult GetHCPDataUsingVendorId(string vendorId)
+        {
+            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            string[] sheetIds = {
+                configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value
+            };
+            foreach (string i in sheetIds)
+            {
+                long.TryParse(i, out long p);
+                Sheet sheeti = smartsheet.SheetResources.GetSheet(p, null, null, null, null, null, null, null);
+                Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "VendorId");
+                if (misCodeColumn != null)
+                {
+                    Row existingRow = sheeti.Rows.FirstOrDefault(row =>
+                        row.Cells != null &&
+                        row.Cells.Any(cell =>
+                            cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == vendorId
+                        )
+                    );
+                    if (existingRow != null)
+                    {
+                        Cell VendorCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == misCodeColumn.Id);
+                        var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(p, existingRow.Id.Value, null);
+                        var url = "";
+                       
+                       
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        List<string> Base64Strings = new List<string>();
+                        foreach (var attachment in attachments.Data)
+                        {
+                            if (attachment != null)
+                            {
+                                var AID = (long)attachment.Id;
+                                var Name = attachment.Name;
+                                var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(p, AID);
+                                url = file.Url;                                
+                                using (HttpClient client = new HttpClient())
+                                {
+                                    var fileContent = client.GetByteArrayAsync(url).Result;
+                                    var base64String = Convert.ToBase64String(fileContent);
+                                    Base64Strings.Add(base64String);
+                                    rowData[Name] = base64String;
+                                }
+                            }
+                        }
+                        return Ok(new
+                        {                         
+                            rowData
+                        });
+                    }
+                }
+            }
+
+            return Ok("False");
+        }
+
+
+
+
+
+
+        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
+        {
+            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+
+
+
+            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "VendorId");
+
+            if (idColumn != null)
+            {
+                foreach (var row in sheet.Rows)
+                {
+                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == email);
+
+                    if (cell != null)
+                    {
+                        return row;
+                    }
+                }
+            }
+
+            return null;
+        }
+
 
         private long GetColumnIdByName(Sheet sheet, string columnname)
         {
