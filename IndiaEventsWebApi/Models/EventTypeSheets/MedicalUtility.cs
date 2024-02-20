@@ -7,8 +7,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
         public DateTime? EventDate { get; set; }
-        public DateTime? ValidFrom { get; set; }
-        public DateTime? ValidTill { get; set; }
+        public string? ValidFrom { get; set; }
+        public string? ValidTill { get; set; }
         public string? MedicalUtilityType { get; set; }
         public string? MedicalUtilityDescription { get; set; }
         public string? Class_III_EventCode { get; set; }

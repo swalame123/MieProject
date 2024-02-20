@@ -4,8 +4,6 @@
     {
         public string? InitiatorNameName { get; set; }
         public string? InitiatorEmail { get; set; }
-
-
         public string? VendorAccount { get; set; }
         public string? MisCode { get; set; }
         public string? BenificiaryName { get; set; }
@@ -22,12 +20,9 @@
     }
     public class UpdateVendorCodeGeneration
     {
-
         public string? VendorId { get; set; }
         public string? InitiatorNameName { get; set; }
         public string? InitiatorEmail { get; set; }
-
-
         public string? VendorAccount { get; set; }
         public string? MisCode { get; set; }
         public string? BenificiaryName { get; set; }
