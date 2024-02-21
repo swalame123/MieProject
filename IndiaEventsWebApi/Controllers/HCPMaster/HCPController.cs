@@ -8,6 +8,7 @@ using Smartsheet.Api.Models;
 using Smartsheet.Api.OAuth;
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace IndiaEventsWebApi.Controllers.HCPMaster
 {
@@ -289,7 +290,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                         GOorNGO = worksheet.Cells[row, GetColumnIndexByName(worksheet, "HCP Type")].StringValue,
                         MISCode = worksheet.Cells[row, GetColumnIndexByName(worksheet, "MisCode")].StringValue,
                         Speciality = worksheet.Cells[row, GetColumnIndexByName(worksheet, "Speciality")].StringValue,
-                        Address = worksheet.Cells[row, GetColumnIndexByName(worksheet, "Address")].StringValue
+                        CompanyName = worksheet.Cells[row, GetColumnIndexByName(worksheet, "Company Name")].StringValue
                     };
 
                     formDataList.Add(formData);
@@ -332,7 +333,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                     newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "HCP Type"), Value = i.GOorNGO });
                     newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = i.MISCode });
                     newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speciality"), Value = i.Speciality });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Address"), Value = i.Address });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Company Name"), Value = i.CompanyName });
 
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
@@ -356,6 +357,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
             }
             return 0;
         }
+
 
         private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
         {

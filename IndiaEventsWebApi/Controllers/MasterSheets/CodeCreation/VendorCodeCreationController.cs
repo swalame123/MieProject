@@ -304,11 +304,21 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Email "), Value = formData.Email });
                 updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Requestor Name"), Value = formData.InitiatorNameName });
                 updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Requestor"), Value = formData.InitiatorEmail });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Tax Residence Certificate Date"), Value = formData.TaxResidenceCertificateDate });
 
 
                 var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
 
-
+                var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(parsedSheetId, updatedRow[0].Id.Value, null);
+                List<string> Names = new List<string>();
+                foreach (var attachment in attachments.Data)
+                {
+                    var Id = attachment.Id;
+                    var Fullname = attachment.Name.Split(".");
+                    var splitName = Fullname[0];
+                    var data = $"{splitName}:{Id}";
+                    Names.Add(data);
+                }
 
                 var IsPanCardDocument = !string.IsNullOrEmpty(formData.PanCardDocument) ? "Yes" : "No";
                 var IsChequeDocument = !string.IsNullOrEmpty(formData.ChequeDocument) ? "Yes" : "No";
@@ -316,6 +326,23 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                 if (IsChequeDocument == "Yes")
                 {
+                    foreach (var a in attachments.Data)
+                    {
+                        long Id = (long)a.Id;
+                        var Fullname = a.Name.Split(".");
+                        var splitName = Fullname[0];
+                      
+                        if(splitName == " ChequeDocument")
+                        {
+
+                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                              parsedSheetId,           // sheetId
+                              Id            // attachmentId
+                            );
+
+                        }
+                    }
+
 
                     byte[] fileBytes = Convert.FromBase64String(formData.ChequeDocument);
                     var folderName = Path.Combine("Resources", "Images");
@@ -345,6 +372,24 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 }
                 if (IsPanCardDocument == "Yes")
                 {
+                    foreach (var a in attachments.Data)
+                    {
+                        long Id = (long)a.Id;
+                        var Fullname = a.Name.Split(".");
+                        var splitName = Fullname[0];
+                       
+                       
+                        if (splitName == " PanCardDocument")
+                        {
+
+                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                              parsedSheetId,           // sheetId
+                              Id            // attachmentId
+                            );
+
+                        }
+                    }
+
                     //var addFile = AddFile(formData.TrainerCV,RowId );
                     byte[] fileBytes = Convert.FromBase64String(formData.PanCardDocument);
                     var folderName = Path.Combine("Resources", "Images");
@@ -374,6 +419,23 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 }
                 if (IsTaxResidenceCertificate == "Yes")
                 {
+                    foreach (var a in attachments.Data)
+                    {
+                        long Id = (long)a.Id;
+                        var Fullname = a.Name.Split(".");
+                        var splitName = Fullname[0];
+                        
+                      
+                        if (splitName == " TaxResidenceCertificate")
+                        {
+
+                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                              parsedSheetId,           // sheetId
+                              Id            // attachmentId
+                            );
+
+                        }
+                    }
                     //var addFile = AddFile(formData.TrainerCV,RowId );
                     byte[] fileBytes = Convert.FromBase64String(formData.TaxResidenceCertificate);
                     var folderName = Path.Combine("Resources", "Images");
@@ -404,8 +466,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
 
 
-
-
                 return Ok(new { Message = "Data Updated successfully." });
 
             }
@@ -421,8 +481,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
 
 
-        [HttpGet("GetHCPDataUsingVendorId")]
-        public IActionResult GetHCPDataUsingVendorId(string vendorId)
+        [HttpGet("Getbase64UsingVendorId")]
+        public IActionResult Getbase64UsingVendorId(string vendorId)
         {
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
             string[] sheetIds = {

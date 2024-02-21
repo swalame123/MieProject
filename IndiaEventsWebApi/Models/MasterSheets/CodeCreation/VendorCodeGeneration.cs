@@ -33,6 +33,7 @@
         public string? SwiftCode { get; set; }
         public string? IbnNumber { get; set; }
         public string? Email { get; set; }
+        public DateTime? TaxResidenceCertificateDate { get; set; }
         public string? PanCardDocument { get; set; }
         public string? ChequeDocument { get; set; }
         public string? TaxResidenceCertificate { get; set; }

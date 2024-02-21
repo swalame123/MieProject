@@ -28,7 +28,7 @@
         public string? Speciality { get; set; }
         public string? GOorNGO { get; set; }
         public string? MISCode { get; set; }
-        public string? Address { get; set; }
+        public string? CompanyName { get; set; }
        
     }
 }

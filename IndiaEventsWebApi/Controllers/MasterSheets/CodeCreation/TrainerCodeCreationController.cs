@@ -156,9 +156,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trained on"), Value = formData.Trainedon });
                     newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Category"), Value = formData.Trainer_Category });
                     newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Criteria"), Value = formData.Trainer_Criteria });
+                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Trainer Criteria Details"), Value = formData.Trainer_Criteria_Details });
 
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var RowId = addedRows[0].Id.Value;
+
+
                     if (IsTrainerCV == "Yes")
                     {
                         //var addFile = AddFile(formData.TrainerCV,RowId );
@@ -220,21 +223,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     }
 
 
-
-
-
                 }
-
-
-
-
-
-
-
-
-
-
-
                 return Ok(new
                 { Message = "Data added successfully." });
 
@@ -244,6 +233,249 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpPut("UpdateTrainerDatausingTrainerId")]
+        public IActionResult UpdateVendorDatausingVendorId(UpdateVendorCodeGeneration formData)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
+                //string sheetId1 = configuration.GetSection("SmartsheetSettings:HonorariumPayment").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                //long.TryParse(sheetId1, out long parsedSheetId1);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                //Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);           
+
+                Row existingRow = GetRowById(smartsheet, parsedSheetId, formData.VendorId);
+                Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Requestor Name"), Value = formData.InitiatorNameName });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Requestor"), Value = formData.InitiatorEmail });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Tax Residence Certificate Date"), Value = formData.TaxResidenceCertificateDate });
+
+
+                var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+
+                var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(parsedSheetId, updatedRow[0].Id.Value, null);
+                List<string> Names = new List<string>();
+                foreach (var attachment in attachments.Data)
+                {
+                    var Id = attachment.Id;
+                    var Fullname = attachment.Name.Split(".");
+                    var splitName = Fullname[0];
+                    var data = $"{splitName}:{Id}";
+                    Names.Add(data);
+                }
+
+                var IsPanCardDocument = !string.IsNullOrEmpty(formData.PanCardDocument) ? "Yes" : "No";
+                var IsChequeDocument = !string.IsNullOrEmpty(formData.ChequeDocument) ? "Yes" : "No";
+                var IsTaxResidenceCertificate = !string.IsNullOrEmpty(formData.TaxResidenceCertificate) ? "Yes" : "No";
+
+                if (IsChequeDocument == "Yes")
+                {
+                    foreach (var a in attachments.Data)
+                    {
+                        long Id = (long)a.Id;
+                        var Fullname = a.Name.Split(".");
+                        var splitName = Fullname[0];
+
+                        if (splitName == " ChequeDocument")
+                        {
+
+                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                              parsedSheetId,           // sheetId
+                              Id            // attachmentId
+                            );
+
+                        }
+                    }
+
+
+                    byte[] fileBytes = Convert.FromBase64String(formData.ChequeDocument);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = " ChequeDocument." + fileType;
+
+                    string filePath = Path.Combine(pathToSave, fileName);
+
+
+                    var addedRow = updatedRow[0];
+
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    // string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+                if (IsPanCardDocument == "Yes")
+                {
+                    foreach (var a in attachments.Data)
+                    {
+                        long Id = (long)a.Id;
+                        var Fullname = a.Name.Split(".");
+                        var splitName = Fullname[0];
+
+
+                        if (splitName == " PanCardDocument")
+                        {
+
+                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                              parsedSheetId,           // sheetId
+                              Id            // attachmentId
+                            );
+
+                        }
+                    }
+
+                    //var addFile = AddFile(formData.TrainerCV,RowId );
+                    byte[] fileBytes = Convert.FromBase64String(formData.PanCardDocument);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = " PanCardDocument." + fileType;
+                    // string fileName = val+x + ": AttachedFile." + fileType;
+                    string filePath = Path.Combine(pathToSave, fileName);
+
+
+                    var addedRow = updatedRow[0];
+
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    // string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+
+                }
+                if (IsTaxResidenceCertificate == "Yes")
+                {
+                    foreach (var a in attachments.Data)
+                    {
+                        long Id = (long)a.Id;
+                        var Fullname = a.Name.Split(".");
+                        var splitName = Fullname[0];
+
+
+                        if (splitName == " TaxResidenceCertificate")
+                        {
+
+                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                              parsedSheetId,           // sheetId
+                              Id            // attachmentId
+                            );
+
+                        }
+                    }
+                    //var addFile = AddFile(formData.TrainerCV,RowId );
+                    byte[] fileBytes = Convert.FromBase64String(formData.TaxResidenceCertificate);
+                    var folderName = Path.Combine("Resources", "Images");
+                    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (!Directory.Exists(pathToSave))
+                    {
+                        Directory.CreateDirectory(pathToSave);
+                    }
+
+                    string fileType = GetFileType(fileBytes);
+                    string fileName = " TaxResidenceCertificate." + fileType;
+                    // string fileName = val+x + ": AttachedFile." + fileType;
+                    string filePath = Path.Combine(pathToSave, fileName);
+
+
+                    var addedRow = updatedRow[0];
+
+                    System.IO.File.WriteAllBytes(filePath, fileBytes);
+                    // string type = GetContentType(fileType);
+                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+
+                }
+
+
+
+                return Ok(new { Message = "Data Updated successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
+        {
+            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
+
+
+
+            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "TrainerId");
+
+            if (idColumn != null)
+            {
+                foreach (var row in sheet.Rows)
+                {
+                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == email);
+
+                    if (cell != null)
+                    {
+                        return row;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+
+
+
         //private long AddFile(string TrainerCV , long rowId ,long sheetId)
         //{
         //    byte[] fileBytes = Convert.FromBase64String(TrainerCV);
