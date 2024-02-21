@@ -6,16 +6,13 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
     {             
         public string? EventType { get; set; }
         public string? EventName { get; set; }
-
-        public DateTime? EventDate { get; set; }
-        public string? StartTime { get; set; }
-        public string? EndTime { get; set; }
+        //public DateTime? EventDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string? Class_III_EventCode { get; set; }
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
         public string? Marketing_Head { get; set; }
-
-
         public string? MedicalAffairsEmail { get; set; }
         public string? ReportingManagerEmail { get; set; }
         public string? FirstLevelEmail { get; set; }
@@ -24,7 +21,6 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? FinanceAccountsEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
         public string? Role { get; set; }
-
         public string? Finance { get; set; }
         public string? InitiatorName { get; set; }
         public string? Initiator_Email { get; set; }       
