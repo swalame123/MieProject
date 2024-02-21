@@ -186,8 +186,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speaker Type"), Value = formData.Speaker_Type });
                 updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speaker Category"), Value = formData.Speaker_Category });
                 updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speaker Criteria"), Value = formData.Speaker_Criteria });
+                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Speaker Criteria Details"), Value = formData.Speaker_Criteria_Details });
 
-               
 
                 var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
 
