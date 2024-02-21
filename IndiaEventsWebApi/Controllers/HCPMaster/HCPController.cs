@@ -120,7 +120,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
         {
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
             string[] sheetIds = {
-                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
+               
                 configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
@@ -140,6 +140,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                 Column Firstname = sheeti.Columns.FirstOrDefault(column => column.Title == "FirstName");
                 Column LastName = sheeti.Columns.FirstOrDefault(column => column.Title == "LastName");
                 Column gongoColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCP Type");
+                Column Company = sheeti.Columns.FirstOrDefault(column => column.Title == "Company Name");
 
 
                 if (misCodeColumn != null)
@@ -155,11 +156,9 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                    );
                     if (existingRow != null)
                     {
-                        // Both Name and MISCode are present in the same row, return success
                         //return Ok(existingRow);
                         //var data = existingRow.Cells.ToDictionary(cell => sheeti.Columns.First(col => col.Id == cell.ColumnId).Title, cell => cell.Value.ToString());
                         //return Ok(data);
-                        // Retrieve specific cell values for columns "HCPName" and "Gongo"
                         var hcpNameValue = existingRow.Cells
                             .FirstOrDefault(cell => cell.ColumnId == hcpNameColumn.Id)?.Value.ToString();
 
@@ -170,16 +169,28 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                         var firstName = existingRow.Cells
                             .FirstOrDefault(cell => cell.ColumnId == Firstname.Id)?.Value.ToString();
                         var lastName = existingRow.Cells
-                           .FirstOrDefault(cell => cell.ColumnId == LastName.Id)?.Value.ToString();
+                           .FirstOrDefault(cell => cell.ColumnId == LastName.Id)?.Value.ToString(); 
+                        var CompanyName = existingRow.Cells
+                           .FirstOrDefault(cell => cell.ColumnId == Company.Id)?.Value.ToString();
+                        //var cn = "";
+                        //if(CompanyName.Value == null )
+                        //{
+                        //    cn = "";
+                        //}
+                        //else
+                        //{
+                        //    cn = CompanyName?.Value.ToString();
+                        //}
 
-                        // Create a dictionary with column names and corresponding cell values
+
                         var cellData = new Dictionary<string, string>
                         {
                             { "MIS Code", Mis },
                             { "FirstName", firstName },
                             { "LastName", lastName },
                             { "HCPName", hcpNameValue },
-                            { "HcpType", gongoValue }
+                            { "HcpType", gongoValue },
+                            {"Company Name",CompanyName }
                         };
                         resultData.Add(cellData);
 
