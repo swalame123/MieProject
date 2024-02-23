@@ -22,11 +22,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
 
         }
-        //[HttpPost("PreEventData")]
-        //public IActionResult PreEventData(MedicalPreEventPayload formDataList)
-        //{
-        //    return Ok(formDataList);
-        //}
+
         [HttpPost("PreEventData")]
         public IActionResult PreEventData(MedicalUtilityPreEventPayload formDataList)
         {
@@ -34,9 +30,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
             string sheetId1 = configuration.GetSection("SmartsheetSettings:Class1").Value;
             string sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestBrandsList").Value;
-            //string sheetId3 = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
             string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
-            //string sheetId5 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpSlideKit").Value;
             string sheetId6 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
             string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
 
@@ -44,37 +38,25 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             long.TryParse(sheetId1, out long parsedSheetId1);
             long.TryParse(sheetId2, out long parsedSheetId2);
-            //long.TryParse(sheetId3, out long parsedSheetId3);
             long.TryParse(sheetId4, out long parsedSheetId4);
-            //long.TryParse(sheetId5, out long parsedSheetId5);
             long.TryParse(sheetId6, out long parsedSheetId6);
             long.TryParse(sheetId7, out long parsedSheetId7);
 
             Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
             Sheet sheet2 = smartsheet.SheetResources.GetSheet(parsedSheetId2, null, null, null, null, null, null, null);
-            //Sheet sheet3 = smartsheet.SheetResources.GetSheet(parsedSheetId3, null, null, null, null, null, null, null);
             Sheet sheet4 = smartsheet.SheetResources.GetSheet(parsedSheetId4, null, null, null, null, null, null, null);
-            //Sheet sheet5 = smartsheet.SheetResources.GetSheet(parsedSheetId5, null, null, null, null, null, null, null);
             Sheet sheet6 = smartsheet.SheetResources.GetSheet(parsedSheetId6, null, null, null, null, null, null, null);
             Sheet sheet7 = smartsheet.SheetResources.GetSheet(parsedSheetId7, null, null, null, null, null, null, null);
 
             StringBuilder addedBrandsData = new StringBuilder();
-            //StringBuilder addedInviteesData = new StringBuilder();
             StringBuilder addedHcpData = new StringBuilder();
-            //StringBuilder addedSlideKitData = new StringBuilder();
             StringBuilder addedExpences = new StringBuilder();
 
-            // int addedSlideKitDataNo = 1;
             int addedHcpDataNo = 1;
-            //  int addedInviteesDataNo = 1;
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
 
-            //var TotalHonorariumAmount = 0;
-            //var TotalTravelAmount = 0;
-            //var TotalAccomodateAmount = 0;
-            //var TotalHCPLcAmount = 0;
-            //var TotalInviteesLcAmount = 0;
+
             var TotalExpenseAmount = 0;
 
             CultureInfo hindi = new CultureInfo("hi-IN");
@@ -84,7 +66,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             var EventWithin7Days = "";
             var UploadDeviationFile = "";
             var FCPA = "";
-            //var InvoiceUpload = "";
+
             if (formDataList.MedicalUtilityData.EventWithin7daysFile != "")
             {
                 EventWithin7Days = "Yes";
@@ -177,29 +159,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Expenses"), Value = Expense });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Panelists"), Value = HCP });
 
-
-
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.MedicalUtilityData.Role });
-
-
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet1, "EventOpen30days"),
-                //    Value = formDataList.HcpConsultant.EventOpen30days
-                //});
-                //newRow.Cells.Add(new Cell
-                //{
-                //    ColumnId = GetColumnIdByName(sheet1, "EventWithin7days"),
-                //    Value = formDataList.HcpConsultant.EventWithin7days
-                //});
-
-
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.MedicalUtilityData.RBMorBM });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Marketing Head"), Value = formDataList.MedicalUtilityData.Marketing_Head });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"), Value = formDataList.MedicalUtilityData.Finance });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "InitiatorName"), Value = formDataList.MedicalUtilityData.InitiatorName });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.MedicalUtilityData.Initiator_Email });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Expense"), Value = TotalExpenseAmount });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Budget"), Value = total });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.MedicalUtilityData.Initiator_Email });
@@ -216,143 +176,101 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.MedicalUtilityData.Role });
 
 
-
-
-
-
-
-
-
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
 
                 var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
-
-
-
-
-
+                List<string> DeviationNames = new List<string>();
+                DeviationNames.Add($"30DaysDeviationFile:{formDataList.MedicalUtilityData.EventOpen30daysFile}");
+                DeviationNames.Add($"7DaysDeviationFile:{formDataList.MedicalUtilityData.EventWithin7daysFile}");
+                DeviationNames.Add($"AgregateSpendDeviationFile:{formDataList.MedicalUtilityData.UploadDeviationFile}");
 
                 if (EventOpen30Days == "Yes" || EventWithin7Days == "Yes" || UploadDeviationFile == "Yes")
                 {
                     var eventId = val;
-                    try
+                    foreach (var name in DeviationNames)
                     {
+                        var y = name.Split(':');
+                        var fn = y[0];
+                        var bs = y[1];
 
-                        var newRow7 = new Row();
-                        newRow7.Cells = new List<Cell>();
-
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.MedicalUtilityData.EventTopic });
-
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.MedicalUtilityData.EventType });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.MedicalUtilityData.EventDate });
-
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = EventOpen30Days });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 1,00,000 Trigger"), Value = UploadDeviationFile });
-
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Finance Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
-
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.MedicalUtilityData.InitiatorName });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.MedicalUtilityData.Initiator_Email });
-
-
-                        var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
-
-                        if (EventWithin7Days == "Yes")
+                        if (bs != "")
                         {
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.MedicalUtilityData.EventWithin7daysFile);
-                            var folderName = Path.Combine("Resources", "Images");
-                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                            if (!Directory.Exists(pathToSave))
+                            try
                             {
-                                Directory.CreateDirectory(pathToSave);
+                                var newRow7 = new Row();
+                                newRow7.Cells = new List<Cell>();
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.MedicalUtilityData.EventTopic });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.MedicalUtilityData.EventType });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.MedicalUtilityData.EventDate });
+                                if (fn == "30DaysDeviationFile")
+                                {
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = EventOpen30Days });
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Outstanding Events"), Value = formDataList.MedicalUtilityData.EventOpen30dayscount });
+
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 30 days" });
+
+                                }
+                                else if (fn == "7DaysDeviationFile")
+                                {
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Deviation Type"), Value = "7 days from the Event Date" });
+
+                                }
+                                else if (fn == "AgregateSpendDeviationFile")
+                                {
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "HCP exceeds 1,00,000 Trigger"), Value = UploadDeviationFile });
+                                    newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Deviation Type"), Value = "HCP exceeds 1,00,000 Trigger" });
+                                }
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Finance Head"), Value = formDataList.MedicalUtilityData.Sales_Head });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.MedicalUtilityData.InitiatorName });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.MedicalUtilityData.Initiator_Email });
+
+
+                                var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
+
+
+                                byte[] fileBytes = Convert.FromBase64String(bs);
+                                var folderName = Path.Combine("Resources", "Images");
+                                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                                if (!Directory.Exists(pathToSave))
+                                {
+                                    Directory.CreateDirectory(pathToSave);
+                                }
+
+                                string fileType = GetFileType(fileBytes);
+                                string fileName = fn + "." + fileType;
+                                string filePath = Path.Combine(pathToSave, fileName);
+
+
+                                var addedRow = addeddeviationrow[0];
+
+                                System.IO.File.WriteAllBytes(filePath, fileBytes);
+                                string type = GetContentType(fileType);
+                                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                        parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+
+                                if (System.IO.File.Exists(filePath))
+                                {
+                                    System.IO.File.Delete(filePath);
+                                }
+
+
+
+
+
                             }
-
-                            string fileType = GetFileType(fileBytes);
-                            string fileName = val + "-" + " 7DaysDeviation." + fileType;
-                            // string fileName = val+x + ": AttachedFile." + fileType;
-                            string filePath = Path.Combine(pathToSave, fileName);
-
-
-                            var addedRow = addeddeviationrow[0];
-
-                            System.IO.File.WriteAllBytes(filePath, fileBytes);
-                            string type = GetContentType(fileType);
-                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-
-                            if (System.IO.File.Exists(filePath))
+                            catch (Exception ex)
                             {
-                                System.IO.File.Delete(filePath);
+                                return BadRequest(ex.Message);
                             }
                         }
-                        if (EventOpen30Days == "Yes")
-                        {
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.MedicalUtilityData.EventOpen30daysFile);
-                            var folderName = Path.Combine("Resources", "Images");
-                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                            if (!Directory.Exists(pathToSave))
-                            {
-                                Directory.CreateDirectory(pathToSave);
-                            }
-
-                            string fileType = GetFileType(fileBytes);
-                            string fileName = val + "-" + " 30DaysDeviation." + fileType;
-                            // string fileName = val+x + ": AttachedFile." + fileType;
-                            string filePath = Path.Combine(pathToSave, fileName);
-
-
-                            var addedRow = addeddeviationrow[0];
-
-                            System.IO.File.WriteAllBytes(filePath, fileBytes);
-                            string type = GetContentType(fileType);
-                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-
-                            if (System.IO.File.Exists(filePath))
-                            {
-                                System.IO.File.Delete(filePath);
-                            }
-                        }
-                        if (UploadDeviationFile == "Yes")
-                        {
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.MedicalUtilityData.UploadDeviationFile);
-                            var folderName = Path.Combine("Resources", "Images");
-                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                            if (!Directory.Exists(pathToSave))
-                            {
-                                Directory.CreateDirectory(pathToSave);
-                            }
-
-                            string fileType = GetFileType(fileBytes);
-                            string fileName = val + "-" + " UploadDeviationFile." + fileType;
-                            // string fileName = val+x + ": AttachedFile." + fileType;
-                            string filePath = Path.Combine(pathToSave, fileName);
-
-
-                            var addedRow = addeddeviationrow[0];
-
-                            System.IO.File.WriteAllBytes(filePath, fileBytes);
-                            string type = GetContentType(fileType);
-                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-                            if (System.IO.File.Exists(filePath))
-                            {
-                                System.IO.File.Delete(filePath);
-                            }
-                        }
-
-
-
                     }
-                    catch (Exception ex)
-                    {
-                        return BadRequest(ex.Message);
-                    }
+
+
                 }
 
 
@@ -378,7 +296,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Legitimate Need"), Value = formData.Legitimate });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Objective Criteria"), Value = formData.Objective });
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Rationale"), Value = formData.Rationale });
-                  
+
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Topic"), Value = formDataList.MedicalUtilityData.EventTopic });
 
                     newRow1.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet4, "Event Type"), Value = formDataList.MedicalUtilityData.EventType });

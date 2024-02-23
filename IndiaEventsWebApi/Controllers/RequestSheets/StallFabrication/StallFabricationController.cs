@@ -121,38 +121,20 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 newRow.Cells = new List<Cell>();
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event Topic"), Value = formDataList.StallFabrication.EventName });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventType"), Value = formDataList.StallFabrication.EventType });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.StallFabrication.EventDate });
-
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "EventDate"), Value = formDataList.StallFabrication.StartDate });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Event End Date"), Value = formDataList.StallFabrication.EndDate });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Class III Event Code"), Value = formDataList.StallFabrication.Class_III_EventCode });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Brands"), Value = brand });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Expenses"), Value = Expense });
-                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
+                newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Expense"), Value = TotalExpenseAmount });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Total Budget"), Value = total });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "IsAdvanceRequired"), Value = formDataList.StallFabrication.IsAdvanceRequired });
-
-
-
-
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.StallFabrication.Role });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.StallFabrication.RBMorBM });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Marketing Head"), Value = formDataList.StallFabrication.Marketing_Head });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"), Value = formDataList.StallFabrication.Finance });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
-
-
-
-
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.StallFabrication.RBMorBM });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Sales Coordinator"), Value = formDataList.StallFabrication.SalesCoordinatorEmail });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Marketing Head"), Value = formDataList.StallFabrication.Marketing_Head });
-                //newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Finance Treasury"), Value = formData.RequestHonorariumList.MarketingHeadEmail });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Compliance"), Value = formDataList.StallFabrication.ComplianceEmail });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Finance Accounts"), Value = formDataList.StallFabrication.FinanceAccountsEmail });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Finance Treasury"), Value = formDataList.StallFabrication.Finance });
@@ -161,14 +143,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Medical Affairs Head"), Value = formDataList.StallFabrication.MedicalAffairsEmail });
                 newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet1, "Role"), Value = formDataList.StallFabrication.Role });
 
-
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
-
                 var eventIdColumnId = GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
-
-
 
                 var x = 1;
                 if (BrouchereUpload == "Yes")
@@ -242,100 +220,112 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 if (formDataList.StallFabrication.IsDeviationUpload == "Yes")
                 {
                     var eventId = val;
-                    try
+                    List<string> list = new List<string>
                     {
-
-                        var newRow7 = new Row();
-                        newRow7.Cells = new List<Cell>();
-
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.StallFabrication.EventName });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.StallFabrication.EventType });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.StallFabrication.StartDate });
-                        //newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "StartTime"), Value = formDataList.StallFabrication.StartTime });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event End Date"), Value = formDataList.StallFabrication.EndDate });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = uploadDeviationForTableContainsData });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
-                        newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
-
-
-                        var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
-
-
-
-
-                        var j = 1;
-                        if (uploadDeviationForTableContainsData == "Yes")
+                        "30days","7days"
+                    };
+                    foreach (var item in list)
+                    {
+                        if (uploadDeviationForTableContainsData == "Yes" && item == "30days")
                         {
-
-
-
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.StallFabrication.TableContainsDataUpload);
-                            var folderName = Path.Combine("Resources", "Images");
-                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                            if (!Directory.Exists(pathToSave))
+                            try
                             {
-                                Directory.CreateDirectory(pathToSave);
+                                var newRow7 = new Row();
+                                newRow7.Cells = new List<Cell>();
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.StallFabrication.EventName });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.StallFabrication.EventType });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.StallFabrication.StartDate });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event End Date"), Value = formDataList.StallFabrication.EndDate });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = uploadDeviationForTableContainsData });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 30 days" });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Outstanding Events"), Value = formDataList.StallFabrication.EventOpen30dayscount });
+
+                                var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
+
+                                byte[] fileBytes = Convert.FromBase64String(formDataList.StallFabrication.TableContainsDataUpload);
+                                var folderName = Path.Combine("Resources", "Images");
+                                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                                if (!Directory.Exists(pathToSave))
+                                {
+                                    Directory.CreateDirectory(pathToSave);
+                                }
+                                string fileType = GetFileType(fileBytes);
+                                string fileName = "30DaysDeviationFile." + fileType;
+                                // string fileName = val+x + ": AttachedFile." + fileType;
+                                string filePath = Path.Combine(pathToSave, fileName);
+                                var addedRow = addeddeviationrow[0];
+                                System.IO.File.WriteAllBytes(filePath, fileBytes);
+                                string type = GetContentType(fileType);
+                                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                        parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+
+                                if (System.IO.File.Exists(filePath))
+                                {
+                                    System.IO.File.Delete(filePath);
+                                }
+
                             }
-
-                            string fileType = GetFileType(fileBytes);
-                            string fileName = eventId + " 30days deviation." + fileType;
-                            // string fileName = val+x + ": AttachedFile." + fileType;
-                            string filePath = Path.Combine(pathToSave, fileName);
-
-
-                            var addedRow = addeddeviationrow[0];
-
-                            System.IO.File.WriteAllBytes(filePath, fileBytes);
-                            string type = GetContentType(fileType);
-                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-                            j++;
-
-                            if (System.IO.File.Exists(filePath))
+                            catch (Exception ex)
                             {
-                                System.IO.File.Delete(filePath);
+                                return BadRequest(ex.Message);
                             }
                         }
-                        if (EventWithin7Days == "Yes")
+                        else if (EventWithin7Days == "Yes" && item == "7days")
                         {
-
-
-
-                            byte[] fileBytes = Convert.FromBase64String(formDataList.StallFabrication.EventWithin7daysUpload);
-                            var folderName = Path.Combine("Resources", "Images");
-                            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                            if (!Directory.Exists(pathToSave))
+                            try
                             {
-                                Directory.CreateDirectory(pathToSave);
+
+                                var newRow7 = new Row();
+                                newRow7.Cells = new List<Cell>();
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.StallFabrication.EventName });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventType"), Value = formDataList.StallFabrication.EventType });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.StallFabrication.StartDate });
+                                //newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "StartTime"), Value = formDataList.StallFabrication.StartTime });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Event End Date"), Value = formDataList.StallFabrication.EndDate });
+                                //newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventOpen30days"), Value = uploadDeviationForTableContainsData });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "EventWithin7days"), Value = EventWithin7Days });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
+                                newRow7.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet7, "Deviation Type"), Value = "7 days from the Event Date" });
+
+
+                                var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
+
+                                byte[] fileBytes = Convert.FromBase64String(formDataList.StallFabrication.EventWithin7daysUpload);
+                                var folderName = Path.Combine("Resources", "Images");
+                                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                                if (!Directory.Exists(pathToSave))
+                                {
+                                    Directory.CreateDirectory(pathToSave);
+                                }
+                                string fileType = GetFileType(fileBytes);
+                                string fileName = "7DaysDeviationFile." + fileType;
+                                string filePath = Path.Combine(pathToSave, fileName);
+                                var addedRow = addeddeviationrow[0];
+                                System.IO.File.WriteAllBytes(filePath, fileBytes);
+                                string type = GetContentType(fileType);
+                                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                        parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+
+                                if (System.IO.File.Exists(filePath))
+                                {
+                                    System.IO.File.Delete(filePath);
+                                }
+
                             }
-
-                            string fileType = GetFileType(fileBytes);
-                            string fileName = eventId + " 7 days deviation." + fileType;
-                            // string fileName = val+x + ": AttachedFile." + fileType;
-                            string filePath = Path.Combine(pathToSave, fileName);
-
-
-                            var addedRow = addeddeviationrow[0];
-
-                            System.IO.File.WriteAllBytes(filePath, fileBytes);
-                            string type = GetContentType(fileType);
-                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                    parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
-                            j++;
-
-                            if (System.IO.File.Exists(filePath))
+                            catch (Exception ex)
                             {
-                                System.IO.File.Delete(filePath);
+                                return BadRequest(ex.Message);
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        return BadRequest(ex.Message);
-                    }
+                  
                 }
 
 

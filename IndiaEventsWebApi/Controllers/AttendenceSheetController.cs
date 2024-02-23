@@ -188,7 +188,7 @@ namespace IndiaEventsWebApi.Controllers
                 }
 
 
-                return Ok(new { FileUrl});
+                return Ok(new { FileUrl });
 
 
             }
@@ -197,6 +197,196 @@ namespace IndiaEventsWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("AttendencesheetBase64value")]
+        public IActionResult AttendencesheetBase64value(string EventID)
+        {
+            try
+            {
+
+                var EventCode = "";
+                var EventName = "";
+                var EventDate = "";
+                var EventVenue = "";
+
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+                string sheetId_SpeakerCode = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+                long.TryParse(sheetId_SpeakerCode, out long parsedSheetId_SpeakerCode);
+                Sheet sheet_SpeakerCode = smartsheet.SheetResources.GetSheet(parsedSheetId_SpeakerCode, null, null, null, null, null, null, null);
+
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:Class1").Value;
+                long.TryParse(sheetId1, out long parsedSheetId1);
+                Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
+
+
+                string processSheet = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
+                long.TryParse(processSheet, out long parsedProcessSheet);
+                Sheet processSheetData = smartsheet.SheetResources.GetSheet(parsedProcessSheet, null, null, null, null, null, null, null);
+
+                long rowId = 0;
+                Column IdColumn = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
+                if (IdColumn != null)
+                {
+                    // Find all rows with the specified speciality
+                    List<Row> targetRows = sheet1.Rows
+                        .Where(row => row.Cells.Any(cell => cell.ColumnId == IdColumn.Id && cell.Value.ToString() == EventID))
+                        .ToList();
+
+                    if (targetRows.Any())
+                    {
+                        var rowIds = targetRows.Select(row => row.Id).ToList();
+                        rowId = (long)rowIds[0];
+                    }
+
+                }
+                var a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(parsedSheetId1, rowId, null);
+
+
+
+
+
+                Column SpecialityColumn = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn1 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Topic", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn2 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventDate", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn3 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "VenueName", StringComparison.OrdinalIgnoreCase));
+
+                if (SpecialityColumn != null)
+                {
+                    Row targetRow = sheet1.Rows
+                     .FirstOrDefault(row => row.Cells?.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value?.ToString() == EventID) == true);
+
+                    if (targetRow != null)
+                    {
+
+                        EventCode = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == SpecialityColumn.Id)?.Value?.ToString();
+                        EventName = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn1.Id)?.Value?.ToString();
+                        EventDate = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn2.Id)?.Value?.ToString();
+                        EventVenue = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn3.Id)?.Value?.ToString();
+                    }
+                }
+
+                List<string> requiredColumns = new List<string> { "HCPName", "MISCode", "Speciality", "HCP Type" };
+                List<Column> selectedColumns = sheet_SpeakerCode.Columns
+                    .Where(column => requiredColumns.Contains(column.Title, StringComparer.OrdinalIgnoreCase)).ToList();
+                DataTable dtMai = new DataTable();
+                dtMai.Columns.Add("S.No", typeof(int));
+                foreach (Column column in selectedColumns)
+                {
+                    dtMai.Columns.Add(column.Title);
+                }
+                dtMai.Columns.Add("Sign");
+                int Sr_No = 1;
+                foreach (Row row in sheet_SpeakerCode.Rows)
+                {
+                    string eventId = row.Cells
+                        .FirstOrDefault(cell => sheet_SpeakerCode.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title == "EventId/EventRequestId")?.DisplayValue;
+                    if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
+                    {
+                        DataRow newRow = dtMai.NewRow();
+                        newRow["S.No"] = Sr_No;
+                        foreach (Cell cell in row.Cells)
+                        {
+                            string columnName = sheet_SpeakerCode.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
+                            if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
+                            {
+                                newRow[columnName] = cell.DisplayValue;
+                            }
+                        }
+                        dtMai.Rows.Add(newRow);
+                        Sr_No++;
+                    }
+                }
+
+                foreach (Row row in sheet.Rows)
+                {
+                    string eventId = row.Cells.FirstOrDefault(cell => sheet.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title == "EventId/EventRequestId")?.DisplayValue;
+                    if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
+                    {
+                        DataRow newRow = dtMai.NewRow();
+                        newRow["S.No"] = Sr_No;
+                        foreach (Cell cell in row.Cells)
+                        {
+                            string columnName = sheet.Columns
+                                .FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
+                            if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
+                            {
+                                newRow[columnName] = cell.DisplayValue;
+                            }
+                        }
+                        dtMai.Rows.Add(newRow);
+                        Sr_No++;
+                    }
+                }
+                foreach (var x in a.Data)
+                {
+                    long Id = (long)x.Id;
+                    var Fullname = x.Name.Split("-");
+                    var splitName = Fullname[0];
+
+                    if (splitName == "AttendenceSheet")
+                    {
+
+                        smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                          parsedSheetId1,           // sheetId
+                          Id            // attachmentId
+                        );
+
+                    }
+                }
+
+                byte[] fileBytes = exportpdf(dtMai, EventCode, EventName, EventDate, EventVenue, dtMai);
+                string filename = "AttendenceSheet-" + EventID + ".pdf";
+                var folderName = Path.Combine("Resources", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                if (!Directory.Exists(pathToSave))
+                {
+                    Directory.CreateDirectory(pathToSave);
+                }
+                string fileType = GetFileType(fileBytes);
+                string filePath = Path.Combine(pathToSave, filename);
+                System.IO.File.WriteAllBytes(filePath, fileBytes);
+
+                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(parsedSheetId1, rowId, filePath, "application/msword");
+
+                var FileUrl = "";
+                var AID = (long)attachment.Id;
+                var Name = attachment.Name;
+                var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(parsedSheetId1, AID);
+                FileUrl = file.Url;
+
+
+                //string downloadLink = GetDownloadLink(filename);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                var data = "";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    var fileContent = client.GetByteArrayAsync(FileUrl).Result;
+                    var base64String = Convert.ToBase64String(fileContent);
+
+
+                    data = $"{Name}:{base64String}";
+
+
+                }
+                return Ok(new { data });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         private byte[] exportpdf(DataTable dtEmployee, string EventCode, string EventName, string EventDate, string EventVenue, DataTable dtMai)
         {

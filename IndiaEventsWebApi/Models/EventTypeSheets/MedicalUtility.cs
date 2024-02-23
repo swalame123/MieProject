@@ -6,7 +6,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
     {
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
-        public DateTime? EventDate { get; set; }
+        //public DateTime? EventDate { get; set; }
+        public string? EventDate { get; set; }
         public string? ValidFrom { get; set; }
         public string? ValidTill { get; set; }
         public string? MedicalUtilityType { get; set; }
@@ -14,6 +15,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? Class_III_EventCode { get; set; }
         public string? IsAdvanceRequired { get; set; }
         public string? EventOpen30daysFile { get; set; }
+        public string? EventOpen30dayscount { get; set; }
+
         public string? EventWithin7daysFile { get; set; }
         // public string? FcpaFile { get; set; }
         public string? IsDeviationUpload { get; set; }
@@ -21,8 +24,6 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
         public string? Marketing_Head { get; set; }
-
-
         public string? MedicalAffairsEmail { get; set; }
         public string? ReportingManagerEmail { get; set; }
         public string? FirstLevelEmail { get; set; }
@@ -31,7 +32,6 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? FinanceAccountsEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
         public string? Role { get; set; }
-
         public string? Finance { get; set; }
         public string? InitiatorName { get; set; }
         //public string? Role { get; set; }

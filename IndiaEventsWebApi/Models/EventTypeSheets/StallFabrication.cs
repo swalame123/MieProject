@@ -28,6 +28,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? TotalBudgetAmount { get; set;}
         public string? EventWithin7daysUpload { get; set; }
         public string? TableContainsDataUpload { get; set; }
+        public string? EventOpen30dayscount { get; set; }
         public string? EventBrouchereUpload { get; set; }
         public string? Invoice_QuotationUpload { get; set; }
         public string? IsDeviationUpload { get; set; }

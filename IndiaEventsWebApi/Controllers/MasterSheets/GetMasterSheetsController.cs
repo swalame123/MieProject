@@ -35,13 +35,21 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 }
                 foreach (Row row in sheet.Rows)
                 {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    int isActiveColumnIndex = columnNames.IndexOf("Is Active");
+                    if (isActiveColumnIndex >= 0 && row.Cells[isActiveColumnIndex].Value?.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase) == true)
                     {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
 
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+
+                        }
+                        sheetData.Add(rowData);
                     }
-                    sheetData.Add(rowData);
+
+
+
                 }
                 return Ok(sheetData);
             }
@@ -67,14 +75,29 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 }
                 foreach (Row row in sheet.Rows)
                 {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                    int isActiveColumnIndex = columnNames.IndexOf("IsActive");
+                    if (isActiveColumnIndex >= 0 && row.Cells[isActiveColumnIndex].Value?.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase) == true)
                     {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
 
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+
+                        }
+                        sheetData.Add(rowData);
                     }
-                    sheetData.Add(rowData);
                 }
+                //foreach (Row row in sheet.Rows)
+                //{
+                //    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                //    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                //    {
+                //        rowData[columnNames[i]] = row.Cells[i].Value;
+
+                //    }
+                //    sheetData.Add(rowData);
+                //}
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -232,11 +255,11 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if ((columnNames[i] == "CityId" ) || (columnNames[i] == "CityName")|| (columnNames[i] == "StateId"))
+                        if ((columnNames[i] == "CityId") || (columnNames[i] == "CityName") || (columnNames[i] == "StateId"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                       
+
 
                     }
                     sheetData.Add(rowData);
@@ -436,7 +459,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if ((columnNames[i] == "EventTypeId")|| (columnNames[i] == "EventType") || (columnNames[i] == "Roles"))
+                        if ((columnNames[i] == "EventTypeId") || (columnNames[i] == "EventType") || (columnNames[i] == "Roles"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
@@ -454,7 +477,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
             {
                 return BadRequest(ex.Message);
             }
-        } 
+        }
         [HttpGet("GetExpenseTypeMasterData")]
         public IActionResult GetExpenseTypeMasterData()
         {
@@ -550,7 +573,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if ((columnNames[i] == "HCPRoleID")|| (columnNames[i] == "HCPRole"))
+                        if ((columnNames[i] == "HCPRoleID") || (columnNames[i] == "HCPRole"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
@@ -605,7 +628,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
             }
         }
 
-         [HttpGet("GetMedicalUtilityData")]
+        [HttpGet("GetMedicalUtilityData")]
 
         public IActionResult GetMedicalUtilityData()
         {
@@ -659,7 +682,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        if ((columnNames[i] == "RoleId")|| (columnNames[i] == "RoleName"))
+                        if ((columnNames[i] == "RoleId") || (columnNames[i] == "RoleName"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
@@ -713,7 +736,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
             }
         }
 
-         [HttpGet("GetSpeakerCategoriesData")]
+        [HttpGet("GetSpeakerCategoriesData")]
 
         public IActionResult GetSpeakerCategoriesData()
         {
@@ -768,7 +791,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
 
-                        if ((columnNames[i] == "StateId")|| (columnNames[i] == "StateName"))
+                        if ((columnNames[i] == "StateId") || (columnNames[i] == "StateName"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
@@ -842,11 +865,76 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 }
                 foreach (Row row in sheet.Rows)
                 {
+                    int isActiveColumnIndex = columnNames.IndexOf("IsActive?");
+                    if (isActiveColumnIndex >= 0 && row.Cells[isActiveColumnIndex].Value?.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase) == true)
+                    {
+
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+
+                        }
+                        sheetData.Add(rowData);
+                    }
+                }
+                //foreach (Row row in sheet.Rows)
+                //{
+                //    //var includeRow = true;
+                //    Dictionary<string, object> rowData = new Dictionary<string, object>();
+                //    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                //    {
+
+                //        rowData[columnNames[i]] = row.Cells[i].Value;
+
+                //    }
+                //    sheetData.Add(rowData);
+                //}
+                return Ok(sheetData);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("DeviationMasterSheetData")]
+        public IActionResult DeviationMasterSheetData()
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:DeviationMaster").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+                List<string> columnNames = new List<string>();
+                foreach (Column column in sheet.Columns)
+                {
+                    columnNames.Add(column.Title);
+                }
+                //foreach (Row row in sheet.Rows)
+                //{
+                //    int isActiveColumnIndex = columnNames.IndexOf("IsActive");
+                //    if (isActiveColumnIndex >= 0 && row.Cells[isActiveColumnIndex].Value?.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase) == true)
+                //    {
+
+                //        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                //        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                //        {
+                //            rowData[columnNames[i]] = row.Cells[i].Value;
+
+                //        }
+                //        sheetData.Add(rowData);
+                //    }
+                //}
+                foreach (Row row in sheet.Rows)
+                {
                     //var includeRow = true;
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-                        
+
                         rowData[columnNames[i]] = row.Cells[i].Value;
 
                     }

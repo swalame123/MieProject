@@ -15,6 +15,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? Country { get; set; }
         public string? IsAdvanceRequired { get; set; }
         public string? EventOpen30days { get; set; }
+        public string? EventOpen30dayscount { get; set; }
         public string? EventWithin7days { get; set; }
         public string? FcpaFile { get; set; }
         public string? BrochureFile { get; set; }

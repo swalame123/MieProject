@@ -387,16 +387,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
         }
 
-
-
-
-
-
-
-
-
-
-
         private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
         {
             Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
@@ -420,10 +410,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
             return null;
         }
-
-
-
-
 
         //private long AddFile(string TrainerCV , long rowId ,long sheetId)
         //{
@@ -452,7 +438,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
         //    return filePath;
         //}
 
-
         private long GetColumnIdByName(Sheet sheet, string columnname)
         {
             foreach (var column in sheet.Columns)
@@ -464,6 +449,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
             }
             return 0;
         }
+
         private string GetFileType(byte[] bytes)
         {
 
@@ -500,6 +486,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 return "unknown";
             }
         }
+
         //private string GetLastTrainerCode(long sheetId, string trainerType, SmartsheetClient smartsheet)
         //{
 
@@ -546,6 +533,5 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
         //    return newTrainerCode;
         //}
-
     }
 }

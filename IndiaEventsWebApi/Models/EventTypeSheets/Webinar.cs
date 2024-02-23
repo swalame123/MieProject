@@ -23,6 +23,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? TotalExpenseBTC { get; set; }
         public string? TotalExpenseBTE { get; set; }
         public string? EventOpen30days { get; set; }
+        public string? EventOpen30dayscount { get; set; }
         public string? EventWithin7days { get; set; }
         public string? FB_Expense_Excluding_Tax { get; set; }
         public string? RBMorBM { get; set; }
