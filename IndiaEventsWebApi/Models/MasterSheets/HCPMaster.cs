@@ -31,4 +31,9 @@
         public string? CompanyName { get; set; }
        
     }
+    public class MIsandType
+    {
+        public string? MISCode { get; set;}
+        public string? Type { get; set;}
+    }
 }
