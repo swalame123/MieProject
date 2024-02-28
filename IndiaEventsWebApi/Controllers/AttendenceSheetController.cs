@@ -1,4 +1,5 @@
-﻿using iTextSharp.text;
+﻿using IndiaEventsWebApi.Helper;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -170,7 +171,7 @@ namespace IndiaEventsWebApi.Controllers
                 {
                     Directory.CreateDirectory(pathToSave);
                 }
-                string fileType = GetFileType(fileBytes);
+                string fileType = SheetHelper.GetFileType(fileBytes);
                 string filePath = Path.Combine(pathToSave, filename);
                 System.IO.File.WriteAllBytes(filePath, fileBytes);
 
@@ -348,7 +349,7 @@ namespace IndiaEventsWebApi.Controllers
                 {
                     Directory.CreateDirectory(pathToSave);
                 }
-                string fileType = GetFileType(fileBytes);
+                string fileType = SheetHelper.GetFileType(fileBytes);
                 string filePath = Path.Combine(pathToSave, filename);
                 System.IO.File.WriteAllBytes(filePath, fileBytes);
 
@@ -416,7 +417,7 @@ namespace IndiaEventsWebApi.Controllers
             pBody.Add(new Chunk("Event Code:" + EventCode));
             pBody.Add(new Chunk("\nEvent Name:" + EventName));
             pBody.Add(new Chunk("\nEvent Date:" + EventDate));
-            pBody.Add(new Chunk("\nEvent Vanue:" + EventVenue));
+            pBody.Add(new Chunk("\nEvent Venue:" + EventVenue));
             pBody.Add(new Chunk("\n\nSpeakers: "));
 
             //foreach(DataRow row in dtMai.Rows)

@@ -1,4 +1,5 @@
-﻿using IndiaEventsWebApi.Models;
+﻿using IndiaEventsWebApi.Helper;
+using IndiaEventsWebApi.Models;
 using IndiaEventsWebApi.Models.MasterSheets.CodeCreation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -146,27 +147,27 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
 
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
 
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
-
-
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
-
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
 
 
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Cheque Document"), Value = IsChequeDocument });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Pancard Document"), Value = IsPanCardDocument });
-                    newRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Tax Residence Certificate"), Value = IsTaxResidenceCertificate });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
+
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+
+
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Cheque Document"), Value = IsChequeDocument });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pancard Document"), Value = IsPanCardDocument });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Tax Residence Certificate"), Value = IsTaxResidenceCertificate });
 
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var RowId = addedRows[0].Id.Value;
@@ -182,7 +183,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                             Directory.CreateDirectory(pathToSave);
                         }
 
-                        string fileType = GetFileType(fileBytes);
+                        string fileType = SheetHelper.GetFileType(fileBytes);
                         string fileName = " ChequeDocument." + fileType;
 
                         string filePath = Path.Combine(pathToSave, fileName);
@@ -191,7 +192,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         var addedRow = addedRows[0];
 
                         System.IO.File.WriteAllBytes(filePath, fileBytes);
-                        // string type = GetContentType(fileType);
+                        // string type = SheetHelper.GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
 
@@ -211,7 +212,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                             Directory.CreateDirectory(pathToSave);
                         }
 
-                        string fileType = GetFileType(fileBytes);
+                        string fileType = SheetHelper.GetFileType(fileBytes);
                         string fileName = " PanCardDocument." + fileType;
                         // string fileName = val+x + ": AttachedFile." + fileType;
                         string filePath = Path.Combine(pathToSave, fileName);
@@ -220,7 +221,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         var addedRow = addedRows[0];
 
                         System.IO.File.WriteAllBytes(filePath, fileBytes);
-                        // string type = GetContentType(fileType);
+                        // string type = SheetHelper.GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                         if (System.IO.File.Exists(filePath))
@@ -240,7 +241,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                             Directory.CreateDirectory(pathToSave);
                         }
 
-                        string fileType = GetFileType(fileBytes);
+                        string fileType = SheetHelper.GetFileType(fileBytes);
                         string fileName = " TaxResidenceCertificate." + fileType;
                         // string fileName = val+x + ": AttachedFile." + fileType;
                         string filePath = Path.Combine(pathToSave, fileName);
@@ -249,7 +250,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         var addedRow = addedRows[0];
 
                         System.IO.File.WriteAllBytes(filePath, fileBytes);
-                        // string type = GetContentType(fileType);
+                        // string type = SheetHelper.GetContentType(fileType);
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                         if (System.IO.File.Exists(filePath))
@@ -290,21 +291,21 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 Row existingRow = GetRowById(smartsheet, parsedSheetId, formData.VendorId);
                 Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
 
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Email "), Value = formData.Email });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Requestor Name"), Value = formData.InitiatorNameName });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Requestor"), Value = formData.InitiatorEmail });
-                updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Tax Residence Certificate Date"), Value = formData.TaxResidenceCertificateDate });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Requestor Name"), Value = formData.InitiatorNameName });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Requestor"), Value = formData.InitiatorEmail });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Tax Residence Certificate Date"), Value = formData.TaxResidenceCertificateDate });
 
 
                 var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
@@ -352,7 +353,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         Directory.CreateDirectory(pathToSave);
                     }
 
-                    string fileType = GetFileType(fileBytes);
+                    string fileType = SheetHelper.GetFileType(fileBytes);
                     string fileName = " ChequeDocument." + fileType;
 
                     string filePath = Path.Combine(pathToSave, fileName);
@@ -361,7 +362,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var addedRow = updatedRow[0];
 
                     System.IO.File.WriteAllBytes(filePath, fileBytes);
-                    // string type = GetContentType(fileType);
+                    // string type = SheetHelper.GetContentType(fileType);
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
 
@@ -399,7 +400,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         Directory.CreateDirectory(pathToSave);
                     }
 
-                    string fileType = GetFileType(fileBytes);
+                    string fileType = SheetHelper.GetFileType(fileBytes);
                     string fileName = " PanCardDocument." + fileType;
                     // string fileName = val+x + ": AttachedFile." + fileType;
                     string filePath = Path.Combine(pathToSave, fileName);
@@ -408,7 +409,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var addedRow = updatedRow[0];
 
                     System.IO.File.WriteAllBytes(filePath, fileBytes);
-                    // string type = GetContentType(fileType);
+                    // string type = SheetHelper.GetContentType(fileType);
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     if (System.IO.File.Exists(filePath))
@@ -445,7 +446,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         Directory.CreateDirectory(pathToSave);
                     }
 
-                    string fileType = GetFileType(fileBytes);
+                    string fileType = SheetHelper.GetFileType(fileBytes);
                     string fileName = " TaxResidenceCertificate." + fileType;
                     // string fileName = val+x + ": AttachedFile." + fileType;
                     string filePath = Path.Combine(pathToSave, fileName);
@@ -454,7 +455,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var addedRow = updatedRow[0];
 
                     System.IO.File.WriteAllBytes(filePath, fileBytes);
-                    // string type = GetContentType(fileType);
+                    // string type = SheetHelper.GetContentType(fileType);
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     if (System.IO.File.Exists(filePath))
