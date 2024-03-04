@@ -24,6 +24,33 @@ namespace IndiaEventsWebApi.Helper
             }
             return 0;
         }
+        internal static Sheet GetSheetById(SmartsheetClient smartsheet, string sheetId)
+        {
+            long.TryParse(sheetId, out long parsedSheetId);
+            return smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+        }
+
+        internal static List<Dictionary<string, object>> GetSheetData(Sheet sheet)
+        {
+            List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+            List<string> columnNames = sheet.Columns.Select(column => column.Title).ToList();
+
+            foreach (Row row in sheet.Rows)
+            {
+                Dictionary<string, object> rowData = new Dictionary<string, object>();
+
+                for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                {
+                    rowData[columnNames[i]] = row.Cells[i].Value;
+                }
+
+                sheetData.Add(rowData);
+            }
+
+            return sheetData;
+        }
+
+
 
         internal static string testingFile(string Invoice_QuotationUpload, string eventId , string name)
         {
@@ -83,11 +110,6 @@ namespace IndiaEventsWebApi.Helper
             pBody.Add(new Chunk("\nEvent Venue:" + EventVenue));
             pBody.Add(new Chunk("\n\nSpeakers: "));
 
-            //foreach(DataRow row in dtMai.Rows)
-            //{
-            //    string hcpName = row["HCPName"].ToString();
-            //    pBody.Add(new Chunk(" " + hcpName));
-            //}
 
             string hcpNames = string.Join(", ", dtMai.AsEnumerable().Select(row => row["HCPName"].ToString()));
             pBody.Add(new Chunk(" " + hcpNames));

@@ -7,38 +7,51 @@ using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using IndiaEventsWebApi.Helper;
+using Microsoft.Extensions.DependencyInjection;
+using Aspose.Pdf.Plugins;
+using iTextSharp.text.pdf.security;
+using Smartsheet.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = "your-issuer",
-//        ValidAudience = "your-audience",
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("asdfghjklqwertyuiopzxcvbnm1234567890asdfghjkl"))
-//    };
-//});
-
-
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddCookie()
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = "ABM",
+        ValidIssuer = "http://localhost:5098",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"))
+    };
+
+    //options.Events = new JwtBearerEvents
+    //{
+    //    OnAuthenticationFailed = context =>
+    //    {
+    //        context.Response.ContentType = "application/json";
+    //        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+    //        //return context.Response.WriteAsync(new
+    //        //{
+    //        //    Message = "Invalid token",
+    //        //    Error = context.Exception.Message
+    //        //}.ToString());
+            
+    //    }
+    //};
+})
 .AddGoogle(options =>
 {
     options.ClientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
@@ -66,7 +79,7 @@ IHostBuilder CreateHostBuilder(string[] args) =>
     services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
     services.AddOptions();
     services.Configure<SmartsheetSettings>(configuration.GetSection("SmartsheetSettings"));
-    
+  
 
 });
 

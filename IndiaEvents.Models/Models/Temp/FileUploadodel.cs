@@ -1,4 +1,6 @@
-﻿namespace IndiaEventsWebApi.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace IndiaEventsWebApi.Models
 {
     public class FileUploadodel
     {

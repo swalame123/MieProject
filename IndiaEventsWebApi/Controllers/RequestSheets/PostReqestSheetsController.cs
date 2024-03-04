@@ -302,14 +302,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                             if (file == "30DaysDeviationFile")
                             {
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 30 days" });
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventOpen30days"), Value = formDataList.class1.EventOpen30days });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 45 days" });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventOpen45days"), Value = formDataList.class1.EventOpen30days });
                                 newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Outstanding Events"), Value = formDataList.class1.EventOpen30dayscount });
                             }
                             else if (file == "7DaysDeviationFile")
                             {
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "7 days from the Event Date" });
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventWithin7days"), Value = formDataList.class1.EventWithin7days });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "5 days from the Event Date" });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventWithin5days"), Value = formDataList.class1.EventWithin7days });
 
                             }
                             else if (file == "ExpenseExcludingTax")
@@ -740,8 +740,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "City"), Value = formData.RequestHonorariumList.City });
                         newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "State"), Value = formData.RequestHonorariumList.State });
 
-                        newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Honorarium documentation not uploaded within 2 working days" });
-                        newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "HON-2Workingdays Deviation Date Trigger"), Value = formData.RequestHonorariumList.IsDeviationUpload });
+                        newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Honorarium documentation not uploaded within 5 working days" });
+                        newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "HON-5Workingdays Deviation Date Trigger"), Value = formData.RequestHonorariumList.IsDeviationUpload });
 
                         newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Sales Head"), Value = formData.RequestHonorariumList.Compliance });
                         newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Finance Head"), Value = formData.RequestHonorariumList.Compliance });
@@ -994,8 +994,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                             newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "State"), Value = formData.State });
                             if (file == "30DaysDeviationFile")
                             {
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "POST- Beyond30Days Deviation Date Trigger"), Value = formData.EventOpen30Days });
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 30 days" });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "POST- Beyond45Days Deviation Date Trigger"), Value = formData.EventOpen30Days });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 45 days" });
                             }
                             else if (file == "Lessthan5InviteesDeviationFile")
                             {

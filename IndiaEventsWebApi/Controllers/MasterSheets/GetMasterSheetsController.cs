@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IndiaEventsWebApi.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
@@ -11,22 +12,22 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
     {
         private readonly string accessToken;
         private readonly IConfiguration configuration;
+        private readonly SmartsheetClient smartsheet;
 
         public GetMasterSheetsController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
-
+            smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
         }
         [HttpGet("GetApprovedSpeakersData")]
         public IActionResult GetApprovedSpeakersData()
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+               
                 string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -63,10 +64,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -88,16 +87,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         sheetData.Add(rowData);
                     }
                 }
-                //foreach (Row row in sheet.Rows)
-                //{
-                //    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                //    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                //    {
-                //        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                //    }
-                //    sheetData.Add(rowData);
-                //}
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -110,26 +99,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -142,26 +114,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:ObjectiveCriteria").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -174,26 +129,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:LegitimateNeed").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -206,26 +144,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:BrandMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
 
             }
@@ -239,10 +160,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:City").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -276,26 +195,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:ClassIIITypeMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -308,26 +210,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:DHProductName").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -340,26 +225,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:DivisionMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -373,18 +241,14 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-
                 string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
                 string sheetId2 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
 
                 List<string> Sheets = new List<string>() { sheetId1, sheetId2 };
                 foreach (var sheetId in Sheets)
                 {
-                    long.TryParse(sheetId, out long parsedSheetId);
-                    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                     List<string> columnNames = new List<string>();
                     foreach (Column column in sheet.Columns)
                     {
@@ -412,26 +276,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:EmployeeRoleMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -444,10 +291,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:EventType").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -463,11 +308,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        //if (columnNames[i] == "EventType")
-                        //{
-                        //    rowData[columnNames[i]] = row.Cells[i].Value;
-                        //}
-
                     }
                     sheetData.Add(rowData);
                 }
@@ -483,26 +323,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:ExpenseTypeMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -516,10 +339,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-
                 string sheetId1 = configuration.GetSection("SmartsheetSettings:HcpMaster1").Value;
                 string sheetId2 = configuration.GetSection("SmartsheetSettings:HcpMaster2").Value;
                 string sheetId3 = configuration.GetSection("SmartsheetSettings:HcpMaster3").Value;
@@ -528,8 +348,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 List<string> Sheets = new List<string>() { sheetId1, sheetId2, sheetId3, sheetId4 };
                 foreach (var sheetId in Sheets)
                 {
-                    long.TryParse(sheetId, out long parsedSheetId);
-                    Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                     List<string> columnNames = new List<string>();
                     foreach (Column column in sheet.Columns)
                     {
@@ -557,10 +376,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:HCPRole").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -577,12 +394,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        //if (columnNames[i] == "HCPRole")
-                        //{
-                        //    rowData[columnNames[i]] = row.Cells[i].Value;
-                        //}
-
-
                     }
                     sheetData.Add(rowData);
                 }
@@ -599,26 +410,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:InitiatorMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
 
             }
@@ -634,26 +428,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:MedicalUtility").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
 
             }
@@ -667,10 +444,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:RoleMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -686,11 +461,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        //if (columnNames[i] == "RoleName")
-                        //{
-                        //    rowData[columnNames[i]] = row.Cells[i].Value;
-                        //}
-
                     }
                     sheetData.Add(rowData);
                 }
@@ -707,26 +477,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:SlideKitMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
 
             }
@@ -742,26 +495,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:SpeakerCategories").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
 
             }
@@ -775,10 +511,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:State").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -790,17 +524,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     Dictionary<string, object> rowData = new Dictionary<string, object>();
                     for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                     {
-
                         if ((columnNames[i] == "StateId") || (columnNames[i] == "StateName"))
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
                         }
-                        //if (columnNames[i] == "StateName")
-                        //{
-                        //    rowData[columnNames[i]] = row.Cells[i].Value;
-                        //}
-
-
                     }
                     sheetData.Add(rowData);
                 }
@@ -818,26 +545,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:TrainerCategories").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
 
             }
@@ -853,10 +563,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+               
                 string sheetId = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
                 List<string> columnNames = new List<string>();
                 foreach (Column column in sheet.Columns)
@@ -868,30 +577,15 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                     int isActiveColumnIndex = columnNames.IndexOf("IsActive?");
                     if (isActiveColumnIndex >= 0 && row.Cells[isActiveColumnIndex].Value?.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase) == true)
                     {
-
                         Dictionary<string, object> rowData = new Dictionary<string, object>();
                         for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
                         {
                             rowData[columnNames[i]] = row.Cells[i].Value;
-
                         }
                         sheetData.Add(rowData);
                     }
-                }
-                //foreach (Row row in sheet.Rows)
-                //{
-                //    //var includeRow = true;
-                //    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                //    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                //    {
-
-                //        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                //    }
-                //    sheetData.Add(rowData);
-                //}
+                }             
                 return Ok(sheetData);
-
             }
             catch (Exception ex)
             {
@@ -902,46 +596,11 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         public IActionResult DeviationMasterSheetData()
         {
             try
-            {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-                string sheetId = configuration.GetSection("SmartsheetSettings:DeviationMaster").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                //foreach (Row row in sheet.Rows)
-                //{
-                //    int isActiveColumnIndex = columnNames.IndexOf("IsActive");
-                //    if (isActiveColumnIndex >= 0 && row.Cells[isActiveColumnIndex].Value?.ToString().Equals("Yes", StringComparison.OrdinalIgnoreCase) == true)
-                //    {
-
-                //        Dictionary<string, object> rowData = new Dictionary<string, object>();
-                //        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                //        {
-                //            rowData[columnNames[i]] = row.Cells[i].Value;
-
-                //        }
-                //        sheetData.Add(rowData);
-                //    }
-                //}
-                foreach (Row row in sheet.Rows)
-                {
-                    //var includeRow = true;
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+            {               
+                string sheetId = configuration.GetSection("SmartsheetSettings:DeviationMaster").Value;              
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);               
                 return Ok(sheetData);
-
             }
             catch (Exception ex)
             {
