@@ -44,4 +44,8 @@
 	  <Folder Include="Resources\Images\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\IndiaEvents.Models\IndiaEvents.Models.csproj" />
+	</ItemGroup>
+
 </Project>

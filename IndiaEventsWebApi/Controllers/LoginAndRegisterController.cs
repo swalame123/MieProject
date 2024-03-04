@@ -37,7 +37,7 @@ namespace IndiaEventsWebApi.Controllers
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
 
         }
-    
+
 
         [HttpGet("GetSheetData")]
 
@@ -71,7 +71,7 @@ namespace IndiaEventsWebApi.Controllers
                         }
                         sheetData.Add(rowData);
                     }
-                }           
+                }
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -105,13 +105,13 @@ namespace IndiaEventsWebApi.Controllers
                 string sheetId2 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
 
 
-                List<string> Sheets = new List<string>() {sheetId1 ,sheetId2};
-                foreach(var sheetId in Sheets)
+                List<string> Sheets = new List<string>() { sheetId1, sheetId2 };
+                foreach (var sheetId in Sheets)
                 {
                     long.TryParse(sheetId, out long parsedSheetId);
                     Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
 
-                   
+
                     var EmailColumnId = GetColumnIdByName(sheet, "EmailId");
                     var UsernameColumnId = GetColumnIdByName(sheet, "UserName");
                     var passwordColumnId = GetColumnIdByName(sheet, "Password");
@@ -178,8 +178,8 @@ namespace IndiaEventsWebApi.Controllers
                             var FinanceTreasury = FinanceTreasuryCell.Value?.ToString();
                             var FinanceAccounts = FinanceAccountsCell.Value?.ToString();
                             var SalesCoordinator = SalesCoordinatorCell.Value?.ToString();
-                           
-                            var token = CreateJwt(username,email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, MarketingHead, Compliance, MedicalAffairsHead,FinanceTreasury, FinanceAccounts, SalesCoordinator);
+
+                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceAccounts, SalesCoordinator);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
@@ -189,9 +189,9 @@ namespace IndiaEventsWebApi.Controllers
                 }
                 return BadRequest("Username or Password Incorrect");
             }
-               
 
-               
+
+
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -280,19 +280,19 @@ namespace IndiaEventsWebApi.Controllers
                             var SalesHead = SalesHeadCell.Value?.ToString();
                             var MarketingHead = MarketingHeadCell.Value?.ToString();
                             var MedicalAffairsHead = MedicalAffairsHeadCell.Value?.ToString();
-                            var FinanceTreasury =  FinanceTreasuryCell.Value?.ToString();
+                            var FinanceTreasury = FinanceTreasuryCell.Value?.ToString();
                             var FinanceAccounts = FinanceAccountsCell.Value?.ToString();
                             var SalesCoordinator = SalesCoordinatorCell.Value?.ToString();
 
-                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, MarketingHead, Compliance, MedicalAffairsHead,FinanceTreasury ,FinanceAccounts, SalesCoordinator);
+                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceAccounts, SalesCoordinator);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
                         }
                     }
                 }
-               
-                
+
+
 
                 return BadRequest("Username or Password Incorrect");
 
@@ -301,42 +301,81 @@ namespace IndiaEventsWebApi.Controllers
             {
                 return BadRequest(BadRequest(ex.Message));
             }
-            
+
         }
-        private string CreateJwt(string username, string email,string role, string reportingmanager, string firstLevelManager, string RBM_BM,string SalesHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury, string FinanceAccounts, string SalesCoordinator)
+        //private string CreateJwt(string username, string email,string role, string reportingmanager, string firstLevelManager, string RBM_BM,string SalesHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury, string FinanceAccounts, string SalesCoordinator)
+        //{
+        //    var jwtTokenHandler = new JwtSecurityTokenHandler();
+        //    var key = Encoding.ASCII.GetBytes("veryveryveryveryverysecret......................");
+        //    var identity = new ClaimsIdentity(new Claim[]
+        //    {
+        //        new Claim(ClaimTypes.Name,username),
+        //        new Claim(ClaimTypes.Email,email),
+        //        new Claim(ClaimTypes.Role,role),
+        //        new Claim("reportingmanager",reportingmanager),
+        //        new Claim("firstLevelManager",firstLevelManager),
+        //        new Claim("RBM_BM",RBM_BM),
+        //        new Claim("SalesHead",SalesHead),
+        //        new Claim("MarketingHead",MarketingHead),
+        //        new Claim("ComplianceHead",compliance),
+        //        new Claim("MedicalAffairsHead",MedicalAffairsHead),
+        //        new Claim("FinanceTreasury",FinanceTreasury),
+        //        new Claim("FinanceAccounts",FinanceAccounts),
+        //        new Claim("SalesCoordinator",SalesCoordinator),
+
+
+        //    });
+        //    var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+
+        //    var tokenDescriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = identity,
+        //        Expires = DateTime.Now.AddDays(1),
+        //        SigningCredentials = credentials
+        //    };
+        //    var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+        //    return jwtTokenHandler.WriteToken(token);
+        //}
+
+        private string CreateJwt(string username, string email, string role, string reportingmanager, string firstLevelManager, string RBM_BM, string SalesHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury, string FinanceAccounts, string SalesCoordinator)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("veryveryveryveryverysecret......................");
-            var identity = new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name,username),
-                new Claim(ClaimTypes.Email,email),
-                new Claim(ClaimTypes.Role,role),
-                new Claim("reportingmanager",reportingmanager),
-                new Claim("firstLevelManager",firstLevelManager),
-                new Claim("RBM_BM",RBM_BM),
-                new Claim("SalesHead",SalesHead),
-                new Claim("MarketingHead",MarketingHead),
-                new Claim("ComplianceHead",compliance),
-                new Claim("MedicalAffairsHead",MedicalAffairsHead),
-                new Claim("FinanceTreasury",FinanceTreasury),
-                new Claim("FinanceAccounts",FinanceAccounts),
-                new Claim("SalesCoordinator",SalesCoordinator),
-            
-                
-            });
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
 
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var identity = new Claim[]
             {
-                Subject = identity,
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = credentials
+        //new Claim(ClaimTypes.Name, username),
+        //new Claim(ClaimTypes.Email, email),
+        //new Claim(ClaimTypes.Role, role),
+        new Claim("unique_name", username),
+        new Claim("email", email),
+        new Claim("role", role),
+        new Claim("reportingmanager", reportingmanager),
+        new Claim("firstLevelManager", firstLevelManager),
+        new Claim("RBM_BM", RBM_BM),
+        new Claim("SalesHead", SalesHead),
+        new Claim("MarketingHead", MarketingHead),
+        new Claim("ComplianceHead", compliance),
+        new Claim("MedicalAffairsHead", MedicalAffairsHead),
+        new Claim("FinanceTreasury", FinanceTreasury),
+        new Claim("FinanceAccounts", FinanceAccounts),
+        new Claim("SalesCoordinator", SalesCoordinator),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+
+            // Combine roles into a comma-separated string
+            //var roles = string.Join(",", new[] { "AM", "ABM", "BM", "RBM", "MM" });
+
+            var token = new JwtSecurityToken(
+                issuer: "http://localhost:5098",
+                audience: "ABM", // Use roles as the audience
+                expires: DateTime.Now.AddDays(1),
+                claims: identity,
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+            );
+
             return jwtTokenHandler.WriteToken(token);
         }
-
 
     }
 }
