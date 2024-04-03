@@ -1,5 +1,6 @@
 ﻿using IndiaEventsWebApi.Helper;
 using IndiaEventsWebApi.Models.EventTypeSheets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
@@ -12,6 +13,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class StallFabricationController : ControllerBase
     {
         private readonly string accessToken;
@@ -24,7 +26,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
         }
 
-        [HttpPost("PreEventData")]
+        [HttpPost("PreEventData"), DisableRequestSizeLimit]
         public IActionResult PreEventData(AllStallFabrication formDataList)
         {
 
@@ -48,7 +50,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
             var TotalExpenseAmount = 0;
             CultureInfo hindi = new CultureInfo("hi-IN");
 
-            var uploadDeviationForTableContainsData = !string.IsNullOrEmpty(formDataList.StallFabrication.TableContainsDataUpload) ? "Yes" : "No";         
+            var uploadDeviationForTableContainsData = !string.IsNullOrEmpty(formDataList.StallFabrication.TableContainsDataUpload) ? "Yes" : "No";
             var EventWithin7Days = !string.IsNullOrEmpty(formDataList.StallFabrication.EventWithin7daysUpload) ? "Yes" : "No";
             var BrouchereUpload = !string.IsNullOrEmpty(formDataList.StallFabrication.EventBrouchereUpload) ? "Yes" : "No";
             var InvoiceUpload = !string.IsNullOrEmpty(formDataList.StallFabrication.Invoice_QuotationUpload) ? "Yes" : "No";
@@ -59,7 +61,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
                 addedExpences.AppendLine(rowData);
                 addedExpencesNo++;
-                var amount = int.Parse(formdata.Amount);
+                var amount = SheetHelper.NumCheck(formdata.Amount);
                 TotalExpenseAmount = TotalExpenseAmount + amount;
 
             }
@@ -76,6 +78,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
             string brand = addedBrandsData.ToString();
 
             var FormattedTotalExpenseAmount = string.Format(hindi, "{0:#,#}", TotalExpenseAmount);
+
+            //var BTE = SheetHelper.NumCheck(formDataList.StallFabrication.TotalExpenseBTE);
+            //var BTC = SheetHelper.NumCheck(formDataList.StallFabrication.TotalExpenseBTC);
+            //var total = BTC + BTE;
 
             var total = TotalExpenseAmount;
 
@@ -98,6 +104,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Total Expense"), Value = TotalExpenseAmount });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Total Budget"), Value = total });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "IsAdvanceRequired"), Value = formDataList.StallFabrication.IsAdvanceRequired });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Advance Amount"), Value = SheetHelper.NumCheck(formDataList.StallFabrication.AdvanceAmount) });
+
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "RBM/BM"), Value = formDataList.StallFabrication.RBMorBM });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
@@ -109,14 +117,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Reporting Manager"), Value = formDataList.StallFabrication.ReportingManagerEmail });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "1 Up Manager"), Value = formDataList.StallFabrication.FirstLevelEmail });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Medical Affairs Head"), Value = formDataList.StallFabrication.MedicalAffairsEmail });
-                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Role"), Value = formDataList.StallFabrication.Role });
+                //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Role"), Value = formDataList.StallFabrication.Role });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, " Total Expense BTC"), Value = SheetHelper.NumCheck(formDataList.StallFabrication.TotalExpenseBTC )});
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Total Expense BTE"), Value = SheetHelper.NumCheck(formDataList.StallFabrication.TotalExpenseBTE )});
 
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId1, new Row[] { newRow });
                 var eventIdColumnId = SheetHelper.GetColumnIdByName(sheet1, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
                 var val = eventIdCell.DisplayValue;
 
-                
+
 
                 if (BrouchereUpload == "Yes")
                 {
@@ -124,7 +134,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                     var filePath = SheetHelper.testingFile(formDataList.StallFabrication.Invoice_QuotationUpload, val, name);
 
                     var addedRow = addedRows[0];
-                   
+
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
 
@@ -144,7 +154,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                             parsedSheetId1, addedRow.Id.Value, filePath, "application/msword");
-                  
+
 
                     if (System.IO.File.Exists(filePath))
                     {
@@ -177,18 +187,20 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                                 newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.StallFabrication.Sales_Head });
                                 newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.StallFabrication.InitiatorName });
                                 newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.StallFabrication.Initiator_Email });
-                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with intiator for more than 45 days" });
+                                newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with initiator for more than 45 days" });
                                 newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Outstanding Events"), Value = formDataList.StallFabrication.EventOpen30dayscount });
 
                                 var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
 
                                 var name = "30DaysDeviationFile";
-                                 var filePath = SheetHelper.testingFile(formDataList.StallFabrication.Invoice_QuotationUpload, val, name);
+                                var filePath = SheetHelper.testingFile(formDataList.StallFabrication.Invoice_QuotationUpload, val, name);
 
                                 var addedRow = addeddeviationrow[0];
-                               
+
                                 var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                         parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+                                var attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                        parsedSheetId1, addedRows[0].Id.Value, filePath, "application/msword");
 
                                 if (System.IO.File.Exists(filePath))
                                 {
@@ -232,6 +244,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                                 var addedRow = addeddeviationrow[0];
                                 var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                         parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+                                var attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                        parsedSheetId1, addedRows[0].Id.Value, filePath, "application/msword");
 
 
                                 if (System.IO.File.Exists(filePath))
@@ -246,7 +260,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                             }
                         }
                     }
-                  
+
                 }
 
 
@@ -272,11 +286,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Expense"), Value = formdata.Expense });
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "EventId/EventRequestID"), Value = val });
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "AmountExcludingTax?"), Value = formdata.AmountExcludingTax });
-                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Amount"), Value = formdata.Amount });
+                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Amount"), Value = SheetHelper.NumCheck(formdata.Amount) });
+                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Amount Excluding Tax"), Value = formdata.ExcludingTaxAmount });
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTC/BTE"), Value = formdata.BtcorBte });
-                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BudgetAmount"), Value = formdata.BudgetAmount });
-                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTCAmount"), Value = formdata.BtcAmount });
-                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTEAmount"), Value = formdata.BteAmount });
+                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTCAmount"), Value = SheetHelper.NumCheck(formdata.BtcAmount) });
+                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTEAmount"), Value = SheetHelper.NumCheck(formdata.BteAmount) });
+                    newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BudgetAmount"), Value = SheetHelper.NumCheck(formdata.BudgetAmount )});
+                    //newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTCAmount"), Value = formdata.BtcAmount });
+                    //newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTEAmount"), Value = formdata.BteAmount });
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Event Topic"), Value = formDataList.StallFabrication.EventName });
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Event Type"), Value = formDataList.StallFabrication.EventType });
                     newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Event Date Start"), Value = formDataList.StallFabrication.StartDate });
@@ -284,6 +301,18 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.StallFabrication
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId6, new Row[] { newRow6 });
                 }
+
+
+
+
+                var addedrow = addedRows[0];
+                long ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Role");
+                var UpdateB = new Cell { ColumnId = ColumnId, Value = formDataList.StallFabrication.Role };
+                Row updateRows = new Row { Id = addedrow.Id, Cells = new Cell[] { UpdateB } };
+                var cellsToUpdate = addedrow.Cells.FirstOrDefault(c => c.ColumnId == ColumnId);
+                if (cellsToUpdate != null) { cellsToUpdate.Value = formDataList.StallFabrication.Role; }
+
+                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId1, new Row[] { updateRows });
 
                 return Ok(new
                 { Message = " Success!" });

@@ -8,6 +8,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
         public DateTime? EventDate { get; set; }
+        public DateTime? EventEndDate { get; set; }
         public string? StartTime { get; set; }
         public string? EndTime { get; set; }
         public string? Meeting_Type { get; set; }
@@ -27,6 +28,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? EventWithin7days { get; set; }
         public string? FB_Expense_Excluding_Tax { get; set; }
         public string? RBMorBM { get; set; }
+        public string? FinanceHead { get; set; }
 
 
         //public string? MedicalAffairsEmail { get; set; }

@@ -14,6 +14,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? SponsorshipSocietyName { get; set; }
         public string? Country { get; set; }
         public string? IsAdvanceRequired { get; set; }
+        public string? AdvanceAmount { get; set; }
         public string? EventOpen30days { get; set; }
         public string? EventOpen30dayscount { get; set; }
         public string? EventWithin7days { get; set; }
@@ -22,9 +23,12 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? AggregateDeviation { get; set; }
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
+        public string? FinanceHead { get; set; }
         public string? Marketing_Head { get; set; }
         //public string? MedicalAffairsEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
+        public string? TotalExpenseBTC { get; set; }
+        public string? TotalExpenseBTE { get; set; }
 
         public string? MedicalAffairsEmail { get; set; }
         public string? ReportingManagerEmail { get; set; }
@@ -56,16 +60,24 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? Objective { get; set; }
         public string? Rationale { get; set; }
         public DateTime? Fcpadate { get; set; }
-     
-       
+        public string? ExpenseType { get; set; }
+
+
 
     }
     public class ExpenseList
     {
+
         public string? Expense { get; set; }
         public string? BTC_BTE { get; set; }
+
         public string? RegstAmount { get; set; }
-       
+        public int? RegstAmountExcludingTax { get; set; }
+        public string? ExpenseAmount { get; set; }
+        public int? ExpenseAmountExcludingTax { get; set; }
+        public string? BtcAmount { get; set; }
+        public string? BteAmount { get; set; }
+
 
 
 

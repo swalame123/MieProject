@@ -199,10 +199,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         if (existingRow != null)
                         {
                             Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
                             var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
                         }
                         else
@@ -287,10 +287,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         if (existingRow != null)
                         {
                             Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
                             var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
                         }
                         else
@@ -416,6 +416,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
             return null;
         }
+
+
     }
 }
 

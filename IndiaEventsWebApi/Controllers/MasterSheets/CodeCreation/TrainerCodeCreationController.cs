@@ -67,14 +67,9 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 string[] sheetIds = {
-                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster4").Value,
-                //configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value,
+
                 configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value
-                //configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value
+
 
                 };
                 var mis = "";
@@ -114,6 +109,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 {
                     var IsTrainerCV = "";
                     var IsTrainerCertificate = "";
+
                     if (formData.TrainerCV != "")
                     {
                         IsTrainerCV = "Yes";
@@ -122,7 +118,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     {
                         IsTrainerCV = "No";
                     }
-                    if (formData.TrainerCV != "")
+                    if (formData.Trainercertificate != "")
                     {
                         IsTrainerCertificate = "Yes";
                     }

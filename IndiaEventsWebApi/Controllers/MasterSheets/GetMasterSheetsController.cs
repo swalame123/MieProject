@@ -1,4 +1,5 @@
 ﻿using IndiaEventsWebApi.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
@@ -8,6 +9,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class GetMasterSheetsController : ControllerBase
     {
         private readonly string accessToken;
@@ -25,7 +27,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-               
+
                 string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value;
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
@@ -139,12 +141,44 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("VenueSelectionChecklistMaster")]
+        public IActionResult VenueSelectionChecklistMaster()
+        {
+            try
+            {
+                string sheetId = configuration.GetSection("SmartsheetSettings:VenueSelectionChecklistMaster").Value;
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
+                return Ok(sheetData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("GetBrandNameData")]
         public IActionResult GetBrandNameData()
         {
             try
             {
                 string sheetId = configuration.GetSection("SmartsheetSettings:BrandMaster").Value;
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
+                return Ok(sheetData);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetIndicationsMasterData")]
+        public IActionResult GetIndicationsMasterData()
+        {
+            try
+            {
+                string sheetId = configuration.GetSection("SmartsheetSettings:IndicatorsMaster").Value;
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
@@ -563,7 +597,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         {
             try
             {
-               
+
                 string sheetId = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
@@ -584,7 +618,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         }
                         sheetData.Add(rowData);
                     }
-                }             
+                }
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -596,10 +630,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         public IActionResult DeviationMasterSheetData()
         {
             try
-            {               
-                string sheetId = configuration.GetSection("SmartsheetSettings:DeviationMaster").Value;              
+            {
+                string sheetId = configuration.GetSection("SmartsheetSettings:DeviationMaster").Value;
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
-                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);               
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)

@@ -168,6 +168,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Cheque Document"), Value = IsChequeDocument });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pancard Document"), Value = IsPanCardDocument });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Tax Residence Certificate"), Value = IsTaxResidenceCertificate });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Finance Checker"), Value = formData.FinanceChecker });
 
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     var RowId = addedRows[0].Id.Value;
@@ -306,7 +307,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Requestor Name"), Value = formData.InitiatorNameName });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Requestor"), Value = formData.InitiatorEmail });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Tax Residence Certificate Date"), Value = formData.TaxResidenceCertificateDate });
-
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Finance Checker"), Value = formData.FinanceChecker });
 
                 var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
 
@@ -507,7 +508,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     {
                         Cell VendorCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == misCodeColumn.Id);
                         Cell DateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == DateColumn.Id);
-
                         var date = DateCell?.Value?.ToString();
 
 
