@@ -48,6 +48,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? InitiatorName { get; set; }
         public string? Initiator_Email { get; set; }
         public List<string>? Files { get; set; }
+        public string? IsDeviationUpload { get; set; }
         public List<string>? DeviationFiles { get; set; }
         //public string? Role { get; set; }
     }

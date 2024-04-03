@@ -205,8 +205,8 @@ namespace IndiaEventsWebApi.Controllers
                                 {
                                     if (status != null && status == "Approved")
                                     {
-                                        int timeInterval = 250000;
-                                        await Task.Delay(timeInterval);
+                                        //int timeInterval = 250000;
+                                        //await Task.Delay(timeInterval);
                                         if (meetingType != null)
                                         {
                                             if (meetingType.ToString() == "Other |")
@@ -429,8 +429,16 @@ namespace IndiaEventsWebApi.Controllers
                             {
                                 var AID = (long)x.Id;
                                 var file = smartsheet.SheetResources.AttachmentResources.GetAttachment((long)sheet_SpeakerCode.Id, AID);
-                                url = file.Url;
-                                name = file.Name;
+                                //string filename = file.Name.Split(".")[0].Split("-")[1];
+                                string FullName = file.Name;
+                                string substring = "agreement";
+                                bool test = FullName.Contains(substring);
+                                if (test == true)
+                                {
+                                    url = file.Url;
+                                    name = file.Name;
+                                }
+
                             }
                             if (url != "")
                             {
@@ -452,7 +460,9 @@ namespace IndiaEventsWebApi.Controllers
                                     System.IO.File.WriteAllBytes(fp, xy);
                                     string type = SheetHelper.GetContentType(ft);
                                     var z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile((long)processSheetData.Id, rowId, fp, "application/msword");
+                                
                                 }
+                                url = "";
                                 var bs64 = "";
                             }
                         }

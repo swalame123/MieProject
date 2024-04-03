@@ -50,9 +50,22 @@ namespace IndiaEvents.Models.Models.RequestSheets
         public string? VenueName { get; set; }
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
+        public string? EventStartTime { get; set; }
+        public string? EventEndTime { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? SalesHeadEmail { get; set; }
+        public string? FinanceEmail { get; set; }
+        public string? InitiatorName { get; set; }
+        public string? InitiatorEmail { get; set; }
+
 
         public EventRequestBenificiaryDetails? BenificiaryDetailsData { get; set; }
-
+        public string? IsDeviationUpload
+        {
+            get; set;
+        }
+        public List<string>? DeviationFiles { get; set; }
 
 
 

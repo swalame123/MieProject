@@ -96,7 +96,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     {
         public string? MISCode { get; set; }
         public string? HCPRole { get; set; }
-       
+
         public string? TrainerName { get; set; }
         public string? TrainerCode { get; set; }
         public string? TrainerQualification { get; set; }
@@ -106,9 +106,9 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? TrainerType { get; set; }
         //public string? UploadNOC { get; set; }
         public string? Rationale { get; set; }
-        
+
         public DateTime? FCPAIssueDate { get; set; }
-       // public string? UploadTrainerConsent { get; set; }
+        // public string? UploadTrainerConsent { get; set; }
         public string? IsHonorariumApplicable { get; set; }
         public int? Presentation_Speaking_WorkshopDuration { get; set; }
         public int? DevelopmentofPresentationPanelSessionPreparation { get; set; }
@@ -140,7 +140,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public int? FinalAmount { get; set; }
 
         public EventRequestBenificiaryDetails? BenificiaryDetailsData { get; set; }
-
+        public List<string>? TrainerFiles { get; set; }
 
 
         //public string? Currency { get; set; }
@@ -164,13 +164,15 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? SlideKitDocument { get; set; }
         public string? IndicatorsForThreads { get; set; }
         public string? IndicatorsForFillers { get; set; }
+        public string? IsUpload { get; set; }
+        public string? DocToUpload { get; set; }
     }
 
     public class ProductSelection
     {
         public string? ProductSelectionType { get; set; }
-        public string? ProductName { get; set;}
-        public int? SamplesRequires { get; set;}
+        public string? ProductName { get; set; }
+        public int? SamplesRequires { get; set; }
     }
 
     public class AttenderSelection
@@ -190,13 +192,14 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
 
         public string? EmployeeCode { get; set; }
         public string? Designation { get; set; }
+        public List<string>? AttenderFiles { get; set; }
     }
 
     //public class MenariniEmployeeSelection
     //{
     //    public string? EmployeeCode { get; set; }
     //    public string? EmployeeName { get; set; }
-        
+
     //}
 
     public class Expense
