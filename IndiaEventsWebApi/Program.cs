@@ -12,12 +12,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Aspose.Pdf.Plugins;
 using iTextSharp.text.pdf.security;
 using Smartsheet.Api.Models;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+int maxRequestLimit = 1073741824;
 
-
-
+//builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(60); });
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,29 +36,28 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = "http://localhost:5098",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"))
     };
-
-    //options.Events = new JwtBearerEvents
-    //{
-    //    OnAuthenticationFailed = context =>
-    //    {
-    //        context.Response.ContentType = "application/json";
-    //        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-
-    //        //return context.Response.WriteAsync(new
-    //        //{
-    //        //    Message = "Invalid token",
-    //        //    Error = context.Exception.Message
-    //        //}.ToString());
-            
-    //    }
-    //};
+   
 })
+
 .AddGoogle(options =>
 {
-    options.ClientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
-    options.ClientSecret = "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";
+    options.ClientId = "644106526561-5899nb8044t0k47h4bdu6lk2aebs4g1s.apps.googleusercontent.com";
+    options.ClientSecret = "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";
+
 });
 
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 1073741824; // 1 GB in bytes
+    options.MaxRequestBodyBufferSize = 1073741824;
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 1073741824; // 1 GB in bytes
+
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(20); //  20 minutes
+});
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("MyPolicy", builder =>
@@ -79,10 +79,9 @@ IHostBuilder CreateHostBuilder(string[] args) =>
     services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
     services.AddOptions();
     services.Configure<SmartsheetSettings>(configuration.GetSection("SmartsheetSettings"));
-  
+
 
 });
-
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -102,6 +101,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 
 var app = builder.Build();
 

@@ -14,38 +14,21 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
     {
         private readonly string accessToken;
         private readonly IConfiguration configuration;
-
+        private readonly SmartsheetClient smartsheet;
         public SpeakerCodeCreationController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
-
+            smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
         }
         [HttpGet("GetSpeakerCodeCreationData")]
         public IActionResult GetSpeakerCodeCreationData()
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:SpeakerCodeCreation").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                List<string> columnNames = new List<string>();
-                foreach (Column column in sheet.Columns)
-                {
-                    columnNames.Add(column.Title);
-                }
-                foreach (Row row in sheet.Rows)
-                {
-                    Dictionary<string, object> rowData = new Dictionary<string, object>();
-                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                    {
-                        rowData[columnNames[i]] = row.Cells[i].Value;
-
-                    }
-                    sheetData.Add(rowData);
-                }
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 return Ok(sheetData);
             }
             catch (Exception ex)
@@ -54,30 +37,16 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
             }
         }
 
-
-
         [HttpPost("AddSpeakersData")]
         public IActionResult AddSpeakersData(SpeakerCodeGeneration formData)
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:SpeakerCodeCreation").Value;
-
-
                 long.TryParse(sheetId, out long parsedSheetId);
-
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 string[] sheetIds = {
-                //configuration.GetSection("SmartsheetSettings:HcpMaster").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
-                //configuration.GetSection("SmartsheetSettings:HcpMaster4").Value,
                 configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value,
-                //configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value,
-                //configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value
-
                 };
                 var mis = "";
                 var sheetval = "";
@@ -85,24 +54,14 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 {
                     long.TryParse(i, out long p);
                     Sheet sheeti = smartsheet.SheetResources.GetSheet(p, null, null, null, null, null, null, null);
-
                     Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "MisCode");
-
                     if (misCodeColumn != null)
                     {
-                        Row existingRow = sheeti.Rows.FirstOrDefault(row =>
-                        row.Cells != null &&
-
-                        row.Cells.Any(cell =>
-                            cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == formData.MISCode
-                        )
-                        );
+                        Row existingRow = sheeti.Rows.FirstOrDefault(row => row.Cells != null && row.Cells.Any(cell => cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == formData.MISCode));
                         if (existingRow != null)
                         {
                             mis = formData.MISCode;
                             sheetval = sheeti.Name;
-                            // Both Name and MISCode are present in the same row, return success
-
                         }
                     }
                 }
@@ -115,13 +74,10 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
-
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Head"), Value = formData.SalesHead });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Medical Affairs Head"), Value = formData.MedicalAffairsHead });
-
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "SpeakerName"), Value = formData.SpeakerName });
-
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Speaker Code"), Value = formData.SpeakerCode });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MISCode });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Division"), Value = formData.Division });
@@ -138,11 +94,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Speaker Criteria Details"), Value = formData.Speaker_Criteria_Details });
 
 
-
                     var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                 }
-
-
                 return Ok(new
                 { Message = "Data added successfully." });
 
@@ -160,12 +113,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
         {
             try
             {
-                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId = configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value;
-                long.TryParse(sheetId, out long parsedSheetId);
-                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);       
 
-                Row existingRow = GetRowById(smartsheet, parsedSheetId, formData.SpeakerId);
+                long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+
+                Row existingRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formData.SpeakerId));
 
                 Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
 
@@ -201,52 +154,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
             }
         }
 
-
-
-
-
-
-
-
-        private Row GetRowById(SmartsheetClient smartsheet, long sheetId, string email)
-        {
-            Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId, null, null, null, null, null, null, null);
-
-
-
-            Column idColumn = sheet.Columns.FirstOrDefault(col => col.Title == "SpeakerId");
-            
-
-            if (idColumn != null)
-            {
-                foreach (var row in sheet.Rows)
-                {
-                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == idColumn.Id && c.Value.ToString() == email);
-
-                    if (cell != null)
-                    {
-                        return row;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-
-
-
-        private long GetColumnIdByName(Sheet sheet, string columnname)
-        {
-            foreach (var column in sheet.Columns)
-            {
-                if (column.Title == columnname)
-                {
-                    return column.Id.Value;
-                }
-            }
-            return 0;
-        }
     }
 
 }

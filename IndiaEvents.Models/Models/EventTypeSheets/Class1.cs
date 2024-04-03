@@ -1,4 +1,6 @@
-﻿namespace IndiaEventsWebApi.Models.EventTypeSheets
+﻿using Microsoft.AspNetCore.Http;
+
+namespace IndiaEventsWebApi.Models.EventTypeSheets
 {
     public class Class1
     {
@@ -6,6 +8,7 @@
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
         public DateTime? EventDate { get; set; }
+        public DateTime? EventEndDate { get; set; }
         public string? StartTime { get; set; }
         public string? EndTime { get; set; }
         public string? VenueName { get; set; }
@@ -25,6 +28,7 @@
         public string? FB_Expense_Excluding_Tax { get; set; }
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
+        public string? FinanceHead { get; set; }
 
 
         public string? MedicalAffairsEmail { get; set; }
@@ -51,6 +55,6 @@
         public string? EventId { get; set; }
 
       
-        public List<string>? File { get; set; }
+        public List<IFormFile>? File { get; set; }
     }
 }

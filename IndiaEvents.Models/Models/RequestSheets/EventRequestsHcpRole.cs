@@ -24,9 +24,30 @@
         public string? QASessionDuration { get; set; }
         public string? BriefingSession { get; set; }
         public string? TotalSessionHours { get; set; }
-       
         public string? IsInclidingGst { get; set; }
         public string? AgreementAmount { get; set; }
+        public string? PanCardName { get; set; }
+        public string? ExpenseType { get; set; }
+        public string? OthersType { get; set; }
+        public string? BankAccountNumber { get; set; }
+        public string? BankName { get; set; }
+        public string? IFSCCode { get; set; }
+        public string? Fcpadate { get; set; }
+
+        public string? Currency { get; set; }
+        public string? OtherCurrencyType { get; set; }
+        public string? BeneficiaryName { get; set; }
+        public string? PanNumber { get; set; }
+        //Currency,Other Currency Type,Beneficiary Name,Pan Number,
+        public string? LcBtcorBte { get; set; }
+        public string? TravelBtcorBte { get; set; }
+        public string? AccomodationBtcorBte { get; set; }
+
+        public int? HonarariumAmountExcludingTax { get; set; }
+        public int? TravelExcludingTax { get; set; }
+        public int? AccomdationExcludingTax { get; set; }
+        public int? LocalConveyanceExcludingTax { get; set; }
+
 
     }
 }

@@ -17,6 +17,7 @@
         public string? PanCardDocument { get; set; }
         public string? ChequeDocument { get; set; }
         public string? TaxResidenceCertificate { get; set; }
+        public string? FinanceChecker { get; set; }
     }
     public class UpdateVendorCodeGeneration
     {
@@ -37,5 +38,6 @@
         public string? PanCardDocument { get; set; }
         public string? ChequeDocument { get; set; }
         public string? TaxResidenceCertificate { get; set; }
+        public string? FinanceChecker { get; set; }
     }
 }

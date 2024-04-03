@@ -27,6 +27,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string InitiatorEmail { get; set; }
         public string RBMorBM { get; set; }
         public string Compliance { get; set; }
+        public string FinanceHead { get; set; }
         //public string? FinanceTreasuryEmail { get; set; }
 
         public string? MedicalAffairsEmail { get; set; }

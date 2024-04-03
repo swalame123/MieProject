@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using IndiaEventsWebApi.Junk.Test;
+using IndiaEventsWebApi.Models;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -170,7 +170,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
+        
 
         [HttpPost("GetEventRequestsHcpRoleByIds")]
         public IActionResult GetEventRequestsHcpRoleByIds([FromBody] getIds eventIdorEventRequestIds)
@@ -312,6 +312,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             {
                 return NotFound("NotFound");
             }
+        }
+
+
+
+
+        public class getIds
+        {
+            public List<string> EventIds { get; set; }
         }
     }
 }

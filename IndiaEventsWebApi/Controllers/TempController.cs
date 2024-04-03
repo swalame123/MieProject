@@ -25,6 +25,126 @@ namespace IndiaEventsWebApi.Controllers
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
         }
 
+
+
+
+
+        [HttpPost("AddFormData")]
+        public async Task<IActionResult> AddFormData(IFormFile i)
+        {
+            try
+            {
+
+                var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+                var sheetId1 = 6857973674495876;
+                var rowId = 2502681132175236;
+                Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId1, null, null, null, null, null, null, null);
+
+                var newRow = new Row();
+                newRow.Cells = new List<Cell>();
+
+                // Upload the file to Smartsheet
+                var file = i;
+                if (file != null && file.Length > 0)
+                {
+                    //smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                    //       sheet1.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                    Attachment attachment = smartsheet.SheetResources.AttachmentResources.AttachFile(sheetId1, file.FileName, "application/msword");
+                   // newRow.Cells.Add(new Cell.AddCellBuilder(sheet.Columns[0].Id, attachment.AttachmentId).Build());
+                }
+                //using (var memoryStream = new MemoryStream())
+                //{
+                //    await file.CopyToAsync(memoryStream);
+                //    newRow.Cells.Add(new Cell.AddCellBuilder(sheet.Columns[0].Id, memoryStream.ToArray()).Build());
+                //}
+            
+                else
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                // Add the new row to the sheet
+                smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Row[] { newRow });
+
+
+
+                //byte[] fileBytes = Convert.FromBase64String(i);
+
+                //if (fileBytes != null && fileBytes.Length > 0)
+                //{
+                //    var fileName = "FCPA" + fileBytes;//fileUploadModel.File.FileName;
+                //    var folderName = Path.Combine("Resources", "Images");
+                //    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                //    var fullPath = Path.Combine(pathToSave, fileName);
+
+                //    if (!Directory.Exists(pathToSave))
+                //    {
+                //        Directory.CreateDirectory(pathToSave);
+                //    }
+
+
+                //    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                //    {
+
+                //        fileBytes.;
+                //    }
+                //    //string type = fileBytes.;//fileUploadModel.File.ContentType;
+                //    var addedRow = addedRows[0];
+                //    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                //        sheetId1, addedRow.Id.Value, fullPath, "");
+
+
+                //}
+
+
+
+
+                return Ok("Data added successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpPost("Basestring")]
         public IActionResult Basestring(string[] data)
         {
@@ -63,6 +183,22 @@ namespace IndiaEventsWebApi.Controllers
             }
             return Ok("Null");
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         [HttpGet("GenerateSummaryPDF")]
@@ -184,7 +320,7 @@ namespace IndiaEventsWebApi.Controllers
                         Sr_No++;
                     }
                 }
-                byte[] fileBytes = exportpdf(dtMai, EventCode, EventName, EventDate, EventVenue,dtMai);
+                byte[] fileBytes = exportpdf(dtMai, EventCode, EventName, EventDate, EventVenue, dtMai);
                 string filename = "Sample_PDF_" + EventID + ".pdf";
                 var folderName = Path.Combine("Resources", "Images");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -199,7 +335,7 @@ namespace IndiaEventsWebApi.Controllers
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
-                }               
+                }
                 List<Attachment> attachments = new List<Attachment>();
 
                 foreach (Row row in sheet_SpeakerCode.Rows)
@@ -242,7 +378,7 @@ namespace IndiaEventsWebApi.Controllers
                                         System.IO.File.WriteAllBytes(fp, xy);
                                         string type = SheetHelper.GetContentType(ft);
                                         var z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(parsedProcessSheet, addedRow, fp, "application/msword");
-                                    }                                    
+                                    }
                                     var bs64 = "";
                                 }
                             }
@@ -254,6 +390,59 @@ namespace IndiaEventsWebApi.Controllers
             {
                 //return BadRequest(ex.Message);
             }
+        }
+
+
+
+
+        // Testing using row id
+        [HttpGet("GenerateSummaryTest")]
+        public IActionResult GenerateSummaryTest(long rowId)
+        {
+            try
+            {
+                var EventID = "";
+
+
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
+
+
+                string processSheet = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
+                long.TryParse(processSheet, out long parsedProcessSheet);
+                Sheet processSheetData = smartsheet.SheetResources.GetSheet(parsedProcessSheet, null, null, null, null, null, null, null);
+
+                Column processIdColumn = processSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
+
+                Row targetRow = processSheetData.Rows.FirstOrDefault(row => row.Id == rowId);
+
+
+                if (targetRow != null)
+                {
+
+
+
+                    if (processIdColumn != null)
+                    {
+                        var columnValue = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn.Id)?.Value;
+                        EventID = columnValue?.ToString();
+                    }
+
+                }
+                else
+                {
+
+                    return BadRequest("Row not found in the specified sheet.");
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //return BadRequest(ex.Message);
+            }
+            return Ok("created and attached in process sheet ...");
         }
 
 
@@ -448,7 +637,7 @@ namespace IndiaEventsWebApi.Controllers
                     }
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -539,7 +728,7 @@ namespace IndiaEventsWebApi.Controllers
                                         string type = SheetHelper.GetContentType(ft);
                                         var z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(parsedProcessSheet, addedRow, fp, "application/msword");
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -548,7 +737,7 @@ namespace IndiaEventsWebApi.Controllers
                 return Ok("Done");
 
             }
-            
+
 
 
 
@@ -559,8 +748,8 @@ namespace IndiaEventsWebApi.Controllers
         }
 
 
-        [HttpGet ("GetcolumnsbysheetId")]
-        public IActionResult GetcolumnsbysheetId (long Id)
+        [HttpGet("GetcolumnsbysheetId")]
+        public IActionResult GetcolumnsbysheetId(long Id)
         {
             try
             {
@@ -588,11 +777,11 @@ namespace IndiaEventsWebApi.Controllers
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-           
+
 
 
         }
@@ -644,7 +833,7 @@ namespace IndiaEventsWebApi.Controllers
             return result;
         }
 
-        private byte[] exportpdf(DataTable dtEmployee, string EventCode, string EventName, string EventDate, string EventVenue , DataTable dtMai)
+        private byte[] exportpdf(DataTable dtEmployee, string EventCode, string EventName, string EventDate, string EventVenue, DataTable dtMai)
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             iTextSharp.text.Rectangle rec = new iTextSharp.text.Rectangle(PageSize.A4);
@@ -687,7 +876,7 @@ namespace IndiaEventsWebApi.Controllers
             doc.Add(new Paragraph("\n "));
             PdfPTable table = new PdfPTable(dtEmployee.Columns.Count);
             table.WidthPercentage = 100;
-            float[] columnWidths = Enumerable.Range(0, dtEmployee.Columns.Count).Select(i=>i==dtEmployee.Columns.IndexOf("HCPName") ? 2f : 1f).ToArray(); /*Count).Select(i => 1f).ToArray();*/
+            float[] columnWidths = Enumerable.Range(0, dtEmployee.Columns.Count).Select(i => i == dtEmployee.Columns.IndexOf("HCPName") ? 2f : 1f).ToArray(); /*Count).Select(i => 1f).ToArray();*/
             table.SetWidths(columnWidths);
 
             for (int i = 0; i < dtEmployee.Columns.Count; i++)
@@ -788,7 +977,7 @@ namespace IndiaEventsWebApi.Controllers
 
 
 
-      
+
 
 
 
@@ -1017,65 +1206,6 @@ namespace IndiaEventsWebApi.Controllers
 
 //}
 
-
-//[HttpPost("AddFormData")]
-//public IActionResult AddFormData(Class11 i)
-//{
-//    try
-//    {
-
-//        var accessToken = "jQ7rAWlaTgbtMPVvlc7RGOqeNqDWwheJRNV83";
-//        SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-//        var sheetId1 = 6857973674495876;
-//        Sheet sheet = smartsheet.SheetResources.GetSheet(sheetId1, null, null, null, null, null, null, null);
-
-//        var newRow = new Row();
-//        newRow.Cells = new List<Cell>();
-
-//        //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "GENDER"), Value = fileUploadModel.Gender.GENDER });
-
-//        var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheetId1, new Row[] { newRow });
-
-//        byte[] fileBytes = Convert.FromBase64String(i.File);
-
-//        if (fileBytes != null && fileBytes.Length > 0)
-//        {
-//            var fileName = "FCPA" + fileBytes;//fileUploadModel.File.FileName;
-//            var folderName = Path.Combine("Resources", "Images");
-//            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-//            var fullPath = Path.Combine(pathToSave, fileName);
-
-//            if (!Directory.Exists(pathToSave))
-//            {
-//                Directory.CreateDirectory(pathToSave);
-//            }
-
-
-//            using (var fileStream = new FileStream(fullPath, FileMode.Create))
-//            {
-
-//                fileBytes.;
-//            }
-//            //string type = fileBytes.;//fileUploadModel.File.ContentType;
-//            var addedRow = addedRows[0];
-//            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-//                sheetId1, addedRow.Id.Value, fullPath, type);
-
-
-//        }
-
-
-
-
-//        return Ok("Data added successfully.");
-//    }
-//    catch (Exception ex)
-//    {
-//        return BadRequest(ex.Message);
-//    }
-
-//}
 
 
 

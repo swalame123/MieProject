@@ -6,6 +6,7 @@
         public string? Expense { get; set; }
         public string? Amount { get; set; }
         public string? AmountExcludingTax { get; set; }
+        public int? ExcludingTaxAmount { get; set; }
         public string? BtcorBte{ get; set; }
         public string? BtcAmount { get; set;}
         public string? BteAmount { get; set;}

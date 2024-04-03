@@ -1,6 +1,6 @@
 ﻿namespace IndiaEventsWebApi.Models.EventTypeSheets
 {
-    public class EventRequestHcpRole
+    public class EventRequestHcpRole//not in class I
     {
         public string? HcpRoleId { get; set; }
         public string? MISCode { get; set; }
@@ -21,6 +21,7 @@
         public string? BrefingSession { get; set; }
         public string? TotalSessionHours { get; set; }
         public string? Rationale { get; set; }
+
 
     }
 }

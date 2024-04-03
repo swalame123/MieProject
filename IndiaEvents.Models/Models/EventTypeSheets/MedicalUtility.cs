@@ -14,15 +14,18 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? MedicalUtilityDescription { get; set; }
         public string? Class_III_EventCode { get; set; }
         public string? IsAdvanceRequired { get; set; }
+        public string? AdvanceAmount { get; set; }
         public string? EventOpen30daysFile { get; set; }
         public string? EventOpen30dayscount { get; set; }
-
+        public string? TotalExpenseBTC { get; set; }
+        public string? TotalExpenseBTE { get; set; }
         public string? EventWithin7daysFile { get; set; }
         // public string? FcpaFile { get; set; }
         public string? IsDeviationUpload { get; set; }
         public string? TotalBudgetAmount { get; set; }
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
+        public string? FinanceHead { get; set; }
         public string? Marketing_Head { get; set; }
         public string? MedicalAffairsEmail { get; set; }
         public string? ReportingManagerEmail { get; set; }
@@ -55,7 +58,10 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? MedicalUtilityCostAmount { get; set; }
         public string? Legitimate { get; set; }
         public string? Objective { get; set; }
-        //public DateTime? Fcpadate { get; set; }
+        //public DateTime? RequestDate { get; set; }
+        public string? ExpenseType { get; set; }
+        //public string? MedicalUtilityDescription { get; set; }
+        public DateTime? Fcpadate { get; set; }
     }
 
     public class ExpenseListData
@@ -64,7 +70,10 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
 
         public string? Expense { get; set; }
         public string? BTC_BTE { get; set; }
+        public string? BtcAmount { get; set; }
+        public string? BteAmount { get; set; }
         public string? TotalExpenseAmount { get; set; }
+        public int? TotalExpenseAmountExcludingTax { get; set; }
 
     }
 

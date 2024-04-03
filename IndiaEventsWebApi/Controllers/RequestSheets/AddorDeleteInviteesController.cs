@@ -1,4 +1,5 @@
-﻿using IndiaEventsWebApi.Models.RequestSheets;
+﻿using IndiaEventsWebApi.Helper;
+using IndiaEventsWebApi.Models.RequestSheets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
@@ -32,6 +33,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             {
                 var newRow3 = new Row();
                 newRow3.Cells = new List<Cell>();
+                newRow3.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet3, "Designation"), Value = formdata.Designation });
+                newRow3.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet3, "Employee Code"), Value = formdata.EmployeeCode });
                 newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "HCPName"), Value = formdata.InviteeName });
                 newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "MISCode"), Value = formdata.MISCode });
                 newRow3.Cells.Add(new Cell { ColumnId = GetColumnIdByName(sheet3, "LocalConveyance"), Value = formdata.LocalConveyance });
