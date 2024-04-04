@@ -6,6 +6,9 @@ using System.Data;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Web.Http.Results;
+using Aspose.Pdf.Operators;
+using IndiaEventsWebApi.Helper;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Helper
 {
@@ -530,6 +533,150 @@ namespace IndiaEventsWebApi.Helper
 
 
 
+        //internal static Row Deviations(Sheet sheet2,object formdata)
+        //{
+        //    Row newRow = new()
+        //    {
+        //        Cells = new List<Cell>()
+        //        {
+        //                    new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet2, "% Allocation"), Value = formdata.PercentAllocation },
+        //                    new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet2, "Brands"), Value = formdata.BrandName },
+        //                    new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet2, "Project ID"), Value = formdata.ProjectId },
+        //                    new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet2, "EventId/EventRequestId"), Value = val }
+        //                }
+        //    };
+        //    return newRow;
+        //}
+
+
+
+        //           if (formDataList.class1.EventOpen30days == "Yes" || formDataList.class1.EventWithin7days == "Yes" || formDataList.class1.FB_Expense_Excluding_Tax == "Yes" || formDataList.class1.IsDeviationUpload == "Yes")
+        //                {
+        //                    List<string> DeviationNames = new List<string>();
+        //                    foreach (var p in formDataList.class1.DeviationFiles)
+        //                    {
+        //                        string[] words = p.Split(':');
+        //        var r = words[0];
+
+        //        DeviationNames.Add(r);
+        //                    }
+        //                    foreach (var deviationname in DeviationNames)
+        //                    {
+        //                        var file = deviationname.Split(".")[0];
+        //    var eventId = val;
+        //                        try
+        //                        {
+        //                            var newRow7 = new Row();
+        //    newRow7.Cells = new List<Cell>();
+
+        //                            newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventId/EventRequestId"), Value = eventId
+        //});
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Event Topic"), Value = formDataList.class1.EventTopic });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventType"), Value = formDataList.class1.EventType });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.class1.EventDate });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "StartTime"), Value = formDataList.class1.StartTime });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EndTime"), Value = formDataList.class1.EndTime });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "VenueName"), Value = formDataList.class1.VenueName });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "City"), Value = formDataList.class1.City });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "State"), Value = formDataList.class1.State });
+
+
+        //if (file == "30DaysDeviationFile")
+        //{
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Outstanding with initiator for more than 45 days" });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventOpen45days"), Value = formDataList.class1.EventOpen30days });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Outstanding Events"), Value = SheetHelper.NumCheck(formDataList.class1.EventOpen30dayscount) });
+        //}
+        //else if (file == "7DaysDeviationFile")
+        //{
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "5 days from the Event Date" });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventWithin5days"), Value = formDataList.class1.EventWithin7days });
+
+        //}
+        //else if (file == "ExpenseExcludingTax")
+        //{
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Food and Beverages expense exceeds 1500" });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "PRE-F&B Expense Excluding Tax"), Value = formDataList.class1.FB_Expense_Excluding_Tax });
+        //}
+        //else if (file == "Travel_Accomodation3LExceededFile")
+        //{
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Travel/AccomodationAggregate Limit of 3,00,000 is Exceeded" });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Travel/Accomodation 3,00,000 Exceeded Trigger"), Value = "Yes" });//formDataList.class1.FB_Expense_Excluding_Tax });
+        //}
+        //else if (file == "TrainerHonorarium12LExceededFile")
+        //{
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Honorarium Aggregate Limit of 12,00,000 is Exceeded" });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Trainer Honorarium 12,00,000 Exceeded Trigger"), Value = "Yes" }); //formDataList.class1.FB_Expense_Excluding_Tax });
+        //}
+        //else if (file == "HCPHonorarium6LExceededFile")
+        //{
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Deviation Type"), Value = "Honorarium Aggregate Limit of 6,00,000 is Exceeded" });
+        //    newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "HCP Honorarium 6,00,000 Exceeded Trigger"), Value = "Yes" }); // formDataList.class1.FB_Expense_Excluding_Tax });
+        //}
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Sales Head"), Value = formDataList.class1.Sales_Head });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Finance Head"), Value = formDataList.class1.FinanceHead });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "InitiatorName"), Value = formDataList.class1.InitiatorName });
+        //newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Initiator Email"), Value = formDataList.class1.Initiator_Email });
+
+
+        //var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
+
+
+
+
+        //var j = 1;
+        //foreach (var p in formDataList.class1.DeviationFiles)
+        //{
+        //    string[] words = p.Split(':');
+        //    var r = words[0];
+        //    var q = words[1];
+        //    if (deviationname == r)
+        //    {
+
+        //        var name = r.Split(".")[0];
+
+        //        var filePath = SheetHelper.testingFile(q, val, name);
+
+
+        //        //byte[] fileBytes = Convert.FromBase64String(q);
+        //        //var folderName = Path.Combine("Resources", "Images");
+        //        //var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+        //        //if (!Directory.Exists(pathToSave))
+        //        //{
+        //        //    Directory.CreateDirectory(pathToSave);
+        //        //}
+
+        //        //string fileType = SheetHelper.GetFileType(fileBytes);
+        //        //string fileName = r;
+        //        //// string fileName = val+x + ": AttachedFile." + fileType;
+        //        //string filePath = Path.Combine(pathToSave, fileName);
+
+
+        //        var addedRow = addeddeviationrow[0];
+
+        //        //System.IO.File.WriteAllBytes(filePath, fileBytes);
+        //        //string type = SheetHelper.GetContentType(fileType);
+        //        var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+        //                parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+        //        var attachmentinmain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+        //               parsedSheetId1, addedRows[0].Id.Value, filePath, "application/msword");
+        //        j++;
+        //        if (System.IO.File.Exists(filePath))
+        //        {
+        //            SheetHelper.DeleteFile(filePath);
+        //        }
+        //    }
+
+
+        //}
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+        //    return BadRequest(ex.Message);
+        //}
+        //                    }
+
+        //                }
 
 
 

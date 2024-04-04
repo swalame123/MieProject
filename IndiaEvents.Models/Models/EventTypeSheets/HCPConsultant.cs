@@ -61,6 +61,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? Rationale { get; set; }
         public DateTime? Fcpadate { get; set; }
         public string? ExpenseType { get; set; }
+        public string? IsUpload { get; set; }
+        public List<string>? FilesToUpload { get; set; }
 
 
 

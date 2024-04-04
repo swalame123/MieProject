@@ -86,7 +86,7 @@ namespace IndiaEventsWebApi.Controllers
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "End Time"), Value = formData.RequestHonorariumList.EndTime });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Venue Name"), Value = formData.RequestHonorariumList.VenueName });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Travel & Accommodation Amount"), Value = formData.RequestHonorariumList.TotalTravelAndAccomodationSpend });
-                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Honorarium Amount"), Value = formData.RequestHonorariumList.TotalHonorariumSpend});
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Honorarium Amount"), Value = formData.RequestHonorariumList.TotalHonorariumSpend });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Budget"), Value = formData.RequestHonorariumList.TotalSpend });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Expenses"), Value = formData.RequestHonorariumList.Expenses });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Travel Amount"), Value = formData.RequestHonorariumList.TotalTravelSpend });
@@ -198,6 +198,42 @@ namespace IndiaEventsWebApi.Controllers
         }
 
 
+        [HttpPut("HonorariumUpdate")]
+        public IActionResult HonorariumUpdate(List<HonorariumUpdate> formDataArray)
+        {
 
+
+            string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+
+            Sheet sheet4 = SheetHelper.GetSheetById(smartsheet, sheetId4);
+            foreach (var formdata in formDataArray)
+            {
+                var targetRow = sheet4.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.PanelId));
+                if (targetRow != null)
+                {
+                    foreach (var p in formdata.FilesToUpload)
+                    {
+                        string[] words = p.Split(':');
+                        string r = words[0];
+                        string q = words[1];
+                        string val = formdata.EventId;
+                        string name = r.Split(".")[0];
+                        string filePath = SheetHelper.testingFile(q, val, name);
+                        Row addedRow = targetRow;
+                        Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                       
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            SheetHelper.DeleteFile(filePath);
+                        }
+
+                    }
+                }
+            }
+
+
+            return Ok(new { Message = " Updated Successfully" });
+        }
     }
 }

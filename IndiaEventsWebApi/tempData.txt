@@ -21,7 +21,24 @@
 
 
 
+  foreach (string p in formData.TrainerFiles)
+                    {
+                        string[] words = p.Split(':');
+                        string r = words[0];
+                        string q = words[1];
+                        string name = r.Split(".")[0];
+                        string filePath = SheetHelper.testingFile(q, val, name);
+                        Row addedRow = row[0];
+                        Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                               sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                        x++;
 
+
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            SheetHelper.DeleteFile(filePath);
+                        }
+                    }
 
 
 Row newRow3 = new()

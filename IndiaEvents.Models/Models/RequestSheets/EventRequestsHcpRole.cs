@@ -47,7 +47,8 @@
         public int? TravelExcludingTax { get; set; }
         public int? AccomdationExcludingTax { get; set; }
         public int? LocalConveyanceExcludingTax { get; set; }
-
+        public string? IsUpload { get; set; }
+        public List<string>? FilesToUpload { get; set; }
 
     }
 }

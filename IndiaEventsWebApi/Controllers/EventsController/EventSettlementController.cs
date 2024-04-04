@@ -240,5 +240,12 @@ namespace IndiaEventsWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpPut("EventSettlementUpdate")]
+        public IActionResult EventSettlementUpdate()
+        {
+            return Ok(new { Message = "" });
+        }
     }
 }

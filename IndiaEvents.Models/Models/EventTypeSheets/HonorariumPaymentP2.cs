@@ -70,4 +70,10 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public HonorariumPaymentP2? RequestHonorariumList { get; set; }
         public List<HCPDetailsP2>? HcpRoles { get; set; }
     }
+    public class HonorariumUpdate
+    {
+        public string? PanelId { get; set; }
+        public string? EventId { get; set; }
+        public List<string>? FilesToUpload { get; set; }
+    }
 }
