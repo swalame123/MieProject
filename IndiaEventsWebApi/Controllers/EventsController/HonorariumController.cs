@@ -37,7 +37,8 @@ namespace IndiaEventsWebApi.Controllers
             //string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
             //string sheetId5 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpSlideKit").Value;
             //string sheetId6 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
-            //string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;           
+            //string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
+
             //sheet1 = SheetHelper.GetSheetById(smartsheet, sheetId1);
             //sheet2 = SheetHelper.GetSheetById(smartsheet, sheetId2);
             //sheet3 = SheetHelper.GetSheetById(smartsheet, sheetId3);
@@ -116,19 +117,26 @@ namespace IndiaEventsWebApi.Controllers
                 var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheet.Id.Value, new Row[] { newRow });
                 var eventId = formData.RequestHonorariumList.EventId;
                 var x = 1;
-                foreach (var p in formData.RequestHonorariumList.Files)
+
+
+                foreach (string p in formData.RequestHonorariumList.Files)
                 {
-                    var name = " AttachedFile";
-                    var filePath = SheetHelper.testingFile(p, eventId, name);
-                    var addedRow = addedRows[0];
-                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                            sheet.Id.Value, addedRow.Id.Value, filePath, "application/msword");
-                    x++;
+                    string[] words = p.Split(':');
+                    string r = words[0];
+                    string q = words[1];
+                    string name = r.Split(".")[0];
+                    string filePath = SheetHelper.testingFile(q, eventId, name);
+                    Row addedRow = addedRows[0];
+                    Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                           sheet.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+
+
                     if (System.IO.File.Exists(filePath))
                     {
                         SheetHelper.DeleteFile(filePath);
                     }
                 }
+               
 
                 if (formData.RequestHonorariumList.IsDeviationUpload == "Yes")
                 {
@@ -155,19 +163,26 @@ namespace IndiaEventsWebApi.Controllers
                         var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(sheet7.Id.Value, new Row[] { newRow7 });
 
                         var j = 1;
-                        foreach (var p in formData.RequestHonorariumList.DeviationFiles)
+
+
+                        foreach (string p in formData.RequestHonorariumList.DeviationFiles)
                         {
-                            var name = "2WorkingDaysAfterEvent";
-                            var filePath = SheetHelper.testingFile(p, eventId, name);
-                            var addedRow = addeddeviationrow[0];
-                            var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                    sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
-                            j++;
+                            string[] words = p.Split(':');
+                            string r = words[0];
+                            string q = words[1];
+                            string name = r.Split(".")[0];
+                            string filePath = SheetHelper.testingFile(q, eventId, name);
+                            Row addedRow = addeddeviationrow[0];
+                            Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                   sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+
+
                             if (System.IO.File.Exists(filePath))
                             {
                                 SheetHelper.DeleteFile(filePath);
                             }
                         }
+
                     }
                     catch (Exception ex)
                     {
@@ -222,7 +237,7 @@ namespace IndiaEventsWebApi.Controllers
                         Row addedRow = targetRow;
                         Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                 sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
-                       
+
                         if (System.IO.File.Exists(filePath))
                         {
                             SheetHelper.DeleteFile(filePath);
