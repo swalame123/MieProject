@@ -74,6 +74,8 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     {
         public string? PanelId { get; set; }
         public string? EventId { get; set; }
+        public string? IsInclidingGst { get; set; }
         public List<string>? FilesToUpload { get; set; }
+        public string? IsAnnualTrainerAgreementValid { get; set; }
     }
 }

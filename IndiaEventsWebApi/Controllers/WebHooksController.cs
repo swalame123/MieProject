@@ -203,10 +203,10 @@ namespace IndiaEventsWebApi.Controllers
                                 var EventType = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn4.Id)?.Value.ToString();
                                 if (EventType == "Class I" || EventType == "Webinar")
                                 {
-                                    if (status != null && status == "Approved")
+                                    if (status != null && (status == "Approved" || status == "Waiting for Finance Treasury Approval"))
                                     {
-                                        //int timeInterval = 250000;
-                                        //await Task.Delay(timeInterval);
+                                        int timeInterval = 250000;
+                                        await Task.Delay(timeInterval);
                                         if (meetingType != null)
                                         {
                                             if (meetingType.ToString() == "Other |")

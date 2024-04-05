@@ -760,10 +760,14 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         var j = 1;
                         foreach (var p in formData.RequestHonorariumList.DeviationFiles)
                         {
+                            string[] words = p.Split(':');
+                            var r = words[0];
+                            var q = words[1];
 
-                            var name = "2WorkingDaysAfterEvent";
+                            var name = r.Split(".")[0];
 
-                            var filePath = SheetHelper.testingFile(p, eventId, name);
+                            var filePath = SheetHelper.testingFile(q, eventId, name);
+
 
 
                             var addedRow = addeddeviationrow[0];
@@ -772,12 +776,33 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                                     parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                             var attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                     parsedSheetId, addedRows[0].Id.Value, filePath, "application/msword");
-                            j++;
+                            x++;
+
 
                             if (System.IO.File.Exists(filePath))
                             {
                                 SheetHelper.DeleteFile(filePath);
                             }
+
+
+
+                            //var name = "2WorkingDaysAfterEvent";
+
+                            //var filePath = SheetHelper.testingFile(p, eventId, name);
+
+
+                            //var addedRow = addeddeviationrow[0];
+
+                            //var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            //        parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
+                            //var attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                            //        parsedSheetId, addedRows[0].Id.Value, filePath, "application/msword");
+                            //j++;
+
+                            //if (System.IO.File.Exists(filePath))
+                            //{
+                            //    SheetHelper.DeleteFile(filePath);
+                            //}
                         }
                     }
                     catch (Exception ex)
