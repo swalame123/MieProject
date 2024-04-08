@@ -1,10 +1,12 @@
-﻿using IndiaEventsWebApi.Helper;
+﻿using IndiaEvents.Models.Models.EventTypeSheets;
+using IndiaEventsWebApi.Helper;
 using IndiaEventsWebApi.Models.EventTypeSheets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.Text;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Controllers
 {
@@ -13,31 +15,33 @@ namespace IndiaEventsWebApi.Controllers
     public class EventSettlementController : ControllerBase
     {
 
+
         private readonly string accessToken;
         private readonly IConfiguration configuration;
         private readonly SmartsheetClient smartsheet;
-        private readonly string sheetId1;
-        private readonly string sheetId2;
-        private readonly string sheetId3;
-        private readonly string sheetId4;
-        private readonly string sheetId5;
-        private readonly string sheetId6;
-       
+
+        private readonly Sheet sheet1;
+        private readonly Sheet sheet2;
+        private readonly Sheet sheet3;
+        private readonly Sheet sheet4;
+
 
         public EventSettlementController(IConfiguration configuration)
         {
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
+
+            string panelSheet = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
+            string InviteeSheet = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
+            string ExpenseSheet = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+            string SlideKitSheet = configuration.GetSection("SmartsheetSettings:EventRequestsHcpSlideKit").Value;
+
             smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
 
-            sheetId1 = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
-            sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
-            sheetId3 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
-            sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
-            sheetId5 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
-            sheetId6 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
-
-
+            sheet1 = SheetHelper.GetSheetById(smartsheet, panelSheet);
+            sheet2 = SheetHelper.GetSheetById(smartsheet, InviteeSheet);
+            sheet3 = SheetHelper.GetSheetById(smartsheet, ExpenseSheet);
+            sheet4 = SheetHelper.GetSheetById(smartsheet, SlideKitSheet);
         }
 
         //[HttpPost("AddEventSettlementData")]
@@ -257,24 +261,24 @@ namespace IndiaEventsWebApi.Controllers
 
 
 
-        [HttpPost("AddEventSettlementData"), DisableRequestSizeLimit]
-        public IActionResult AddEventSettlementData(EventSettlement formData)
+        [HttpPost("AddEventSettlementDataForFirst5"), DisableRequestSizeLimit]
+        public IActionResult AddEventSettlementDataForFirst5(EventSettlement formData)
         {
 
             try
             {
 
-                //string sheetId = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;//sheetId1
-                //string sheetId1 = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;//sheetId4
-                //string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;//sheetId6
-                //long.TryParse(sheetId1, out long parsedSheetId);
-                //long.TryParse(sheetId4, out long parsedSheetId1);
-                //long.TryParse(sheetId6, out long parsedSheetId7);
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
+                string sheetId1 = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
+                string sheetId7 = configuration.GetSection("SmartsheetSettings:Deviation_Process").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+                long.TryParse(sheetId1, out long parsedSheetId1);
+                long.TryParse(sheetId7, out long parsedSheetId7);
 
-                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
-                Sheet sheet1 = SheetHelper.GetSheetById(smartsheet, sheetId4);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                Sheet sheet1 = SheetHelper.GetSheetById(smartsheet, sheetId1);
 
-                Sheet sheet7 = SheetHelper.GetSheetById(smartsheet, sheetId6);
+                Sheet sheet7 = SheetHelper.GetSheetById(smartsheet, sheetId7);
 
 
 
@@ -360,7 +364,7 @@ namespace IndiaEventsWebApi.Controllers
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Local Conveyance"), Value = SheetHelper.NumCheck(formData.TotalLocalConveyance) });
 
 
-                var addedRows = smartsheet.SheetResources.RowResources.AddRows(sheet.Id.Value, new Row[] { newRow });
+                var addedRows = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
 
                 var eventIdColumnId = SheetHelper.GetColumnIdByName(sheet, "EventId/EventRequestId");
                 var eventIdCell = addedRows[0].Cells.FirstOrDefault(cell => cell.ColumnId == eventIdColumnId);
@@ -384,7 +388,7 @@ namespace IndiaEventsWebApi.Controllers
                     var addedRow = addedRows[0];
 
                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                            sheet.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                            parsedSheetId, addedRow.Id.Value, filePath, "application/msword");
                     x++;
 
 
@@ -482,7 +486,7 @@ namespace IndiaEventsWebApi.Controllers
                             newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "InitiatorName"), Value = formData.InitiatorName });
                             newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "Initiator Email"), Value = formData.InitiatorEmail });
 
-                            var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(sheet.Id.Value, new Row[] { newRow7 });
+                            var addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(parsedSheetId7, new Row[] { newRow7 });
 
 
 
@@ -505,9 +509,9 @@ namespace IndiaEventsWebApi.Controllers
                                     var addedRow = addeddeviationrow[0];
 
                                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                            sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                                            parsedSheetId7, addedRow.Id.Value, filePath, "application/msword");
                                     var attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                            sheet.Id.Value, addedRows[0].Id.Value, filePath, "application/msword");
+                                            parsedSheetId, addedRows[0].Id.Value, filePath, "application/msword");
                                     j++;
 
                                     if (System.IO.File.Exists(filePath))
@@ -538,7 +542,7 @@ namespace IndiaEventsWebApi.Controllers
                 var cellsToUpdate = s.Cells.FirstOrDefault(c => c.ColumnId == ColumnId);
                 if (cellsToUpdate != null) { cellsToUpdate.Value = formData.Role; }
 
-                smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRows });
+                smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRows });
 
 
                 return Ok(new
@@ -570,8 +574,141 @@ namespace IndiaEventsWebApi.Controllers
 
 
         [HttpPut("EventSettlementUpdate")]
-        public IActionResult EventSettlementUpdate()
+        public IActionResult EventSettlementUpdate(UpdateAttendees formData)
         {
+            try
+            {
+                if (formData.InviteesData.Count > 0)
+                {
+                    foreach (var formdata in formData.InviteesData)
+                    {
+                        var targetRow = sheet2.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.InviteeId));
+                        if (targetRow != null)
+                        {
+                            Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet2, "Attended?"), Value = formdata.IsAttended });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet2, "Actual Local Conveyance Amount"), Value = formdata.ActualAmount });
+                            IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet2.Id.Value, new Row[] { updateRow });
+                            if (formdata.IsUploadDocument == "Yes")
+                            {
+                                foreach (var p in formdata.UploadDocument)
+                                {
+                                    string[] words = p.Split(':');
+                                    var r = words[0];
+                                    var q = words[1];
+                                    var name = r.Split(".")[0];
+                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var addedRow = updatedRow[0];
+                                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                            sheet2.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                                    if (System.IO.File.Exists(filePath))
+                                    {
+                                        SheetHelper.DeleteFile(filePath);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+                if (formData.PanelData.Count > 0)
+                {
+                    foreach (var formdata in formData.PanelData)
+                    {
+                        var targetRow = sheet1.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.PanelId));
+                        if (targetRow != null)
+                        {
+
+                            Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Attended?"), Value = formdata.IsAttended });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Actual Accomodation Amount"), Value = formdata.ActualAccomodationAmount });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Actual Travel Amount"), Value = formdata.ActualTravelAmount });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Actual Local Conveyance Amount"), Value = formdata.ActualLCAmount });
+
+                            IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet1.Id.Value, new Row[] { updateRow });
+
+                        }
+                    }
+                }
+                if (formData.ExpenseData.Count > 0)
+                {
+                    foreach (var formdata in formData.ExpenseData)
+                    {
+                        var targetRow = sheet3.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.ExpenseId));
+                        if (targetRow != null)
+                        {
+                            Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet3, "Actual Amount"), Value = formdata.ActualAmount });
+
+                            IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet3.Id.Value, new Row[] { updateRow });
+                            if (formdata.IsUploadDocument == "Yes")
+                            {
+                                foreach (var p in formdata.UploadDocument)
+                                {
+
+                                    string[] words = p.Split(':');
+                                    var r = words[0];
+                                    var q = words[1];
+                                    var name = r.Split(".")[0];
+                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var addedRow = updatedRow[0];
+                                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                            sheet3.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                                    if (System.IO.File.Exists(filePath))
+                                    {
+                                        SheetHelper.DeleteFile(filePath);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+                if (formData.SlideKitData.Count > 0)
+                {
+                    foreach (var formdata in formData.SlideKitData)
+                    {
+                        var targetRow = sheet4.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.SlideKitId));
+                        if (targetRow != null)
+                        {
+                            Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.ProductName });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.IndicationsDone });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.BatchNumber });
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.SubjectNameandSurName });
+
+                            IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet4.Id.Value, new Row[] { updateRow });
+                            if (formdata.IsUploadDocument == "Yes")
+                            {
+                                foreach (var p in formdata.UploadDocument)
+                                {
+
+                                    string[] words = p.Split(':');
+                                    var r = words[0];
+                                    var q = words[1];
+                                    var name = r.Split(".")[0];
+                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var addedRow = updatedRow[0];
+                                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                                            sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                                    if (System.IO.File.Exists(filePath))
+                                    {
+                                        SheetHelper.DeleteFile(filePath);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                return Ok(new { Message = "Attendees Updated Successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(new { Message = "" });
         }
     }
