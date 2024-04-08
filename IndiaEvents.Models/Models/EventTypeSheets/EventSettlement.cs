@@ -137,6 +137,11 @@
 
         public List<string>? Files { get; set; }
         public List<string>? DeviationFiles { get; set; }
+        public List<UpdatePanelDetails>? PanelData { get; set; }
+        public List<UpdateInviteeDetails>? InviteesData { get; set; }
+        public List<UpdateExpenseDetails>? ExpenseData { get; set; }
+        public List<UpdateSlideKitDetails>? SlideKitData { get; set; }
+
     }
 
 
@@ -147,6 +152,8 @@
         public int? ActualAccomodationAmount { get; set; }
         public int? ActualTravelAmount { get; set; }
         public int? ActualLCAmount { get; set; }
+        public string? IsUploadDocument { get; set; }
+        public List<string>? UploadDocument { get; set; }
     }
     public class UpdateInviteeDetails
     {
@@ -166,7 +173,8 @@
     public class UpdateSlideKitDetails
     {
         public string? SlideKitId { get; set; }
-        public int? ProductName { get; set; }
+        public string? TrainerOrHcpName { get; set; }
+        public string? ProductName { get; set; }
         public string? IndicationsDone { get; set; }
         public string? BatchNumber { get; set; }
         public string? SubjectNameandSurName { get; set; }
@@ -174,6 +182,21 @@
         public List<string>? UploadDocument { get; set; }
     }
 
+    public class IssuedQuantityDetails
+    {
+        public string? Id { get; set; }
+        public string? ProductName { get; set; }
+        public string? BatchNumber { get; set; }
+        public int? IssuedQuantity { get; set; }
+    }
+
+    public class SamplesConsumedDetails
+    {
+        public string? Id { get; set; }
+        public int? TrainerName { get; set; }
+        public string? ProductName { get; set; }
+        public string? SamplesUsed { get; set; }
+    }
 
 }
 

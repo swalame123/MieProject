@@ -21,6 +21,8 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public int? ActualAccomodationAmount { get; set; }
         public int? ActualTravelAmount { get; set; }
         public int? ActualLCAmount { get; set; }
+        public string? IsUploadDocument { get; set; }
+        public List<string>? UploadDocument { get; set; }
     }
     public class UpdateInviteeDetails
     {

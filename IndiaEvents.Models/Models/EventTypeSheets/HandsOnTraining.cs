@@ -13,7 +13,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     {
         public HandsOnTraining? HandsOnTraining { get; set; }
         public List<EventRequestBrandsList>? EventBrandsList { get; set; }
-        public List<ProductSelection>? ProductSelection { get; set; }
+        //public List<ProductSelection>? ProductSelection { get; set; }
         public List<TrainerDetails>? TrainerDetails { get; set; }
         public List<SlideKitSelectionData>? SlideKitSelectionData { get; set; }
         public List<ProductSelection>? ProductSelections { get; set; }
