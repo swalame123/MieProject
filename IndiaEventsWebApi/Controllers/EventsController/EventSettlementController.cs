@@ -709,7 +709,7 @@ namespace IndiaEventsWebApi.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            return Ok(new { Message = "" });
+            
         }
     }
 }

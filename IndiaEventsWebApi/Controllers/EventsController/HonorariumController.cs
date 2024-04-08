@@ -228,8 +228,8 @@ namespace IndiaEventsWebApi.Controllers
                 {
                     Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
 
-                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Attended?"), Value = formdata.IsAnnualTrainerAgreementValid });
-                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Local Conveyance Amount"), Value = formdata.IsInclidingGst });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Annual Trainer Agreement Valid?"), Value = formdata.IsAnnualTrainerAgreementValid });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Including GST?"), Value = formdata.IsInclidingGst });
                     IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet4.Id.Value, new Row[] { updateRow });
 
 
