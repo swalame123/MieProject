@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using IndiaEventsWebApi.Helper;
+using Serilog;
 
 namespace IndiaEventsWebApi.Controllers
 {
@@ -25,10 +26,7 @@ namespace IndiaEventsWebApi.Controllers
     {
         private readonly string accessToken;
         private readonly IConfiguration configuration;
-        private readonly string clientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
-        private readonly string clientSecret = "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";
-        private string GoogleClientId;
-
+       
 
         //private readonly string sheetId1;
 
@@ -197,8 +195,8 @@ namespace IndiaEventsWebApi.Controllers
             try
             {
 
-                string GoogleclientId = "644106526561-5899nb8044t0k47h4bdu6lk2aebs4g1s.apps.googleusercontent.com";
-                ////200698853522 - 5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com
+                string GoogleclientId = configuration.GetSection("GoogleAuthentication:ClientId").Value;
+
                 string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId1").Value;
                 string sheetId2 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
 
@@ -281,7 +279,7 @@ namespace IndiaEventsWebApi.Controllers
                             var FinanceAccounts = FinanceAccountsCell.Value?.ToString();
                             var SalesCoordinator = SalesCoordinatorCell.Value?.ToString();
                             var FinanceChecker = FinanceCheckerCell.Value?.ToString();
-                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead,FinanceHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceChecker, FinanceAccounts, SalesCoordinator);
+                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, FinanceHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceChecker, FinanceAccounts, SalesCoordinator);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
@@ -296,43 +294,12 @@ namespace IndiaEventsWebApi.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(BadRequest(ex.Message));
             }
 
         }
-        //private string CreateJwt(string username, string email,string role, string reportingmanager, string firstLevelManager, string RBM_BM,string SalesHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury, string FinanceAccounts, string SalesCoordinator)
-        //{
-        //    var jwtTokenHandler = new JwtSecurityTokenHandler();
-        //    var key = Encoding.ASCII.GetBytes("veryveryveryveryverysecret......................");
-        //    var identity = new ClaimsIdentity(new Claim[]
-        //    {
-        //        new Claim(ClaimTypes.Name,username),
-        //        new Claim(ClaimTypes.Email,email),
-        //        new Claim(ClaimTypes.Role,role),
-        //        new Claim("reportingmanager",reportingmanager),
-        //        new Claim("firstLevelManager",firstLevelManager),
-        //        new Claim("RBM_BM",RBM_BM),
-        //        new Claim("SalesHead",SalesHead),
-        //        new Claim("MarketingHead",MarketingHead),
-        //        new Claim("ComplianceHead",compliance),
-        //        new Claim("MedicalAffairsHead",MedicalAffairsHead),
-        //        new Claim("FinanceTreasury",FinanceTreasury),
-        //        new Claim("FinanceAccounts",FinanceAccounts),
-        //        new Claim("SalesCoordinator",SalesCoordinator),
-
-
-        //    });
-        //    var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
-
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = identity,
-        //        Expires = DateTime.Now.AddDays(1),
-        //        SigningCredentials = credentials
-        //    };
-        //    var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-        //    return jwtTokenHandler.WriteToken(token);
-        //}
 
         private string CreateJwt(string username, string email, string role, string reportingmanager, string firstLevelManager, string RBM_BM, string SalesHead,string FinanceHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury,string FinanceChecker, string FinanceAccounts, string SalesCoordinator)
         {

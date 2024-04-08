@@ -101,6 +101,29 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using IndiaEventsWebApi.Models;
 using DinkToPdf.Contracts;
@@ -114,10 +137,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Aspose.Pdf.Plugins;
 using iTextSharp.text.pdf.security;
 using Smartsheet.Api.Models;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-
+int maxRequestLimit = 1073741824;
 
 //builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(60); });
 builder.Services.AddAuthentication(options =>
@@ -137,53 +161,37 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = "http://localhost:5098",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"))
     };
-
-    //options.Events = new JwtBearerEvents
-    //{
-    //    OnAuthenticationFailed = context =>
-    //    {
-
-    //        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-    //        {
-    //            context.Response.Headers.Add("Token-Expired", "true");
-    //        }
-
-    //        return Task.CompletedTask;
-    //    }
-    //};
-    //options.Events = new JwtBearerEvents
-    //{
-    //    OnAuthenticationFailed = context =>
-    //    {
-    //        context.Response.ContentType = "application/json";
-    //        //context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-    //        //Task.CompletedTask;
-    //        //return context.Response.WriteAsJsonAsync("Not Found");
-    //        return context.Response.WriteAsJsonAsync(new
-    //        {
-    //            Message = "Invalid token",
-    //            Error = context.Exception.Message
-    //        }.ToString());
-
-
-    //    }
-    //};
+   
 })
+
 .AddGoogle(options =>
 {
-    options.ClientId = "200698853522-5b3nkgrgal38n7eqjqrrt6biinbt46ca.apps.googleusercontent.com";
-    options.ClientSecret = "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";
+    options.ClientId = "644106526561-5899nb8044t0k47h4bdu6lk2aebs4g1s.apps.googleusercontent.com";
+    options.ClientSecret = "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";
+
 });
 
-//builder.Services.AddCors(option =>
-//{
-//    option.AddPolicy("MyPolicy", builder =>
-//    {
-//        builder.AllowAnyOrigin()
-//        .AllowAnyMethod()
-//        .AllowAnyHeader();
-//    });
-//});
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 1073741824; // 1 GB in bytes
+    options.MaxRequestBodyBufferSize = 1073741824;
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 1073741824; // 1 GB in bytes
+
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(20); //  20 minutes
+});
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("MyPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((hostingContext, config) =>
@@ -196,22 +204,13 @@ IHostBuilder CreateHostBuilder(string[] args) =>
     services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
     services.AddOptions();
     services.Configure<SmartsheetSettings>(configuration.GetSection("SmartsheetSettings"));
-    services.AddCors(option =>
-    {
-        option.AddPolicy("MyPolicy", builder =>
-        {
-            builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-        });
-    });
+
 
 });
 
-
-//Log.Logger = new LoggerConfiguration()
-//    .WriteTo.Console()
-//    .CreateLogger();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 {
@@ -226,7 +225,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 
 var app = builder.Build();
