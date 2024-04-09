@@ -638,7 +638,7 @@ namespace IndiaEventsWebApi.Controllers
                                     var filePath = SheetHelper.testingFile(q, formData.EventId, name);
                                     var addedRow = updatedRow[0];
                                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                            sheet2.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                                            sheet1.Id.Value, addedRow.Id.Value, filePath, "application/msword");
                                     if (System.IO.File.Exists(filePath))
                                     {
                                         SheetHelper.DeleteFile(filePath);
