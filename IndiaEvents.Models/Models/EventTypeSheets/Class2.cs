@@ -45,6 +45,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? InitiatorEmail { get; set; }
         public string? RBMorBMEmail { get; set; }
         public string? SalesHeadEmail { get; set; }
+        public string? FinanceHeadEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
         public string? MarketingHeadEmail { get; set; }
         public string? FinanceEmail { get; set; }
