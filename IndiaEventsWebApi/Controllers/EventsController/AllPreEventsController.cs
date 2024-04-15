@@ -1835,9 +1835,9 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
                 List<string> DeviationNames = new()
                 {
-                    $"30DaysDeviationFile*{formDataList.MedicalUtilityData.EventOpen30daysFile}",
-                    $"7DaysDeviationFile*{formDataList.MedicalUtilityData.EventWithin7daysFile}",
-                    $"AgregateSpendDeviationFile*{formDataList.MedicalUtilityData.UploadDeviationFile}"
+                    $"30DaysDeviationFile:{formDataList.MedicalUtilityData.EventOpen30daysFile}",
+                    $"7DaysDeviationFile:{formDataList.MedicalUtilityData.EventWithin7daysFile}",
+                    $"AgregateSpendDeviationFile:{formDataList.MedicalUtilityData.UploadDeviationFile}"
                 };
 
                 if (EventOpen30Days == "Yes" || EventWithin7Days == "Yes" || UploadDeviationFile == "Yes")
@@ -1888,8 +1888,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
                                 IList<Row> addeddeviationrow = smartsheet.SheetResources.RowResources.AddRows(sheet7.Id.Value, new Row[] { newRow7 });
 
-                                string filename = fn.Split("*")[1].Split(".")[0];
-                                string filePath = SheetHelper.testingFile(bs, filename);
+                                string filename = bs.Split("*")[0].Split(".")[0];
+                                string filePath = SheetHelper.testingFile(bs.Split("*")[1], filename);
 
 
 
