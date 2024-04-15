@@ -1153,8 +1153,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 {
 
 
-                    string filename = "Brochure";
-                    string filePath = SheetHelper.testingFile(formDataList.HcpConsultant.BrochureFile, filename);
+                    string filename = formDataList.HcpConsultant.BrochureFile.Split(":")[0].Split(".")[0];
+                    string filePath = SheetHelper.testingFile(formDataList.HcpConsultant.BrochureFile.Split(":")[1], filename);
 
 
                     Row addedRow = addedRows[0];
