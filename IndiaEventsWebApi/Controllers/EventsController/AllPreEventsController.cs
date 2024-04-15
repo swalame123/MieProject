@@ -1174,15 +1174,15 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 {
                     List<string> DeviationNames = new List<string>
                     {
-                        $"30DaysDeviationFile*{formDataList.HcpConsultant.EventOpen30days}",
-                        $"7DaysDeviationFile*{formDataList.HcpConsultant.EventWithin7days}",
-                        $"AgregateSpendDeviationFile*{formDataList.HcpConsultant.AggregateDeviationFiles}"
+                        $"30DaysDeviationFile:{formDataList.HcpConsultant.EventOpen30days}",
+                        $"7DaysDeviationFile:{formDataList.HcpConsultant.EventWithin7days}",
+                        $"AgregateSpendDeviationFile:{formDataList.HcpConsultant.AggregateDeviationFiles}"
                     };
                     string eventId = val;
                     foreach (var name in DeviationNames)
                     {
-                        string[] nameSplit = name.Split("*");
-                        string[] y = nameSplit[1].Split(':');
+                        //string[] nameSplit = name.Split(":");
+                        string[] y = name.Split(':');
                         //string[] y = name.Split(':');
                         string fn = y[0];
                         string bs = y[1];
@@ -1232,8 +1232,10 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                                 {
                                     foreach (var file in formDataList.HcpConsultant.AggregateDeviationFiles)
                                     {
-                                        string filename = nameSplit[1].Split(".")[0];
-                                        string filePath = SheetHelper.testingFile(file, filename);
+                                        //string filename = nameSplit[1].Split(".")[0];
+                                        string bFile = file.Split("*")[1];
+                                        string bName = file.Split("*")[0].Split(".")[0];
+                                        string filePath = SheetHelper.testingFile(bFile, bName);
                                         Row addedRow = addeddeviationrow[0];
                                         Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                                 sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
@@ -1247,8 +1249,11 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                                 }
                                 else
                                 {
-                                    string filename = nameSplit[1].Split(".")[0];
-                                    string filePath = SheetHelper.testingFile(bs, filename);
+                                    //string filename = nameSplit[1].Split(".")[0];
+                                    string bFile = bs.Split("*")[1];
+                                    string bName = bs.Split("*")[0].Split(".")[0];
+                                    string filePath = SheetHelper.testingFile(bFile, bName);
+                                    //string filePath = SheetHelper.testingFile(bs, filename);
 
                                     Row addedRow = addeddeviationrow[0];
 
@@ -1416,6 +1421,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpPost("StallFabricationPreEvent"), DisableRequestSizeLimit]
         public IActionResult StallFabricationPreEvent(AllStallFabrication formDataList)
