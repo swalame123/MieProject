@@ -46,13 +46,13 @@ namespace IndiaEventsWebApi.Controllers
                 Sheet sheet1 = SheetHelper.GetSheetById(smartsheet, sheetId1);
                 Sheet sheet7 = SheetHelper.GetSheetById(smartsheet, sheetId7);
 
-                StringBuilder addedHcpData = new ();
+                StringBuilder addedHcpData = new();
                 int addedHcpDataNo = 1;
 
                 foreach (var i in formData.HcpRoles)
                 {
                     string rowData = $"{addedHcpDataNo}. Name:{i.HcpName} | Role:{i.HcpRole} |Code:{i.MisCode} | HCP Type:{i.GOorNGO}| Including GST:{i.IsInclidingGst}| Agreement Amount:{i.AgreementAmount} |Annual Trainer Agreement Valid: {i.IsAnnualTrainerAgreementValid} ";
-                                        addedHcpData.AppendLine(rowData);
+                    addedHcpData.AppendLine(rowData);
                     addedHcpDataNo++;
                 }
                 string panalist = addedHcpData.ToString();
@@ -105,7 +105,7 @@ namespace IndiaEventsWebApi.Controllers
                     string r = words[0];
                     string q = words[1];
                     string name = r.Split(".")[0];
-                    string filePath = SheetHelper.testingFile(q, eventId, name);
+                    string filePath = SheetHelper.testingFile(q, name);
                     Row addedRow = addedRows[0];
                     Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                            sheet.Id.Value, addedRow.Id.Value, filePath, "application/msword");
@@ -147,10 +147,10 @@ namespace IndiaEventsWebApi.Controllers
                             string[] words = p.Split(':');
                             string r = words[0];
                             string q = words[1];
-                            string name = r.Split(".")[0];
-                            string filePath = SheetHelper.testingFile(q, eventId, name);
+                            string name = r.Split("*")[0];
+                            string filePath = SheetHelper.testingFile(q, name);
                             Row addedRow = addeddeviationrow[0];
-                            Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(                                   sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                            Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
 
 
                             if (System.IO.File.Exists(filePath))
@@ -177,7 +177,7 @@ namespace IndiaEventsWebApi.Controllers
                     Cell? cellToUpdate = targetRow.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
                     if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
                     smartsheet.SheetResources.RowResources.UpdateRows(sheet1.Id.Value, new Row[] { updateRow });
-                                    }
+                }
                 return Ok(new
                 { Message = "Data added successfully." });
             }
@@ -215,10 +215,10 @@ namespace IndiaEventsWebApi.Controllers
                             string q = words[1];
                             string val = formdata.EventId;
                             string name = r.Split(".")[0];
-                            string filePath = SheetHelper.testingFile(q, val, name);
+                            string filePath = SheetHelper.testingFile(q, name);
                             Row addedRow = targetRow;
-                            Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(                                    sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
-                                                        if (System.IO.File.Exists(filePath))
+                            Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                            if (System.IO.File.Exists(filePath))
                             {
                                 SheetHelper.DeleteFile(filePath);
                             }
@@ -228,13 +228,13 @@ namespace IndiaEventsWebApi.Controllers
                 }
                 return Ok(new { Message = " Updated Successfully" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error($"Error occured on HonorariumController method {ex.Message} at {DateTime.Now}");
                 Log.Error(ex.StackTrace);
                 return BadRequest(ex.Message);
             }
-           
+
         }
     }
 }

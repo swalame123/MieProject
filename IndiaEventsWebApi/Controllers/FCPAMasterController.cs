@@ -95,7 +95,7 @@ namespace IndiaEventsWebApi.Controllers
                             if (attachment != null)
                             {
                                 var name = attachment.Name;
-                                if (name.Split(".")[0] == "-FCPA")
+                                if (name.Split(".")[0].Contains("FCPA"))
                                 {
                                     var AID = (long)attachment.Id;
                                     var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet.Id.Value, AID);
@@ -126,9 +126,6 @@ namespace IndiaEventsWebApi.Controllers
             }
             else if (SelectedType == "Trainer")
             {
-
-
-
 
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, SheetId1);
                 Column misCodeColumn = sheet.Columns.FirstOrDefault(column => column.Title == "MisCode");
@@ -163,7 +160,7 @@ namespace IndiaEventsWebApi.Controllers
                             if (attachment != null)
                             {
                                 var name = attachment.Name;
-                                if (name.Split(".")[0] == "-FCPA")
+                                if (name.Split(".")[0].Contains("FCPA"))
                                 {
                                     var AID = (long)attachment.Id;
                                     var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet.Id.Value, AID);
@@ -227,7 +224,7 @@ namespace IndiaEventsWebApi.Controllers
                                 if (attachment != null)
                                 {
                                     var name = attachment.Name;
-                                    if (name.Split(".")[0] == "-FCPA")
+                                    if (name.Split(".")[0].Contains("FCPA"))
                                     {
                                         var AID = (long)attachment.Id;
                                         var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet.Id.Value, AID);
@@ -339,7 +336,7 @@ namespace IndiaEventsWebApi.Controllers
                     foreach (var i in a.Data)
                     {
                         var Fcpaname = i.Name;
-                        if (Fcpaname.Split(".")[0] == "-FCPA")
+                        if (Fcpaname.Split(".")[0].Contains("FCPA"))
                         {
                             long id = i.Id.Value;
                             smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
@@ -361,7 +358,7 @@ namespace IndiaEventsWebApi.Controllers
                 var addedrow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
                 var name = "FCPA";
                 var val = "";
-                var filePath = SheetHelper.testingFile(formdata.UploadFile, val, name);
+                var filePath = SheetHelper.testingFile(formdata.UploadFile, name);
                 var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                             sheet.Id.Value, targetRow.Id.Value, filePath, "application/msword");
                 if (System.IO.File.Exists(filePath))

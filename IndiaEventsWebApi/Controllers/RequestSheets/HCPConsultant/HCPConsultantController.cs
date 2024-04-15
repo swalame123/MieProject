@@ -480,7 +480,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     {
 
                         var filename = "AgreementFile";
-                        var filePath = SheetHelper.testingFile(formdata.AgreementFile, value, filename);
+                        var filePath = SheetHelper.testingFile(formdata.AgreementFile, filename);
 
 
 

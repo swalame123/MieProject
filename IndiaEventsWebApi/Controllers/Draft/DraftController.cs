@@ -52,7 +52,7 @@ namespace IndiaEventsWebApi.Controllers.Draft
                         var r = words[0];
                         var q = words[1];
                         var name = r.Split(".")[0];
-                        var filePath = SheetHelper.testingFile(q, val, name);
+                        var filePath = SheetHelper.testingFile(q, name);
                         var addedRow = addedRows[0];
                         var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile((long)sheet.Id, addedRow.Id.Value, filePath, "application/msword");
                         if (System.IO.File.Exists(filePath))

@@ -361,7 +361,7 @@ namespace IndiaEventsWebApi.Controllers
                     string r = words[0];
                     string q = words[1];
                     string name = r.Split(".")[0];
-                    string filePath = SheetHelper.testingFile(q, val, name);
+                    string filePath = SheetHelper.testingFile(q, name);
                     Row addedRow = addedRows[0];
                     Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet.Id.Value, addedRow.Id.Value, filePath, "application/msword");
                     x++;
@@ -373,10 +373,17 @@ namespace IndiaEventsWebApi.Controllers
                 if (formData.EventOpen30Days == "Yes" || formData.EventLessThan5Days == "Yes" || formData.IsDeviationUpload == "Yes")
                 {
                     List<string> DeviationNames = new List<string>();
+                    //foreach (var p in formData.DeviationFiles)
+                    //{
+                    //    string[] words = p.Split(':');
+                    //    string r = words[0];
+                    //    DeviationNames.Add(r);
+                    //}
                     foreach (var p in formData.DeviationFiles)
                     {
-                        string[] words = p.Split(':');
-                        string r = words[0];
+
+                        string[] words = p.Split(':')[0].Split("*");
+                        string r = words[1];
                         DeviationNames.Add(r);
                     }
                     foreach (var deviationname in DeviationNames)
@@ -462,8 +469,8 @@ namespace IndiaEventsWebApi.Controllers
                                 string q = words[1];
                                 if (deviationname == r)
                                 {
-                                    string name = r.Split(".")[0];
-                                    string filePath = SheetHelper.testingFile(q, val, name);
+                                    string name = r.Split("*")[0];
+                                    string filePath = SheetHelper.testingFile(q,  name);
                                     Row addedRow = addeddeviationrow[0];
                                     Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
                                     Attachment attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet.Id.Value, addedRows[0].Id.Value, filePath, "application/msword");
@@ -531,7 +538,7 @@ namespace IndiaEventsWebApi.Controllers
                                     var r = words[0];
                                     var q = words[1];
                                     var name = r.Split(".")[0];
-                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var filePath = SheetHelper.testingFile(q, name);
                                     var addedRow = updatedRow[0];
                                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                             sheet2.Id.Value, addedRow.Id.Value, filePath, "application/msword");
@@ -569,7 +576,7 @@ namespace IndiaEventsWebApi.Controllers
                                     var r = words[0];
                                     var q = words[1];
                                     var name = r.Split(".")[0];
-                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var filePath = SheetHelper.testingFile(q, name);
                                     var addedRow = updatedRow[0];
                                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                             sheet1.Id.Value, addedRow.Id.Value, filePath, "application/msword");
@@ -604,7 +611,7 @@ namespace IndiaEventsWebApi.Controllers
                                     var r = words[0];
                                     var q = words[1];
                                     var name = r.Split(".")[0];
-                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var filePath = SheetHelper.testingFile(q, name);
                                     var addedRow = updatedRow[0];
                                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                             sheet3.Id.Value, addedRow.Id.Value, filePath, "application/msword");
@@ -642,7 +649,7 @@ namespace IndiaEventsWebApi.Controllers
                                     var r = words[0];
                                     var q = words[1];
                                     var name = r.Split(".")[0];
-                                    var filePath = SheetHelper.testingFile(q, formData.EventId, name);
+                                    var filePath = SheetHelper.testingFile(q, name);
                                     var addedRow = updatedRow[0];
                                     var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
                                             sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
@@ -667,5 +674,7 @@ namespace IndiaEventsWebApi.Controllers
             }
 
         }
+
+
     }
 }

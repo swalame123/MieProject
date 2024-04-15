@@ -1,4 +1,72 @@
-﻿  List<Row> newRows = new();
+﻿
+
+
+
+internal static string testingFile(string base64, string eventId, string name)
+        {
+            byte[] fileBytes = Convert.FromBase64String(base64);
+            //var fileSize = (fileBytes.Length) / 1048576;
+            var folderName = Path.Combine("Resources", "Images");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+            string fileType = GetFileType(fileBytes);
+            string fileName = eventId + "-" + name + "." + fileType;
+            string filePath = Path.Combine(pathToSave, fileName);
+            File.WriteAllBytes(filePath, fileBytes);
+            return filePath;
+        }
+
+
+
+
+
+
+
+
+
+
+ foreach (var p in formDataList.class1.DeviationFiles)
+                    {
+
+                        string[] words = p.Split(':')[0].Split("*");
+                        string r = words[1];
+                        DeviationNames.Add(r);
+                    }
+
+
+
+
+
+        string[] nameSplit = p.Split("*");
+        string[] words = nameSplit[1].Split(':');
+        string r = words[0];
+        string q = words[1];
+        if (deviationname == r)
+        {
+            string name = nameSplit[0];
+            string filePath = SheetHelper.testingFile(q, val, name);
+            Row addedRow = addeddeviationrow[0];
+            Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+            Attachment attachmentinmain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet1.Id.Value, addedRows[0].Id.Value, filePath, "application/msword");
+            j++;
+            if (System.IO.File.Exists(filePath))
+            {
+                SheetHelper.DeleteFile(filePath);
+            }
+        }
+    
+
+
+
+
+
+
+
+
+  List<Row> newRows = new();
 
                 foreach (var formdata in formDataList.RequestBrandsList)
                 {

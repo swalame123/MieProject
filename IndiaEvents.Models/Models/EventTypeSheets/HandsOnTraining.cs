@@ -73,6 +73,8 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? FirstLevelEmail { get; set; }
         public string? MedicalAffairsEmail { get; set; }
         public string? Role { get; set; }
+        public string? IsMslSelected { get; set; }
+        public string? IsProtocolsForThreadsAndFillers { get; set; }
         //public string? ReportingManagerEmail { get; set; }
         //public string? Currency { get; set; }
         //public string? OtherCurrencyType { get; set; }
@@ -84,7 +86,8 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         //public string? IfscCode { get; set; }
         //public string? EmailId { get; set; }
 
-        public EventRequestBenificiaryDetails? BenificiaryDetailsData { get; set; }
+        public EventRequestBenificiaryDetails? VenueBenificiaryDetailsData { get; set; }
+        public EventRequestBenificiaryDetails? AnaestheticBenificiaryDetailsData { get; set; }
         public List<string>? Files { get; set; }
         public string? IsDeviationUpload { get; set; }
         public int? EventOpen30dayscount { get; set; }
@@ -106,6 +109,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? TrainerType { get; set; }
         //public string? UploadNOC { get; set; }
         public string? Rationale { get; set; }
+        public string? IsAnnualTrainerAgreementValid { get; set; }
 
         public DateTime? FCPAIssueDate { get; set; }
         // public string? UploadTrainerConsent { get; set; }
@@ -188,8 +192,8 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? IsBtcorBte { get; set; }
         public int? LocalConveyanceAmountExcludingTax { get; set; }
         public int? LocalConveyanceAmountIncludingTax { get; set; }
-        public string? IsProtocolsForThreadsAndFillers { get; set; }
-        public string? IsMslSelected { get; set; }
+       
+       
         public string? EmployeeCode { get; set; }
         public string? Designation { get; set; }
         public List<string>? AttenderFiles { get; set; }

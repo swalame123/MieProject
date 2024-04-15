@@ -508,7 +508,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     {
                         Cell VendorCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == misCodeColumn.Id);
                         Cell DateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == DateColumn.Id);
-                        var date = DateCell?.Value?.ToString();
+                        string? date = DateCell?.Value?.ToString();
 
 
                         var TaxResidenceCertificateDate = !string.IsNullOrEmpty(date) ? $"{"TaxResidenceCertificateDate"}:{date}" : "No";
@@ -581,52 +581,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
         }
 
 
-        private long GetColumnIdByName(Sheet sheet, string columnname)
-        {
-            foreach (var column in sheet.Columns)
-            {
-                if (column.Title == columnname)
-                {
-                    return column.Id.Value;
-                }
-            }
-            return 0;
-        }
-        private string GetFileType(byte[] bytes)
-        {
-
-            if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xD8)
-            {
-                return "jpg";
-            }
-            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "%PDF")
-            {
-                return "pdf";
-            }
-            else if (bytes.Length >= 3 && Encoding.UTF8.GetString(bytes, 0, 3) == "GIF")
-            {
-                return "gif";
-            }
-            else if (bytes.Length >= 8 && Encoding.UTF8.GetString(bytes, 0, 8) == "PNG\r\n\x1A\n")
-            {
-                return "png";
-            }
-            else if (bytes.Length >= 4 && Encoding.UTF8.GetString(bytes, 0, 4) == "RIFF" && Encoding.UTF8.GetString(bytes, 8, 4) == "WEBP")
-            {
-                return "webp";
-            }
-            else if (bytes.Length >= 4 && (bytes[0] == 0xD0 && bytes[1] == 0xCF && bytes[2] == 0x11 && bytes[3] == 0xE0))
-            {
-                return "doc"; // .doc format
-            }
-            else if (bytes.Length >= 4 && (bytes[0] == 0x50 && bytes[1] == 0x4B && bytes[2] == 0x03 && bytes[3] == 0x04))
-            {
-                return "docx"; // .docx format
-            }
-            else
-            {
-                return "unknown";
-            }
-        }
+       
     }
 }
