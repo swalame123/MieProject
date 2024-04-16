@@ -12,7 +12,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
     [ApiController]
     public class AddorDeleteExpenseController : ControllerBase
     {
-         private readonly string accessToken;
+        private readonly string accessToken;
         private readonly IConfiguration configuration;
         private readonly SmartsheetClient smartsheet;
 
@@ -30,11 +30,11 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
         }
 
-        [HttpPost("AddPanelist"), DisableRequestSizeLimit]
-        public IActionResult AddPanelist(AddNewExpense formdata)
+        [HttpPost("AddExpense"), DisableRequestSizeLimit]
+        public IActionResult AddExpense(AddNewExpense formdata)
         {
             Sheet sheet6 = SheetHelper.GetSheetById(smartsheet, sheetId6);
-            Sheet sheet7 = SheetHelper.GetSheetById(smartsheet, sheetId7);
+
 
             try
             {
@@ -49,13 +49,10 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 };
                 newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Expense"), Value = formdata.ExpenseType });
                 newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "EventId/EventRequestID"), Value = formdata.EventId });
-                //newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "AmountExcludingTax?"), Value = formdata.ExpenseAmountExcludingTax });
-
-
-                //newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "AmountExcludingTax?"), Value = formdata.AmountExcludingTax });
+               
                 newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Amount Excluding Tax"), Value = formdata.ExcludingTaxAmount });
 
-                newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Amount"), Value = formdata.AmountExcludingTax });
+                newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "Amount"), Value = formdata.AmountIncludingTax });
                 newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTC/BTE"), Value = formdata.BtcorBte });
                 //newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BudgetAmount"), Value = formdata.BudgetAmount });
                 //newRow6.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet6, "BTCAmount"), Value = formdata.BtcAmount });

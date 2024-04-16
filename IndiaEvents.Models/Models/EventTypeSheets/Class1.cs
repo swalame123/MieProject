@@ -29,8 +29,6 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? RBMorBM { get; set; }
         public string? Sales_Head { get; set; }
         public string? FinanceHead { get; set; }
-
-
         public string? MedicalAffairsEmail { get; set; }
         public string? ReportingManagerEmail { get; set; }
         public string? FirstLevelEmail { get; set; }
@@ -38,7 +36,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         //public string? FinanceTreasuryEmail { get; set; }
         public string? FinanceAccountsEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
-     
+
         public string? Role { get; set; }
 
 
@@ -50,13 +48,13 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
 
         public List<string>? Files { get; set; }
         public List<string>? DeviationFiles { get; set; }
-        
+
     }
     public class Class11
     {
         public string? EventId { get; set; }
 
-      
+
         public List<IFormFile>? File { get; set; }
     }
 }

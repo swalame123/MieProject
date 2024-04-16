@@ -38,6 +38,24 @@ namespace IndiaEventsWebApi.Helper
             int result;
             return int.TryParse(val, out result) ? result : 0;
         }
+        public static object MisCodeCheck(string val)
+        {
+            if (string.IsNullOrEmpty(val))
+            {
+                return 0;
+            }
+
+            int result;
+            if(int.TryParse(val, out result))
+            {
+                return result;
+            }
+            else
+            {
+                return val;
+            }
+            //return int.TryParse(val, out result) ? result : 0;
+        }
 
         // get sheet using sheetId
         internal static Sheet GetSheetById(SmartsheetClient smartsheet, string sheetId)
@@ -69,7 +87,7 @@ namespace IndiaEventsWebApi.Helper
 
 
         // file convert from base 64 to file  and store in local
-        internal static string testingFile(string base64,  string name)
+        internal static string testingFile(string base64, string name)
         {
             byte[] fileBytes = Convert.FromBase64String(base64);
             //var fileSize = (fileBytes.Length) / 1048576;
@@ -85,7 +103,7 @@ namespace IndiaEventsWebApi.Helper
             File.WriteAllBytes(filePath, fileBytes);
             return filePath;
         }
-        
+
 
 
         // delete local file if file exists

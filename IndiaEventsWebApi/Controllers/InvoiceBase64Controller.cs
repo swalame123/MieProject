@@ -35,9 +35,6 @@ namespace IndiaEventsWebApi.Controllers
 
 
         [HttpPost("GetInvoiceBase64")]
-
-
-
         public IActionResult GetInvoiceBase64(InvoiceIds formdata)
         {
             Dictionary<string, string> idUrlMap = new Dictionary<string, string>();
@@ -67,8 +64,11 @@ namespace IndiaEventsWebApi.Controllers
                             }
                         }
                     }
+                    var resultArray = idUrlMap.Select(kv => new { Id = kv.Key, Url = kv.Value }).ToArray();
+                    return Ok(resultArray);
                 }
-                if (formdata.PanelistId.Count > 0)
+
+                else if (formdata.PanelistId.Count > 0)
                 {
                     Sheet sheet = SheetHelper.GetSheetById(smartsheet, PanelSheet);
                     foreach (var id in formdata.PanelistId)
@@ -81,21 +81,25 @@ namespace IndiaEventsWebApi.Controllers
 
                             foreach (var attachment in attachments.Data)
                             {
-                                if (attachment != null && attachment.Name.Contains("Invoice"))
+
+                                if (attachment != null && attachment.Name.ToLower().Contains("agreement"))
                                 {
                                     long AID = (long)attachment.Id;
-                                    string Name = attachment.Name.Split(".")[0];
+                                    string Name = attachment.Name;
                                     Attachment file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet.Id.Value, AID);
-                                    idUrlMap[id] = file.Url;
+
+                                    idUrlMap[Name + "*" + id] = file.Url;
                                 }
                             }
                         }
                     }
+                    var resultArray = idUrlMap.Select(kv => new {Id = kv.Key.Split("*")[1], Name = kv.Key.Split("*")[0], Url = kv.Value }).ToArray();
+                    return Ok(resultArray);
                 }
+                return Ok();
 
-                var resultArray = idUrlMap.Select(kv => new { Id = kv.Key, Url = kv.Value }).ToArray();
 
-                return Ok(resultArray);
+
             }
             catch (Exception ex)
             {
