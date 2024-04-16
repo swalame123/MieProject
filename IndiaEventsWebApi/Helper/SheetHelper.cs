@@ -679,6 +679,34 @@ namespace IndiaEventsWebApi.Helper
 
         //                }
 
+        internal static List<object> ConvertToJsonObject(string data)
+        {
+            string[] lines = data.Split('\n');
+            List<object> resultList = new List<object>();
+
+            foreach (var line in lines)
+            {
+                string[] values = line.Split('|');
+
+                if (values.Length > 0)
+                {
+                    Dictionary<string, string> item = new Dictionary<string, string>();
+
+                    foreach (var value in values)
+                    {
+                        string[] keyValue = value.Trim().Split(':');
+                        if (keyValue.Length == 2)
+                        {
+                            item.Add(keyValue[0].Trim(), keyValue[1].Trim());
+                        }
+                    }
+
+                    resultList.Add(item);
+                }
+            }
+
+            return resultList;
+        }
 
 
 
