@@ -39,6 +39,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
             smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+
             sheetId1 = configuration.GetSection("SmartsheetSettings:Class1").Value;
             sheetId2 = configuration.GetSection("SmartsheetSettings:EventRequestBrandsList").Value;
             sheetId3 = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;

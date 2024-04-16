@@ -465,11 +465,11 @@ namespace IndiaEventsWebApi.Controllers
                             foreach (var p in formData.DeviationFiles)
                             {
                                 string[] words = p.Split(':');
-                                string r = words[0];
+                                string r = words[0].Split("*")[1];
                                 string q = words[1];
                                 if (deviationname == r)
                                 {
-                                    string name = r.Split("*")[0];
+                                    string name = words[0].Split("*")[0];
                                     string filePath = SheetHelper.testingFile(q,  name);
                                     Row addedRow = addeddeviationrow[0];
                                     Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
