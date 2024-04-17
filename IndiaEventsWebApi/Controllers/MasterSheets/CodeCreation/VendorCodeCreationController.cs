@@ -154,7 +154,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
 
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
@@ -295,7 +295,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });

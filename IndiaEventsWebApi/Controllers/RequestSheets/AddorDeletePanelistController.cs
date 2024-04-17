@@ -46,7 +46,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                     Cells = new List<Cell>()
                 };
 
-                newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "MISCode"), Value = formData.MISCode });
+                newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "MISCode"), Value = SheetHelper.MisCodeCheck(formData.MISCode )});
                 newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "HcpRole"), Value = formData.HCPRole });
                 newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "HCPName"), Value = formData.TrainerName });
                 newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "TrainerCode"), Value = formData.TrainerCode });

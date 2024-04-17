@@ -137,7 +137,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "TrainerName"), Value = formData.TrainerName });
                     //newRow.Cells.Add(new Cell  { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Trainer Code"),  Value = formData.TrainerCode });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Trainer Brand"), Value = formData.TrainerBrand });
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Division"), Value = formData.Division });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Speciality"), Value = formData.Speciality });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Qualification"), Value = formData.Qualification });
@@ -256,7 +256,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "TrainerName"), Value = formData.TrainerName });
                 //newRow.Cells.Add(new Cell  { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Trainer Code"),  Value = formData.TrainerCode });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Trainer Brand"), Value = formData.TrainerBrand });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = formData.MisCode });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Division"), Value = formData.Division });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Speciality"), Value = formData.Speciality });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Qualification"), Value = formData.Qualification });

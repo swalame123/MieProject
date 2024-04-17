@@ -463,7 +463,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets.HCPConsultant
                     newRow.Cells = new List<Cell>();
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "HCP Name"), Value = formdata.HCPName });
 
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "MIS Code"), Value = formdata.MisCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "MIS Code"), Value = SheetHelper.MisCodeCheck(formdata.MisCode )});
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "GO/N-GO"), Value = formdata.GO_NGO });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Country"), Value = formdata.Country });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "How many days since the parent event Completes"), Value = formdata.How_many_days_since_the_parent_event_completes });
