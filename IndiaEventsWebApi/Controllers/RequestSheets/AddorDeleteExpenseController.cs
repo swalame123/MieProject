@@ -160,6 +160,35 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             { Message = " Success!" });
         }
 
+        [HttpDelete("DeleteData/{RowInvId}")]
+        public IActionResult DeleteData(string RowInvId)
+        {
+            try
+            {
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
+                long.TryParse(sheetId, out long parsedSheetId);
+
+                Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
+                //Row existingRow = GetRowById(smartsheet, parsedSheetId, RowInvId);
+                Row existingRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == RowInvId));
+
+
+                if (existingRow == null)
+                {
+                    return NotFound($"Row with id {RowInvId} not found.");
+                }
+                var Id = (long)existingRow.Id;
+                smartsheet.SheetResources.RowResources.DeleteRows(parsedSheetId, new long[] { Id }, true);
+
+                return Ok(new { Message = "Data Deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }

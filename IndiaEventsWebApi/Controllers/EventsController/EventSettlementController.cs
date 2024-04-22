@@ -318,10 +318,10 @@ namespace IndiaEventsWebApi.Controllers
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Brands"), Value = formData.Brands });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Invitees"), Value = Invitee });
                 //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, ""), Value = formData.TotalBudgetAmount });
-                //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, ""), Value = formData.TotalBudgetAmount });
-                //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, ""), Value = formData.TotalBudgetAmount });
-                //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, ""), Value = formData.TotalBudgetAmount });
-                //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, ""), Value = formData.TotalBudgetAmount });
+                //newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, ""), Value = formData.ActualExpenseAmount });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Advance Amount"), Value = formData.AdvanceProvided });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Expense BTC"), Value = formData.TotalBtcAmount });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Expense BTE"), Value = formData.TotalBteAmount });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Panelists"), Value = formData.Panalists });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "SlideKits"), Value = formData.SlideKits });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Expenses"), Value = Expense });
@@ -348,7 +348,7 @@ namespace IndiaEventsWebApi.Controllers
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Expense"), Value = SheetHelper.NumCheck(formData.TotalExpenses) });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Travel & Accommodation Amount"), Value = SheetHelper.NumCheck(formData.TotalTravelAndAccomodationSpend) });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Honorarium Amount"), Value = SheetHelper.NumCheck(formData.TotalHonorariumSpend) });
-                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Budget"), Value = SheetHelper.NumCheck(formData.TotalSpend) });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Budget"), Value = formData.TotalBudgetAmount });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Total Actual"), Value = SheetHelper.NumCheck(formData.TotalActuals) });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Advance Utilized For Event"), Value = SheetHelper.NumCheck(formData.AdvanceUtilizedForEvents) });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pay Back Amount To Company"), Value = SheetHelper.NumCheck(formData.PayBackAmountToCompany) });
@@ -630,44 +630,44 @@ namespace IndiaEventsWebApi.Controllers
                         }
                     }
                 }
-                if (formData.SlideKitData.Count > 0)
-                {
-                    foreach (var formdata in formData.SlideKitData)
-                    {
-                        Sheet sheet4 = SheetHelper.GetSheetById(smartsheet, SlideKitSheet);
-                        var targetRow = sheet4.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.SlideKitId));
-                        if (targetRow != null)
-                        {
-                            Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.ProductName });
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.IndicationsDone });
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.BatchNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.SubjectNameandSurName });
+                //if (formData.SlideKitData.Count > 0)
+                //{
+                //    foreach (var formdata in formData.SlideKitData)
+                //    {
+                //        Sheet sheet4 = SheetHelper.GetSheetById(smartsheet, SlideKitSheet);
+                //        var targetRow = sheet4.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == formdata.SlideKitId));
+                //        if (targetRow != null)
+                //        {
+                //            Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                //            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.ProductName });
+                //            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.IndicationsDone });
+                //            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.BatchNumber });
+                //            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Actual Amount"), Value = formdata.SubjectNameandSurName });
 
-                            IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet4.Id.Value, new Row[] { updateRow });
-                            if (formdata.IsUploadDocument == "Yes")
-                            {
-                                foreach (var p in formdata.UploadDocument)
-                                {
+                //            IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet4.Id.Value, new Row[] { updateRow });
+                //            if (formdata.IsUploadDocument == "Yes")
+                //            {
+                //                foreach (var p in formdata.UploadDocument)
+                //                {
 
-                                    string[] words = p.Split(':');
-                                    var r = words[0];
-                                    var q = words[1];
-                                    var name = r.Split(".")[0];
-                                    var filePath = SheetHelper.testingFile(q, name);
-                                    var addedRow = updatedRow[0];
-                                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
-                                            sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
-                                    if (System.IO.File.Exists(filePath))
-                                    {
-                                        SheetHelper.DeleteFile(filePath);
-                                    }
-                                }
+                //                    string[] words = p.Split(':');
+                //                    var r = words[0];
+                //                    var q = words[1];
+                //                    var name = r.Split(".")[0];
+                //                    var filePath = SheetHelper.testingFile(q, name);
+                //                    var addedRow = updatedRow[0];
+                //                    var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                //                            sheet4.Id.Value, addedRow.Id.Value, filePath, "application/msword");
+                //                    if (System.IO.File.Exists(filePath))
+                //                    {
+                //                        SheetHelper.DeleteFile(filePath);
+                //                    }
+                //                }
 
-                            }
-                        }
-                    }
-                }
+                //            }
+                //        }
+                //    }
+                //}
 
                 return Ok(new { Message = "Attendees Updated Successfully" });
             }

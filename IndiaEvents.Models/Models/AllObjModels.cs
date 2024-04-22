@@ -13,14 +13,5 @@ namespace IndiaEventsWebApi.Models
         public List<EventRequestExpenseSheet>? EventRequestExpenseSheet { get; set; }
         // public IFormFile? formFile { get; set; }
     }
-    public class UpdateAllObjModels
-    {
-        public Class1? Class1 { get; set; }
-        public List<UpdateEventRequestBrandsList>? RequestBrandsList { get; set; }
-        public List<UpdateEventRequestInvitees>? EventRequestInvitees { get; set; }
-        public List<UpdateEventRequestsHcpRole>? EventRequestHcpRole { get; set; }
-        public List<UpdateEventRequestHCPSlideKit>? EventRequestHCPSlideKits { get; set; }
-        public List<UpdateEventRequestExpenseSheet>? EventRequestExpenseSheet { get; set; }
-        // public IFormFile? formFile { get; set; }
-    }
+  
 }

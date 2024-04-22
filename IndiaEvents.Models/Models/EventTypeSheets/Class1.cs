@@ -50,6 +50,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public List<string>? DeviationFiles { get; set; }
 
     }
+
+   
     public class Class11
     {
         public string? EventId { get; set; }

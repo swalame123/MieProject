@@ -71,11 +71,13 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     public class PanelDetails
     {
         public string? MISCode { get; set; }
-        public string? HCPRole { get; set; }
+        public string? HcpRole { get; set; }
         public string? HCPRoleName { get; set; }
+        public string? SpeakerCode { get; set; }
+        public string? TrainerCode { get; set; }
 
         public string? HcpName { get; set; }
-        public string? HcpCode { get; set; }
+        //public string? HcpCode { get; set; }
         public string? HcpQualification { get; set; }
         public string? HcpCountry { get; set; }
         public string? Speciality { get; set; }
@@ -139,7 +141,6 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? SlideKitDocument { get; set; }
         public string? IsUpload { get; set; }
         public List<string>? FilesToUpload { get; set; }
-
 
     }
 
