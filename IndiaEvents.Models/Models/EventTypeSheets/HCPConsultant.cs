@@ -54,6 +54,14 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? TravelAmount { get; set; }
         public string? AccomAmount { get; set; }
         public string? LcAmount { get; set; }
+        //public string? LcBtcorBte { get; set; }
+        //public string? TravelBtcorBte { get; set; }
+        //public string? AccomodationBtcorBte { get; set; }
+        //public int? HonarariumAmountExcludingTax { get; set; }
+        //public int? TravelExcludingTax { get; set; }
+        //public int? AccomdationExcludingTax { get; set; }
+        //public int? LocalConveyanceExcludingTax { get; set; }
+
         public string? RegistrationAmount { get; set; }
         public string? BudgetAmount { get; set; }
         public string? Legitimate { get; set; }

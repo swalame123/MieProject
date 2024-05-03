@@ -55,6 +55,8 @@ namespace IndiaEventsWebApi.Controllers
                 Column fcpaSignOffDateColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Sign Off Date");
                 Column fcpaExpiryDateColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Expiry Date");
                 Column fcpaValidColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Valid?");
+                Column AggregateSpendOnMedicalUtility = sheet.Columns.FirstOrDefault(column => column.Title == "Aggregate Honorarium Spent");
+                Column AggregateSpendasHCPConsultant = sheet.Columns.FirstOrDefault(column => column.Title == "Aggregate Accommodation Spent");
 
                 //var uniqueVal = "";
                 //if (formdata.MisCode == "NA")
@@ -85,6 +87,8 @@ namespace IndiaEventsWebApi.Controllers
                         Cell fcpaSignOffDateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaSignOffDateColumn.Id);
                         Cell fcpaExpiryDateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaExpiryDateColumn.Id);
                         Cell fcpaValidCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaValidColumn.Id);
+                        Cell AggregateSpendOnMedicalUtilityCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == AggregateSpendOnMedicalUtility.Id);
+                        Cell AggregateSpendasHCPConsultantCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == AggregateSpendasHCPConsultant.Id);
 
 
                         var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet.Id.Value, existingRow.Id.Value, null);
@@ -113,8 +117,11 @@ namespace IndiaEventsWebApi.Controllers
                                 FCPASignOffDate = fcpaSignOffDateCell?.Value,
                                 FCPAExpiryDate = fcpaExpiryDateCell?.Value,
                                 FCPAValid = fcpaValidCell?.Value,
+                                AggregateHonorariumSpent = AggregateSpendOnMedicalUtilityCell?.Value,
+                                AggregateAccommodationSpent = AggregateSpendasHCPConsultantCell?.Value,
                                 Attachments = attachments,
-                                Url = url
+                                Url = url,
+                                base64 = SheetHelper.UrlToBaseValue(url)
 
                             });
                         }
@@ -132,6 +139,8 @@ namespace IndiaEventsWebApi.Controllers
                 Column fcpaSignOffDateColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Sign Off Date");
                 Column fcpaExpiryDateColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Expiry Date");
                 Column fcpaValidColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Valid?");
+                Column AggregateSpendOnMedicalUtility = sheet.Columns.FirstOrDefault(column => column.Title == "Aggregate spend on Accomodation");
+                Column AggregateSpendasHCPConsultant = sheet.Columns.FirstOrDefault(column => column.Title == "Aggregate Honorarium Spent ");
 
 
                 if (misCodeColumn != null)
@@ -151,6 +160,8 @@ namespace IndiaEventsWebApi.Controllers
                         Cell fcpaSignOffDateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaSignOffDateColumn.Id);
                         Cell fcpaExpiryDateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaExpiryDateColumn.Id);
                         Cell fcpaValidCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaValidColumn.Id);
+                        Cell AggregateSpendOnMedicalUtilityCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == AggregateSpendOnMedicalUtility.Id);
+                        Cell AggregateSpendasHCPConsultantCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == AggregateSpendasHCPConsultant.Id);
 
 
                         var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet.Id.Value, existingRow.Id.Value, null);
@@ -178,8 +189,11 @@ namespace IndiaEventsWebApi.Controllers
                                 FCPASignOffDate = fcpaSignOffDateCell?.Value,
                                 FCPAExpiryDate = fcpaExpiryDateCell?.Value,
                                 FCPAValid = fcpaValidCell?.Value,
+                                AggregateSpendonAccomodation = AggregateSpendOnMedicalUtilityCell?.Value,
+                                AggregateHonorariumSpent = AggregateSpendasHCPConsultantCell?.Value,
                                 Attachments = attachments,
-                                Url = url
+                                Url = url,
+                                base64 = SheetHelper.UrlToBaseValue(url)
 
                             });
                         }
@@ -196,6 +210,8 @@ namespace IndiaEventsWebApi.Controllers
                     Column fcpaSignOffDateColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Sign Off Date");
                     Column fcpaExpiryDateColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Expiry Date");
                     Column fcpaValidColumn = sheet.Columns.FirstOrDefault(column => column.Title == "FCPA Valid?");
+                    Column AggregateSpendOnMedicalUtility = sheet.Columns.FirstOrDefault(column => column.Title == "Aggregate Accommodation Spent");
+                    Column AggregateSpendasHCPConsultant = sheet.Columns.FirstOrDefault(column => column.Title == "Aggregate Honorarium Spent");
 
 
                     if (misCodeColumn != null)
@@ -215,6 +231,8 @@ namespace IndiaEventsWebApi.Controllers
                             Cell fcpaSignOffDateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaSignOffDateColumn.Id);
                             Cell fcpaExpiryDateCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaExpiryDateColumn.Id);
                             Cell fcpaValidCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == fcpaValidColumn.Id);
+                            Cell AggregateSpendOnMedicalUtilityCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == AggregateSpendOnMedicalUtility.Id);
+                            Cell AggregateSpendasHCPConsultantCell = existingRow.Cells.FirstOrDefault(cell => cell.ColumnId == AggregateSpendasHCPConsultant.Id);
 
 
                             var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet.Id.Value, existingRow.Id.Value, null);
@@ -242,8 +260,11 @@ namespace IndiaEventsWebApi.Controllers
                                     FCPASignOffDate = fcpaSignOffDateCell?.Value,
                                     FCPAExpiryDate = fcpaExpiryDateCell?.Value,
                                     FCPAValid = fcpaValidCell?.Value,
+                                    AggregatespendonAccommodation = AggregateSpendOnMedicalUtilityCell?.Value,
+                                    AggregateHonorariumSpent = AggregateSpendasHCPConsultantCell?.Value,
                                     Attachments = attachments,
-                                    Url = url
+                                    Url = url,
+                                    base64 = SheetHelper.UrlToBaseValue(url)
 
                                 });
                             }

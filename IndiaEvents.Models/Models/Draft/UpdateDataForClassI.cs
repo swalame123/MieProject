@@ -17,14 +17,14 @@ namespace IndiaEvents.Models.Models.Draft
         public List<UpdateInviteeSelection> InviteeSelection { get; set; }
         public List<UpdateExpenseSelection> ExpenseSelection { get; set; }
         public string IsDeviationUpload { get; set; }
-        public string DeviationFiles { get; set; }
+        public List<string> DeviationFiles { get; set; }
     }
 
     public class UpdateBrandSelection
     {
         public string Id { get; set; }
         public string BrandName { get; set; }
-        public int PercentageAllocation { get; set; }
+        public string? PercentageAllocation { get; set; }
         public string ProjectId { get; set; }
     }
 
@@ -32,6 +32,8 @@ namespace IndiaEvents.Models.Models.Draft
     {
         public string Id { get; set; }
         public string EventTopic { get; set; }
+        public string EventType { get; set; }
+        public DateTime EventDate { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public string VenueName { get; set; }
@@ -44,6 +46,10 @@ namespace IndiaEvents.Models.Models.Draft
         public string Invitees { get; set; }
         public string MIPLInvitees { get; set; }
         public string Expenses { get; set; }
+        public string Sales_Head { get; set; }
+        public string FinanceHead { get; set; }
+        public string InitiatorName { get; set; }
+        public string Initiator_Email { get; set; }
         public int? TotalExpenseBTC { get; set; }
         public int? TotalExpenseBTE { get; set; }
         public int? TotalHonorariumAmount { get; set; }
@@ -53,9 +59,12 @@ namespace IndiaEvents.Models.Models.Draft
         public int? TotalLocalConveyance { get; set; }
         public int? TotalTravelAmount { get; set; }
         public int? TotalExpense { get; set; }
+        public int? EventOpen30dayscount { get; set; }
 
         public string IsFilesUpload { get; set; }
         public List<UpdateFiles> Files { get; set; }
+
+       
 
     }
 
@@ -78,6 +87,8 @@ namespace IndiaEvents.Models.Models.Draft
         public string IsLocalConveyance { get; set; }
         public string LocalConveyanceType { get; set; }
         public string Speciality { get; set; }
+        public string Designation { get; set; }
+        public string HCPType { get; set; }
         public int LocalConveyanceAmountIncludingTax { get; set; }
         public int LocalConveyanceAmountExcludingTax { get; set; }
     }
@@ -111,8 +122,11 @@ namespace IndiaEvents.Models.Models.Draft
         public int TravelAmountIncludingTax { get; set; }
         public int TravelExcludingTax { get; set; }
         public string TravelBtcorBte { get; set; }
+        public string OthersType { get; set; }
         public int LocalConveyanceIncludingTax { get; set; }
         public int LocalConveyanceExcludingTax { get; set; }
+        public int FinalAmount { get; set; }
+        public int AgreementAmount { get; set; }
         public string LcBtcorBte { get; set; }
         public int AccomdationIncludingTax { get; set; }
         public int AccomdationExcludingTax { get; set; }
@@ -128,7 +142,7 @@ namespace IndiaEvents.Models.Models.Draft
         public string IsGlobalFMVCheck { get; set; }
         public string SwiftCode { get; set; }
         public string IsFilesUpload { get; set; }
-        public List<UpdateFiles> Files { get; set; }
+        public List<string> Files { get; set; }
     }
 
     public class UpdateSlideKitSelection
@@ -140,7 +154,7 @@ namespace IndiaEvents.Models.Models.Draft
         public string SlideKitType { get; set; }
         public string SlideKitOption { get; set; }
         public string IsFilesUpload { get; set; }
-        public List<UpdateFiles> Files { get; set; }
+        public List<string> Files { get; set; }
     }
 
     public class UpdateFiles

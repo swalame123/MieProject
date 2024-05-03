@@ -32,6 +32,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? EventBrouchereUpload { get; set; }
         public string? Invoice_QuotationUpload { get; set; }
         public string? IsDeviationUpload { get; set; }
+
         public string? IsAdvanceRequired { get; set; }
         public string? AdvanceAmount { get; set; }
         public string? TotalExpenseBTC { get; set; }

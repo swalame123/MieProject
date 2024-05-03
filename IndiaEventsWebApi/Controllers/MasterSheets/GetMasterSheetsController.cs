@@ -1,4 +1,5 @@
 ﻿using IndiaEventsWebApi.Helper;
+using IndiaEventsWebApi.Models.RequestSheets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -173,6 +174,59 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 return BadRequest(ex.Message);
             }
         }
+
+
+
+
+        [HttpGet("TestVenueSelectionChecklistMaster")]
+        public IActionResult TestVenueSelectionChecklistMaster()
+        {
+            try
+            {
+                string sheetId = configuration.GetSection("SmartsheetSettings:BrandMaster").Value;
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
+
+                List<EventRequestBrandsList> eventRequestBrandsList = sheetData.Select(row =>
+                    new EventRequestBrandsList
+                    {
+                        BrandName = row.ContainsKey("BrandName") ? row["BrandName"].ToString() : null,
+                        PercentAllocation = row.ContainsKey("BrandId") ? row["BrandId"].ToString() : null,
+                        ProjectId = row.ContainsKey("ProjectId") ? row["ProjectId"].ToString() : null
+                    }).ToList();
+
+                return Ok(eventRequestBrandsList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpGet("GetIndicationsMasterData")]
         public IActionResult GetIndicationsMasterData()
         {

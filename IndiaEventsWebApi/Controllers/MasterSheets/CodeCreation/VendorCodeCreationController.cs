@@ -1,4 +1,5 @@
-﻿using IndiaEventsWebApi.Helper;
+﻿using IndiaEvents.Models.Models.RequestSheets;
+using IndiaEventsWebApi.Helper;
 using IndiaEventsWebApi.Models;
 using IndiaEventsWebApi.Models.MasterSheets.CodeCreation;
 using Microsoft.AspNetCore.Http;
@@ -114,36 +115,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var IsPanCardDocument = !string.IsNullOrEmpty(formData.PanCardDocument) ? "Yes" : "No";
                     var IsChequeDocument = !string.IsNullOrEmpty(formData.ChequeDocument) ? "Yes" : "No";
                     var IsTaxResidenceCertificate = !string.IsNullOrEmpty(formData.TaxResidenceCertificate) ? "Yes" : "No";
-                    //var FCPA = !string.IsNullOrEmpty(formDataList.HcpConsultant.FcpaFile) ? "Yes" : "No";
-
-
-                   // var IsPanCardDocument = "";
-                   // var IsChequeDocument = "";
-                   // var IsTaxResidenceCertificate = "";
-                    //if (formData.PanCardDocument != "")
-                    //{
-                    //    IsPanCardDocument = "Yes";
-                    //}
-                    //else
-                    //{
-                    //    IsPanCardDocument = "No";
-                    //}
-                    //if (formData.ChequeDocument != "")
-                    //{
-                    //    IsChequeDocument = "Yes";
-                    //}
-                    //else
-                    //{
-                    //    IsChequeDocument = "No";
-                    //}
-                    //if (formData.TaxResidenceCertificate != "")
-                    //{
-                    //    IsTaxResidenceCertificate = "Yes";
-                    //}
-                    //else
-                    //{
-                    //    IsTaxResidenceCertificate = "No";
-                    //}
+                    
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
 
@@ -152,17 +124,18 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
 
 
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Vendor Account"), Value = formData.VendorAccount });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
 
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MIS Code"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Beneficiary Name"), Value = formData.BenificiaryName });
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pan Card Name"), Value = formData.PanCardName });
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pan Number"), Value = formData.PanNumber });
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Account Number"), Value = formData.BankAccountNumber });
-                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IFSC Code"), Value = formData.IfscCode });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BankAccountNumber"), Value = formData.BankAccountNumber });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Email "), Value = formData.Email });
+                    newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Name"), Value = formData.BankName });
 
 
                     newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Cheque Document"), Value = IsChequeDocument });
@@ -294,13 +267,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Name"), Value = formData.InitiatorNameName });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Initiator Email"), Value = formData.InitiatorEmail });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Vendor Account"), Value = formData.VendorAccount });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MIS Code"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Beneficiary Name"), Value = formData.BenificiaryName });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pan Card Name"), Value = formData.PanCardName });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Pan Number"), Value = formData.PanNumber });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Account Number"), Value = formData.BankAccountNumber });
-                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IFSC Code"), Value = formData.IfscCode });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "VendorAccount"), Value = formData.VendorAccount });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "MisCode"), Value = SheetHelper.MisCodeCheck(formData.MisCode) });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "BeneficiaryName"), Value = formData.BenificiaryName });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanCardName"), Value = formData.PanCardName });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PanNumber"), Value = formData.PanNumber });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IfscCode"), Value = formData.IfscCode });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Swift Code"), Value = formData.SwiftCode });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "IBN Number"), Value = formData.IbnNumber });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Email "), Value = formData.Email });
@@ -308,6 +280,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Requestor"), Value = formData.InitiatorEmail });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Tax Residence Certificate Date"), Value = formData.TaxResidenceCertificateDate });
                 updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Finance Checker"), Value = formData.FinanceChecker });
+                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Name"), Value = formData.BankName });
 
                 var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
 
@@ -333,8 +306,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         long Id = (long)a.Id;
                         var Fullname = a.Name.Split(".");
                         var splitName = Fullname[0];
-                      
-                        if(splitName == " ChequeDocument")
+
+                        if (splitName == " ChequeDocument")
                         {
 
                             smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
@@ -379,8 +352,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         long Id = (long)a.Id;
                         var Fullname = a.Name.Split(".");
                         var splitName = Fullname[0];
-                       
-                       
+
+
                         if (splitName == " PanCardDocument")
                         {
 
@@ -426,8 +399,8 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                         long Id = (long)a.Id;
                         var Fullname = a.Name.Split(".");
                         var splitName = Fullname[0];
-                        
-                      
+
+
                         if (splitName == " TaxResidenceCertificate")
                         {
 
@@ -527,7 +500,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                                 var AID = (long)attachment.Id;
                                 var Name = attachment.Name;
                                 var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(p, AID);
-                                url = file.Url;                                
+                                url = file.Url;
                                 using (HttpClient client = new HttpClient())
                                 {
                                     var fileContent = client.GetByteArrayAsync(url).Result;
@@ -553,6 +526,146 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
 
 
 
+
+        //[HttpGet("GetRowsDataInHcpMasterByMisCode")]
+        //public IActionResult GetRowsDataInHcpMasterByMisCode(string? MisCode)
+        //{
+        //    try
+        //    {
+        //        if (MisCode != null)
+        //        {
+        //            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+        //            if (smartsheet == null)
+        //            {
+        //                // Log error: "SmartsheetClient is null"
+        //                return BadRequest("SmartsheetClient is null");
+        //            }
+
+        //            string sheetId = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
+        //            if (sheetId == null)
+        //            {
+        //                // Log error: "SheetId is null"
+        //                return BadRequest("SheetId is null");
+        //            }
+
+        //            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+        //            if (sheet == null)
+        //            {
+        //                // Log error: "Sheet is null"
+        //                return BadRequest("Sheet is null");
+        //            }
+
+        //            List<string> columnNames = new List<string>();
+        //            foreach (Column column in sheet.Columns)
+        //            {
+        //                columnNames.Add(column.Title);
+        //            }
+
+        //            int miscodeColumnIndex = columnNames.IndexOf("MisCode");
+        //            if (miscodeColumnIndex == -1)
+        //            {
+        //                // Log error: "MisCode column not found"
+        //                return BadRequest("MisCode column not found");
+        //            }
+
+        //            List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+
+        //            foreach (Row row in sheet.Rows)
+        //            {
+        //                Cell miscodeCell = row.Cells.FirstOrDefault(cell => cell.ColumnId == sheet.Columns[miscodeColumnIndex].Id);
+
+        //                if (miscodeCell != null && miscodeCell.Value != null && miscodeCell.Value.ToString().Contains(MisCode))
+        //                {
+        //                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+
+        //                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+        //                    {
+        //                        rowData[columnNames[i]] = row.Cells[i].Value;
+        //                    }
+
+        //                    sheetData.Add(rowData);
+        //                }
+        //            }
+
+        //            return Ok(sheetData);
+        //        }
+        //        else
+        //        {
+        //            return Ok(new { Message = "False" });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception
+        //        return StatusCode(500, "An error occurred: " + ex.Message);
+        //    }
+        //}
+
+        [HttpGet("GetRowsDataInVendorMasterByMisCode")]
+        public IActionResult GetRowsDataInVendorMasterByMisCode(string? MisCode)
+        {
+            try
+            {
+
+                SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                List<EventRequestBenificiaryDetails> benificiaryDetailsList = new List<EventRequestBenificiaryDetails>();
+                string sheetId = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
+
+                if (MisCode != null)
+                {
+
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                    List<string> columnNames = sheet.Columns.Select(column => column.Title).ToList();
+                    int miscodeColumnIndex = columnNames.IndexOf("MisCode");
+
+
+                    foreach (Row row in sheet.Rows)
+                    {
+                        Cell miscodeCell = row.Cells.FirstOrDefault(cell => cell.ColumnId == sheet.Columns[miscodeColumnIndex].Id);
+
+                        if (miscodeCell != null && miscodeCell.Value != null && miscodeCell.Value.ToString() == MisCode)
+                        {
+                            EventRequestBenificiaryDetails rowData = new()
+                            {
+                                Currency = SheetHelper.GetValueByColumnName(row, columnNames, "Currency"),
+                                EnterCurrencyType = SheetHelper.GetValueByColumnName(row, columnNames, "EnterCurrencyType"),
+                                BenificiaryName = SheetHelper.GetValueByColumnName(row, columnNames, "BeneficiaryName"),
+                                BankAccountNumber = SheetHelper.GetValueByColumnName(row, columnNames, "BankAccountNumber"),
+                                BankName = SheetHelper.GetValueByColumnName(row, columnNames, "Bank Name"),
+                                NameasPerPAN = SheetHelper.GetValueByColumnName(row, columnNames, "PanCardName"),
+                                PANCardNumber = SheetHelper.GetValueByColumnName(row, columnNames, "PanNumber"),
+                                IFSCCode = SheetHelper.GetValueByColumnName(row, columnNames, "IfscCode"),
+                                IbnNumber = SheetHelper.GetValueByColumnName(row, columnNames, "IBN Number"),
+                                SwiftCode = SheetHelper.GetValueByColumnName(row, columnNames, "Swift Code"),
+                                TaxResidenceCertificateDate = Convert.ToDateTime(SheetHelper.GetValueByColumnName(row, columnNames, "Tax Residence Certificate Date")),
+                                EmailID = SheetHelper.GetValueByColumnName(row, columnNames, "Email ")
+                            };
+
+                            benificiaryDetailsList.Add(rowData);
+                        }
+                    }
+                }
+                else
+                {
+                    return Ok(new { Message = "False" });
+                }
+
+                if (benificiaryDetailsList.Count > 0)
+                {
+
+                    return Ok(benificiaryDetailsList);
+                }
+                else
+                {
+                    return Ok(new { Message = "False" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
 
@@ -581,6 +694,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
         }
 
 
-       
+
     }
 }

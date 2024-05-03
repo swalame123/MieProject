@@ -1,4 +1,40 @@
-﻿Data change 
+﻿
+            StringBuilder addedExpencesBTE = new();
+            int addedExpencesNoBTE = 1;
+            foreach (var formdata in formDataList.EventRequestExpenseSheet)
+            {
+                if (formdata.BtcorBte.ToLower() == "bte")
+                {
+                    string rowData = $"{addedExpencesNoBTE}. {formdata.Expense} | Amount: {formdata.Amount}";
+                    addedExpencesBTE.AppendLine(rowData);
+                    addedExpencesNoBTE++;
+                }
+            }
+            string BTEExpense = addedExpencesBTE.ToString();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Data change 
+
 
 
 

@@ -1,4 +1,5 @@
-﻿using IndiaEventsWebApi.Models.RequestSheets;
+﻿using IndiaEvents.Models.Models.RequestSheets;
+using IndiaEventsWebApi.Models.RequestSheets;
 
 namespace IndiaEventsWebApi.Models.EventTypeSheets
 {
@@ -49,7 +50,8 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? Initiator_Email { get; set; }
         public List<string>? Files { get; set; }
         public string? IsDeviationUpload { get; set; }
-        public List<string>? DeviationFiles { get; set; }
+        public List<EventRequestDeviationsData>? DeviationDetails { get; set; }
+        //public List<string>? DeviationFiles { get; set; }
         //public string? Role { get; set; }
     }
     public class WebinarPayload

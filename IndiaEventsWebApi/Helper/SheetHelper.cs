@@ -9,6 +9,7 @@ using System.Web.Http.Results;
 using Aspose.Pdf.Operators;
 using IndiaEventsWebApi.Helper;
 using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
+using NPOI.HPSF;
 
 namespace IndiaEventsWebApi.Helper
 {
@@ -26,6 +27,40 @@ namespace IndiaEventsWebApi.Helper
             }
             return 0;
         }
+        public static string GetValueByColumnName(Row row, List<string> columnNames, string columnName)
+        {
+            int columnIndex = columnNames.IndexOf(columnName);
+            return columnIndex != -1 ? row.Cells[columnIndex].Value?.ToString() : null;
+        }
+        //UrlToBase64
+        //public static string UrlToBaseValue(string url)
+        //{
+
+        //    using HttpClient client = new();
+        //    byte[] fileContent = client.GetByteArrayAsync(url).Result;
+        //    string base64String = Convert.ToBase64String(fileContent);
+
+
+        //    return base64String;
+        //}
+        public static string UrlToBaseValue(string url)
+        {
+            using HttpClient client = new();
+            byte[] fileContent = client.GetByteArrayAsync(url).Result;
+            string base64String = Convert.ToBase64String(fileContent);
+            string fileType = GetFileType(fileContent);
+            string prefix = $"data:application/{fileType};base64,";
+            string prefixedBase64String = prefix + base64String;
+            return prefixedBase64String;
+        }
+
+        private static string GetFileType(string url)
+        {
+            string filename = Path.GetFileName(url);
+            string extension = Path.GetExtension(filename);
+            return extension.TrimStart('.').ToLower();
+        }
+
 
         // number check 
         public static int NumCheck(string val)
@@ -46,7 +81,7 @@ namespace IndiaEventsWebApi.Helper
             }
 
             int result;
-            if(int.TryParse(val, out result))
+            if (int.TryParse(val, out result))
             {
                 return result;
             }

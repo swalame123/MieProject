@@ -10,6 +10,7 @@
         public string? PanCardName { get; set; }
         public string? PanNumber { get; set; }
         public string? BankAccountNumber { get; set; }
+        public string? BankName { get; set; }
         public string? IfscCode { get; set; }
         public string? SwiftCode { get; set; }
         public string? IbnNumber { get; set; }
@@ -30,6 +31,8 @@
         public string? PanCardName { get; set; }
         public string? PanNumber { get; set; }
         public string? BankAccountNumber { get; set; }
+        public string? BankName { get; set; }
+
         public string? IfscCode { get; set; }
         public string? SwiftCode { get; set; }
         public string? IbnNumber { get; set; }
