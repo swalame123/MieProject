@@ -84,6 +84,8 @@
         public string? Amount { get; set; }
         public string? AmountExcludingTax { get; set; }
         public string? BtcorBte { get; set; }
+        public int? BudgetAmount { get; set; }
+        public int? ActualAmount { get; set; }
 
     }
 

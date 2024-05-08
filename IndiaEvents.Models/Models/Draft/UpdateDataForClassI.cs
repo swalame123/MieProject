@@ -19,7 +19,14 @@ namespace IndiaEvents.Models.Models.Draft
         public string IsDeviationUpload { get; set; }
         public List<string> DeviationFiles { get; set; }
     }
-
+    public class UpdateDataForStall
+    {
+        public UpdateStallFabricationDetails EventDetails { get; set; }
+        public List<UpdateBrandSelection> BrandSelection { get; set; }
+        public List<UpdateExpenseSelection> ExpenseSelection { get; set; }
+        public string IsDeviationUpload { get; set; }
+        public List<string> DeviationFiles { get; set; }
+    }
     public class UpdateBrandSelection
     {
         public string Id { get; set; }
@@ -64,7 +71,36 @@ namespace IndiaEvents.Models.Models.Draft
         public string IsFilesUpload { get; set; }
         public List<UpdateFiles> Files { get; set; }
 
-       
+
+
+    }
+    public class UpdateStallFabricationDetails
+    {
+        public string Id { get; set; }
+        public string EventTopic { get; set; }
+        public string EventType { get; set; }
+        public DateTime EventStartDate { get; set; }
+        public DateTime EventEndDate { get; set; }
+        public string ClassIIIEventCode { get; set; }
+        public string BrandsData { get; set; }
+        public string ExpenseData { get; set; }
+        public string ExpenseDataBTE { get; set; }
+
+        public string Sales_Head { get; set; }
+        public string FinanceHead { get; set; }
+        public string InitiatorName { get; set; }
+        public string Initiator_Email { get; set; }
+        public int? TotalExpenseBTC { get; set; }
+        public int? TotalExpenseBTE { get; set; }
+        public int? TotalBudget { get; set; }
+        public int? TotalExpense { get; set; }
+        public string? IsAdvanceRequired { get; set; }
+        public int? AdvanceAmount { get; set; }
+        public int? EventOpen30dayscount { get; set; }
+        public string? IsFilesUpload { get; set; }
+        public List<UpdateFiles>? Files { get; set; }
+
+
 
     }
 
@@ -163,4 +199,24 @@ namespace IndiaEvents.Models.Models.Draft
         public string? FileBase64 { get; set; }
     }
 
+
+
+    public class GetEventDetails
+    {
+        public string? EventDate { get; set; }
+        public string? EventTopic { get; set; }
+        public string? ClassIIIEventCode { get; set; }
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
+        public string? State { get; set; }
+        public string? VenueName { get; set; }
+        public string? City { get; set; }
+        public string? Brands { get; set; }
+        public string? Panelists { get; set; }
+        public string? SlideKits { get; set; }
+        public string? Invitees { get; set; }
+        public string? MIPLInvitees { get; set; }
+        public string? Expenses { get; set; }
+        public string? MeetingType { get; set; }
+    }
 }

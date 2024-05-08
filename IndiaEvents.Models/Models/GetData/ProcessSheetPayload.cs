@@ -11,7 +11,6 @@ namespace IndiaEvents.Models.Models.GetData
     {
         [JsonProperty("Event Topic")]
         public string EventTopic { get; set; }
-
         [JsonProperty("EventId/EventRequestId")]
         public string EventIdEventRequestId { get; set; }
         public string EventType { get; set; }
@@ -19,68 +18,49 @@ namespace IndiaEvents.Models.Models.GetData
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public string VenueName { get; set; }
-
         [JsonProperty("Event End Date")]
         public string EventEndDate { get; set; }
         public string State { get; set; }
         public string City { get; set; }
         public string InitiatorName { get; set; }
-
         [JsonProperty("Initiator Email")]
         public string InitiatorEmail { get; set; }
         //public DateTime CreatedOn { get; set; }
-
         [JsonProperty("Created Date - Helper")]
         public string CreatedDateHelper { get; set; }
         //public DateTime Modified { get; set; }
         public string IsAdvanceRequired { get; set; }
-
         [JsonProperty("PRE-RBM/BM Approval")]
         public string PRERBMBMApproval { get; set; }
-
         [JsonProperty("PRE-RBM/BM Approval Date")]
         public string PRERBMBMApprovalDate { get; set; }
-
         [JsonProperty("PRE-Sales Head Approval")]
         public string PRESalesHeadApproval { get; set; }
-
         [JsonProperty("PRE-Sales Head Approval Date")]
         public string PRESalesHeadApprovalDate { get; set; }
-
         [JsonProperty("PRE-Marketing Head Approval")]
         public string PREMarketingHeadApproval { get; set; }
-
         [JsonProperty("PRE-Marketing Head Approval Date")]
         public string PREMarketingHeadApprovalDate { get; set; }
         public string agreement { get; set; }
-
         [JsonProperty("PRE-Finance Treasury Approval Date")]
         public string PREFinanceTreasuryApprovalDate { get; set; }
-
         [JsonProperty("PRE-Medical Affairs Head Approval")]
         public string PREMedicalAffairsHeadApproval { get; set; }
-
         [JsonProperty("PRE-Medical Affairs Head Approval Date")]
         public string PREMedicalAffairsHeadApprovalDate { get; set; }
-
         [JsonProperty("PRE-Sales Coordinator Approval")]
         public string PRESalesCoordinatorApproval { get; set; }
-
         [JsonProperty("PRE-Sales Coordinator Approval Date")]
         public string PRESalesCoordinatorApprovalDate { get; set; }
-
         [JsonProperty("PRE-Compliance Approval")]
         public string PREComplianceApproval { get; set; }
-
         [JsonProperty("PRE-Compliance Approval Date")]
         public string PREComplianceApprovalDate { get; set; }
-
         [JsonProperty("Event Request Status")]
         public string EventRequestStatus { get; set; }
-
         [JsonProperty("Event Approved Date")]
         public string EventApprovedDate { get; set; }
-
         [JsonProperty("Honorarium Request Status")]
         public string HonorariumRequestStatus { get; set; }
 
@@ -378,5 +358,315 @@ namespace IndiaEvents.Models.Models.GetData
         public string Comments { get; set; }
     }
 
+    public class ApprovedSpeakersGetPayload
+    {
+        public string SpeakerId { get; set; }
+        public string SpeakerName { get; set; }
 
+        [JsonProperty("Speaker Code")]
+        public string SpeakerCode { get; set; }
+
+        [JsonProperty("Speaker Category")]
+        public string SpeakerCategory { get; set; }
+        public string Speciality { get; set; }
+
+        [JsonProperty("Speaker Type")]
+        public string SpeakerType { get; set; }
+        public string MisCode { get; set; }
+
+        [JsonProperty("Aggregate Honorarium Limit")]
+        public int AggregateHonorariumLimit { get; set; }
+
+        [JsonProperty("Aggregate Accommodataion Limit")]
+        public int AggregateAccommodataionLimit { get; set; }
+
+        [JsonProperty("Aggregate Honorarium Spent")]
+        public int AggregateHonorariumSpent { get; set; }
+
+        [JsonProperty("Aggregate Accommodation Spent")]
+        public int AggregateAccommodationSpent { get; set; }
+
+        [JsonProperty("Aggregate Spent on Medical Utility")]
+        public int AggregateSpentonMedicalUtility { get; set; }
+
+        [JsonProperty("Aggregate Spent as HCP Consultant")]
+        public int AggregateSpentasHCPConsultant { get; set; }
+
+        [JsonProperty("FCPA Sign Off Date")]
+        public string FCPASignOffDate { get; set; }
+
+        [JsonProperty("FCPA Expiry Date")]
+        public string FCPAExpiryDate { get; set; }
+
+        [JsonProperty("FCPA Valid?")]
+        public string FCPAValid { get; set; }
+
+        [JsonProperty("TRC Date")]
+        public object TRCDate { get; set; }
+
+        [JsonProperty("TRC Valid?")]
+        public object TRCValid { get; set; }
+
+        [JsonProperty("Total Spend on Speaker")]
+        public object TotalSpendonSpeaker { get; set; }
+
+        [JsonProperty("Aggregate Exhausted?")]
+        public object AggregateExhausted { get; set; }
+        public string Division { get; set; }
+        public string Qualification { get; set; }
+        public string Address { get; set; }
+        public string State { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
+
+        [JsonProperty("Contact Number")]
+        public string ContactNumber { get; set; }
+
+        [JsonProperty("ABM Name (Requestor)")]
+        public object ABMNameRequestor { get; set; }
+        public object SpeakerCategoryId { get; set; }
+
+        [JsonProperty("Speaker Criteria")]
+        public string SpeakerCriteria { get; set; }
+
+        [JsonProperty("Is Active")]
+        public string IsActive { get; set; }
+        public object CVdocument { get; set; }
+        public string Created { get; set; }
+
+        [JsonProperty("Created Date - Helper")]
+        public string CreatedDateHelper { get; set; }
+
+        [JsonProperty("Sales Alert Trigger")]
+        public object SalesAlertTrigger { get; set; }
+
+        [JsonProperty("Medical Affairs Alert Trigger")]
+        public object MedicalAffairsAlertTrigger { get; set; }
+
+        [JsonProperty("Sales Head Approval")]
+        public string SalesHeadApproval { get; set; }
+
+        [JsonProperty("Sales Head Approval Date")]
+        public object SalesHeadApprovalDate { get; set; }
+
+        [JsonProperty("Medical Affairs Head Approval")]
+        public string MedicalAffairsHeadApproval { get; set; }
+
+        [JsonProperty("Medical Affairs Head Approval Date")]
+        public object MedicalAffairsHeadApprovalDate { get; set; }
+
+        [JsonProperty("Speaker Criteria Details")]
+        public object SpeakerCriteriaDetails { get; set; }
+
+        [JsonProperty("Sales Head")]
+        public string SalesHead { get; set; }
+
+        [JsonProperty("Medical Affairs Head")]
+        public string MedicalAffairsHead { get; set; }
+
+        [JsonProperty("Initiator Name")]
+        public string InitiatorName { get; set; }
+
+        [JsonProperty("Initiator Email")]
+        public string InitiatorEmail { get; set; }
+
+        [JsonProperty("NA ID")]
+        public object NAID { get; set; }
+    }
+
+    public class ApprovedTrainersGetPayload
+    {
+        public string TrainerId { get; set; }
+        public string TrainerName { get; set; }
+        public string TrainerCode { get; set; }
+        public string TrnrCode { get; set; }
+        public string TierType { get; set; }
+        public string Speciality { get; set; }
+        public string Is_NONGO { get; set; }
+        public string MisCode { get; set; }
+
+        [JsonProperty("NA ID")]
+        public object NAID { get; set; }
+
+        [JsonProperty("Aggregate spend on Honorarium - Trainer")]
+        public int AggregatespendonHonorariumTrainer { get; set; }
+
+        [JsonProperty("Aggregate Limit on Accomodation")]
+        public int AggregateLimitonAccomodation { get; set; }
+
+        [JsonProperty("Aggregate Honorarium Spent ")]
+        public int AggregateHonorariumSpent { get; set; }
+
+        [JsonProperty("Aggregate spend on Accomodation")]
+        public int AggregatespendonAccomodation { get; set; }
+
+        [JsonProperty("Aggregate Spent on Medical Utility")]
+        public int AggregateSpentonMedicalUtility { get; set; }
+
+        [JsonProperty("Aggregate Spent as HCP Consultant")]
+        public int AggregateSpentasHCPConsultant { get; set; }
+        public string Qualification { get; set; }
+        public object TrainerCategoryId { get; set; }
+        public object CityId { get; set; }
+        public object StateId { get; set; }
+        public string Country { get; set; }
+        public string IsActive { get; set; }
+
+        [JsonProperty("FCPA Sign Off Date")]
+        public string FCPASignOffDate { get; set; }
+
+        [JsonProperty("FCPA Expiry Date")]
+        public string FCPAExpiryDate { get; set; }
+
+        [JsonProperty("FCPA Valid?")]
+        public string FCPAValid { get; set; }
+        public object CV_Document { get; set; }
+
+        [JsonProperty("Aggregate Exhausted?")]
+        public object AggregateExhausted { get; set; }
+        public string Created { get; set; }
+
+        [JsonProperty("Created Date - Helper")]
+        public string CreatedDateHelper { get; set; }
+
+        [JsonProperty("Sales Alert Trigger")]
+        public object SalesAlertTrigger { get; set; }
+
+        [JsonProperty("Medical Affairs Head Alert Trigger")]
+        public object MedicalAffairsHeadAlertTrigger { get; set; }
+
+        [JsonProperty("Sales Head Approval")]
+        public string SalesHeadApproval { get; set; }
+
+        [JsonProperty("Sales Head Approval Date")]
+        public object SalesHeadApprovalDate { get; set; }
+
+        [JsonProperty("Medical Affairs Head Approval")]
+        public object MedicalAffairsHeadApproval { get; set; }
+
+        [JsonProperty("Medical Affairs Head Approval Date")]
+        public object MedicalAffairsHeadApprovalDate { get; set; }
+
+        [JsonProperty("Sales Head")]
+        public string SalesHead { get; set; }
+
+        [JsonProperty("Medical Affairs Head")]
+        public string MedicalAffairsHead { get; set; }
+
+        [JsonProperty("Initiator Name")]
+        public string InitiatorName { get; set; }
+
+        [JsonProperty("Initiator Email")]
+        public string InitiatorEmail { get; set; }
+
+        [JsonProperty("TrainerTybe - Shortcode")]
+        public object TrainerTybeShortcode { get; set; }
+
+        [JsonProperty("Trainer Code")]
+        public object TrainerCodeNew { get; set; }
+
+        [JsonProperty("Trainer Brand")]
+        public string TrainerBrand { get; set; }
+
+        [JsonProperty("Trainer Type")]
+        public string TrainerType { get; set; }
+        public string Division { get; set; }
+        public string Address { get; set; }
+        public object City { get; set; }
+        public object State { get; set; }
+
+        [JsonProperty("Contact Number")]
+        public string ContactNumber { get; set; }
+
+        [JsonProperty("Trained by")]
+        public string Trainedby { get; set; }
+
+        [JsonProperty("Trainer CV")]
+        public string TrainerCV { get; set; }
+
+        [JsonProperty("Trainer certificate")]
+        public string Trainercertificate { get; set; }
+
+        [JsonProperty("Trained on")]
+        public string Trainedon { get; set; }
+
+        [JsonProperty("Trainer Category")]
+        public string TrainerCategory { get; set; }
+
+        [JsonProperty("Trainer Criteria")]
+        public string TrainerCriteria { get; set; }
+
+        [JsonProperty("Trainer Criteria Details")]
+        public string TrainerCriteriaDetails { get; set; }
+
+        [JsonProperty("Medical Affairs Alert Trigger")]
+        public object MedicalAffairsAlertTrigger { get; set; }
+    }
+
+    public class ApprovedVendorsGetPayload
+    {
+        public string VendorId { get; set; }
+        public string VendorAccount { get; set; }
+        public int MisCode { get; set; }
+
+        [JsonProperty("Requestor Name")]
+        public string RequestorName { get; set; }
+
+        [JsonProperty("Bank Name")]
+        public string BankName { get; set; }
+        public string BeneficiaryName { get; set; }
+        public string PanCardName { get; set; }
+        public string PanNumber { get; set; }
+        public string BankAccountNumber { get; set; }
+        public string IfscCode { get; set; }
+
+        [JsonProperty("Swift Code")]
+        public object SwiftCode { get; set; }
+
+        [JsonProperty("IBN Number")]
+        public object IBNNumber { get; set; }
+
+        [JsonProperty("Email ")]
+        public string Email { get; set; }
+
+        [JsonProperty("Pancard Document")]
+        public object PancardDocument { get; set; }
+
+        [JsonProperty("Cheque Document")]
+        public object ChequeDocument { get; set; }
+
+        [JsonProperty("Tax Residence Certificate")]
+        public object TaxResidenceCertificate { get; set; }
+
+        [JsonProperty("Tax Residence Certificate Date")]
+        public string TaxResidenceCertificateDate { get; set; }
+
+        [JsonProperty("IsActive?")]
+        public string IsActive { get; set; }
+
+        [JsonProperty("Finance Checker-1")]
+        public string FinanceChecker1 { get; set; }
+
+        [JsonProperty("Finance Checker Approval")]
+        public string FinanceCheckerApproval { get; set; }
+
+        [JsonProperty("Finance Checker Approval Date")]
+        public string FinanceCheckerApprovalDate { get; set; }
+        public string Requestor { get; set; }
+
+        [JsonProperty("Initiator Name")]
+        public string InitiatorName { get; set; }
+
+        [JsonProperty("Initiator Email")]
+        public string InitiatorEmail { get; set; }
+
+        [JsonProperty("Finance Checker ")]
+        public object FinanceChecker { get; set; }
+
+        [JsonProperty("Finance Checker  approval")]
+        public object FinanceCheckerapproval { get; set; }
+
+        [JsonProperty("Finance Checker")]
+        public object FinanceChecker_ { get; set; }
+    }
 }

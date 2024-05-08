@@ -12,7 +12,7 @@
         public string? BteAmount { get; set; }
         public string? BudgetAmount { get; set; }
     }
-   
+
     public class AddNewExpense
     {
         public string? EventId { get; set; }
@@ -24,6 +24,7 @@
         public string? EventTopic { get; set; }
         public string? EventType { get; set; }
         public string? VenueName { get; set; }
+        public string? IsExpenseAddedInPostSettlement { get; set; }
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
     }

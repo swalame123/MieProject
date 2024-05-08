@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
-using NLog.Fluent;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.Data;
@@ -19,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using IndiaEventsWebApi.Models.EventTypeSheets;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Controllers
 {
@@ -144,169 +144,149 @@ namespace IndiaEventsWebApi.Controllers
                 return BadRequest(ex.StackTrace);
             }
         }
-        //[HttpPost("WebHookForEventSettlementApprovals")]
-        //public async Task<IActionResult> WebHookForEventSettlementApprovals()
-        //{
-        //    try
-        //    {
-        //        Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
-        //        string rawContent = string.Empty;
-        //        using (var reader = new StreamReader(Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false))
-        //        {
-        //            rawContent = await reader.ReadToEndAsync();
-        //        }
-        //        requestHeaders.Add("Body", rawContent);
+        [HttpPost("WebHookForEventSettlementApproval")]
+        public async Task<IActionResult> WebHookForEventSettlementApproval()
+        {
+            try
+            {
+                Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
+                string rawContent = string.Empty;
+                using (var reader = new StreamReader(Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false))
+                {
+                    rawContent = await reader.ReadToEndAsync();
+                }
+                requestHeaders.Add("Body", rawContent);
 
 
-        //        var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
-        //        EventSettlementApproval(RequestWebhook);
+                var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
+                EventSettlementApproval(RequestWebhook);
 
-        //        var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
+                var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
 
-        //        return Ok(new Webhook { smartsheetHookResponse = RequestWebhook.challenge });
-        //        //return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Serilog.Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
-        //        Serilog.Log.Error(ex.StackTrace);
-        //        return BadRequest(ex.StackTrace);
-        //    }
-        //}
+                return Ok(new Webhook { smartsheetHookResponse = RequestWebhook.challenge });
+                //return Ok();
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
+                Serilog.Log.Error(ex.StackTrace);
+                return BadRequest(ex.StackTrace);
+            }
+        }
 
 
 
-        //private async void EventSettlementApproval(Root RequestWebhook)
-        //{
-        //    try
-        //    {
-        //        string processSheet = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
+        private async void EventSettlementApproval(Root RequestWebhook)
+        {
+            try
+            {
+                string processSheet = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
+                string? status1 = "";
+                string? status2 = "";
+                string? status3 = "";
+                string? status4 = "";
+                string? status5 = "";
+                string? status6 = "";
+                string? status7 = "";
+                string? status8 = "";
+                string? status9 = "";
+                Row existingRow = new();
+                //string processSheet = "4745908893732740";
+                Sheet TestingSheetData = SheetHelper.GetSheetById(smartsheet, processSheet);
 
-        //        //var TestingId = "6831673324818308";
-        //        Sheet TestingSheetData = SheetHelper.GetSheetById(smartsheet, processSheet);
+                if (RequestWebhook != null && RequestWebhook.events != null)
+                {
+                    foreach (var WebHookEvent in RequestWebhook.events)
+                    {
 
-        //        if (RequestWebhook != null && RequestWebhook.events != null)
-        //        {
-        //            foreach (var WebHookEvent in RequestWebhook.events)
-        //            {
+                        if (WebHookEvent.eventType.ToLower() == "updated" || WebHookEvent.eventType.ToLower() == "created")
+                        {
+                            Row targetRowId = TestingSheetData.Rows.FirstOrDefault(row => row.Id == WebHookEvent.rowId);
+                            if (targetRowId != null)
+                            {
+                                existingRow = targetRowId;
+                                status1 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 7750583457894276)?.Value?.ToString();
+                                status2 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 7315390601318276)?.Value?.ToString();
+                                status3 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 6624683551051652)?.Value?.ToString();
+                                status4 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 4611785905622916)?.Value?.ToString();
+                                status5 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 2359986091937668)?.Value?.ToString();
+                                status6 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 6863585719308164)?.Value?.ToString();
+                                status7 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 1234086185095044)?.Value?.ToString();
+                                status8 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 5737685812465540)?.Value?.ToString();
+                                status9 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 3485885998780292)?.Value?.ToString();
+                            }
+                        }
+                    }
+                    if (existingRow != null)
+                    {
+                        Row updateRow = new() { Id = existingRow.Id, Cells = new List<Cell>() };
 
-        //                if (WebHookEvent.eventType.ToLower() == "updated" || WebHookEvent.eventType.ToLower() == "created")
-        //                {
-        //                    Row targetRowId = TestingSheetData.Rows.FirstOrDefault(row => row.Id == WebHookEvent.rowId);
-        //                    if (targetRowId != null)
-        //                    {
+                        if (status1?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "post 45 days approved"), Value = "Yes" });
+                        }
 
-        //                        string? status1 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 1794362517180292)?.Value.ToString();
-        //                        string? status2 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 8549761958236036)?.Value.ToString();
-        //                        string? status3 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 4890587260997508)?.Value.ToString();
-        //                        string? status4 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 1512887540469636)?.Value.ToString();
-        //                        string? status5 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 3764687354154884)?.Value.ToString();
-        //                        string? status6 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 949937587048324)?.Value.ToString();
-        //                        string? status7 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 3201737400733572)?.Value.ToString();
-        //                        string? status8 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 2075837493890948)?.Value.ToString();
-        //                        string? status9 = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 4327637307576196)?.Value.ToString();
-        //                        if (status1.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "post 45 days approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status2?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post <5 Invitees Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status2.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post <5 Invitees Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status3?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post CostperPax Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status3.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post CostperPax Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status4?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post ChangeInVenue Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status4.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post ChangeInVenue Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status5?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post ChangeInTopic Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status5.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post ChangeInTopic Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status6?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post ChangeInSpeaker Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status6.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post ChangeInSpeaker Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status7?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post AttendeesNotCaptured Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status7.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post AttendeesNotCaptured Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status8?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post SpeakerNotCaptured Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status8.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post SpeakerNotCaptured Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (status9?.ToLower() == "approved")
+                        {
+                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post OtherDeviation Approved"), Value = "Yes" });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                        if (status9.ToLower() == "approved")
-        //                        {
-        //                            long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Post OtherDeviation Approved");
-        //                            Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-        //                            Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-        //                            Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-        //                            if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
+                        if (updateRow.Cells.Count > 0)
+                        {
+                            var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
+                        }
 
-        //                            smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
 
-        //    catch (Exception ex)
-        //    {
-        //        Serilog.Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
-        //        Serilog.Log.Error(ex.StackTrace);
-        //    }
-        //}
+                    }
+
+
+
+                }
+            }
+
+
+
+            catch (Exception ex)
+            {
+                Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
+            }
+        }
 
         private async void ApprovalCheckBox(Root RequestWebhook)
         {
@@ -327,7 +307,7 @@ namespace IndiaEventsWebApi.Controllers
                             Row targetRowId = TestingSheetData.Rows.FirstOrDefault(row => row.Id == WebHookEvent.rowId);
                             if (targetRowId != null)
                             {
-                                string? status = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 7933735728009092)?.Value.ToString();
+                                string? status = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 7933735728009092)?.Value?.ToString();
                                 if (status.ToLower() == "approved")
                                 {
                                     long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "5working days");
@@ -467,7 +447,7 @@ namespace IndiaEventsWebApi.Controllers
                                     }
 
                                 }
-                                else if (status != null && status == "Approved")
+                                else if (status != null && status == "Approved" || status == "Waiting for Finance Treasury Approval")
                                 {
                                     int timeInterval = 250000;
                                     await Task.Delay(timeInterval);
@@ -588,21 +568,21 @@ namespace IndiaEventsWebApi.Controllers
                         string originalDate = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn2.Id)?.Value?.ToString();
                         if (!string.IsNullOrEmpty(originalDate))
                         {
-                           
+
                             if (DateTime.TryParseExact(originalDate, new string[] { "yyyy-MM-dd", "dd/MM/yyyy", "MM/dd/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
                             {
                                 string formattedDate = parsedDate.ToString("dd/MM/yyyy");
-
+                                EventDate = formattedDate;
                             }
                         }
 
                         EventCode = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == SpecialityColumn.Id)?.Value?.ToString();
                         EventName = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn1.Id)?.Value?.ToString();
-                        EventDate = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn2.Id)?.Value?.ToString();
+                        //EventDate = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn2.Id)?.Value?.ToString();
                         //string formattedDate = EventDate.ToString("dd/MM/yyyy");
                         EventVenue = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn3.Id)?.Value?.ToString();
 
-                       
+
 
 
 

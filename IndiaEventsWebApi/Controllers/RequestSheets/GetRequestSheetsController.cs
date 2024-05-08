@@ -17,7 +17,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
     //[Authorize]
     public class GetRequestSheetsController : ControllerBase
     {
-
         private readonly string accessToken;
         private readonly IConfiguration configuration;
         private readonly SmartsheetClient smartsheet;
@@ -27,9 +26,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
             smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-
-        }
+                    }
 
         [HttpGet("GetEventRequestWebData")]
         public IActionResult GetEventRequestWebData()
@@ -46,7 +43,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpGet("GetEventRequestProcessData")]
         public IActionResult GetEventRequestProcessData()
         {
@@ -62,11 +58,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
-
-       
-
-
         [HttpGet("GetHonorariumPaymentData")]
         public IActionResult GetHonorariumPaymentData()
         {
@@ -82,7 +73,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpGet("GetEventSettlementData")]
         public IActionResult GetEventSettlementData()
         {
@@ -98,7 +88,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpGet("GetHCPSlideKitDetailsData")]
         public IActionResult GetHCPSlideKitDetailsData()
         {
@@ -114,8 +103,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpGet("GetExpenseData")]
+                [HttpGet("GetExpenseData")]
         public IActionResult GetExpenseData()
         {
             try
@@ -145,7 +133,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpGet("GetInviteesData")]
         public IActionResult GetInviteesData()
         {
@@ -161,7 +148,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpGet("GetEventRequestBrandsListData")]
         public IActionResult GetEventRequestBrandsListData()
         {
@@ -177,8 +163,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
-
         [HttpPost("GetEventRequestsHcpRoleByIds")]
         public IActionResult GetEventRequestsHcpRoleByIds([FromBody] getIds eventIdorEventRequestIds)
         {
@@ -215,13 +199,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             return Ok(hcpRoleData);
 
         }
-
-
-
-
-
-
-        [HttpGet("GetEventRequestsHcpDetailsTotalSpendValue")]
+                [HttpGet("GetEventRequestsHcpDetailsTotalSpendValue")]
         public IActionResult GetcgtColumnValue(string EventID)
         {
             string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
@@ -286,9 +264,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return NotFound("NotFound");
             }
         }
-
-
-
         [HttpGet("GetEventRequestExpenseSheetAmountValue")]
         public IActionResult GetEventRequestExpenseSheetAmountValue(string EventID)
         {
@@ -320,8 +295,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return NotFound("NotFound");
             }
         }
-
-
         [HttpGet("GetProcessSheetData")]
         public IActionResult GetProcessSheetData()
         {
@@ -485,7 +458,6 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 return BadRequest(ex.Message);
             }
         }
-
 
         public class getIds
         {
