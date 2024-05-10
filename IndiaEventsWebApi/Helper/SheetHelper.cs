@@ -63,16 +63,17 @@ namespace IndiaEventsWebApi.Helper
 
 
         // number check 
-        public static int NumCheck(string val)
+        public static double NumCheck(string val)
         {
             if (string.IsNullOrEmpty(val))
             {
                 return 0;
             }
             //return Convert.ToInt32(val);
-            int result;
-            return int.TryParse(val, out result) ? result : 0;
+            double result;
+            return double.TryParse(val, out result) ? result : 0;
         }
+
         public static object MisCodeCheck(string val)
         {
             if (string.IsNullOrEmpty(val))

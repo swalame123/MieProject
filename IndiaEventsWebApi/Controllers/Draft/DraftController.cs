@@ -135,13 +135,13 @@ namespace IndiaEventsWebApi.Controllers.Draft
                         DraftData[columnNames[i]] = existingRow.Cells[i].Value;
                     }
 
-                    
+
                 }
 
                 var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet.Id.Value, existingRow.Id.Value, null);
 
                 List<Dictionary<string, object>> attachmentsList = new List<Dictionary<string, object>>();
-                
+
                 foreach (var attachment in attachments.Data)
                 {
                     var AID = (long)attachment.Id;
@@ -235,8 +235,6 @@ namespace IndiaEventsWebApi.Controllers.Draft
 
             foreach (var formdata in formDataList.EventRequestHcpRole)
             {
-
-
                 string rowData = $"HcpName: {formdata.HcpName} |HcpRole: {formdata.HcpRole} | MisCode: {formdata.MisCode} |SpeakerCode: {formdata.SpeakerCode} |TrainerCode: {formdata.TrainerCode} " +
                     $"|Speciality: {formdata.Speciality} |Tier: {formdata.Tier} | GOorNGO: {formdata.GOorNGO} |HonorariumRequired: {formdata.HonorariumRequired} |HonarariumAmount: {formdata.HonarariumAmount}" +
                     $" | Travel: {formdata.Travel} |Accomdation: {formdata.Accomdation} | LocalConveyance: {formdata.LocalConveyance} |FinalAmount: {formdata.FinalAmount} |Rationale: {formdata.Rationale}" +

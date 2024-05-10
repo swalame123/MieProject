@@ -16,6 +16,7 @@ namespace IndiaEventsWebApi.Models.RequestSheets
         public string? HonorariumRequired { get; set; }
         public string? HonarariumAmount { get; set; }
         public string? Travel { get; set; }
+        public string? TravelSelection { get; set; }
         public string? Accomdation { get; set; }
         public string? LocalConveyance { get; set; }
         public string? FinalAmount { get; set; }

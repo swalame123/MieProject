@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using IndiaEvents.Models.Models.EventTypeSheets;
+using IndiaEvents.Models.Models.RequestSheets;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +19,34 @@ namespace IndiaEvents.Models.Models.Draft
         public List<UpdateInviteeSelection> InviteeSelection { get; set; }
         public List<UpdateExpenseSelection> ExpenseSelection { get; set; }
         public string IsDeviationUpload { get; set; }
-        public List<string> DeviationFiles { get; set; }
+        public List<EventRequestDeviationsData>? DeviationDetails { get; set; }
+        //public List<string> DeviationFiles { get; set; }
     }
+
     public class UpdateDataForStall
     {
         public UpdateStallFabricationDetails EventDetails { get; set; }
         public List<UpdateBrandSelection> BrandSelection { get; set; }
         public List<UpdateExpenseSelection> ExpenseSelection { get; set; }
         public string IsDeviationUpload { get; set; }
-        public List<string> DeviationFiles { get; set; }
+        public List<EventRequestDeviationsData>? DeviationDetails { get; set; }
     }
+
+    public class UpdateDataForHandsOnTraining
+    {
+
+        public UpdateHandsOnDetails EventDetails { get; set; }
+        public List<UpdateBrandSelection> BrandSelection { get; set; }
+        public List<TrainerDetails> PanelSelection { get; set; }
+        public List<SlideKitSelectionData> SlideKitSelection { get; set; }
+        public List<ProductSelection>? ProductSelections { get; set; }
+        public List<AttenderSelection> InviteeSelection { get; set; }
+        public List<Expense> ExpenseSelection { get; set; }
+        public string IsDeviationUpload { get; set; }
+        public List<EventRequestDeviationsData>? DeviationDetails { get; set; }
+        //public List<string> DeviationFiles { get; set; }
+    }
+
     public class UpdateBrandSelection
     {
         public string Id { get; set; }
@@ -74,6 +94,67 @@ namespace IndiaEvents.Models.Models.Draft
 
 
     }
+
+    public class UpdateHandsOnDetails
+    {
+        public string Id { get; set; }
+        public string EventName { get; set; }
+        public string EventType { get; set; }
+        public DateTime EventDate { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public string? ProductBrandSelection { get; set; }
+        public string? ModeOfTraining { get; set; }
+
+        public string VenueName { get; set; }
+        public string State { get; set; }
+        public string City { get; set; }
+        public string? VendorName { get; set; }
+        public string? VenueSelectionCheckList { get; set; }
+        public string? IsVenueHasAnyEmergancySupport { get; set; }
+        public string? EmerganctContact { get; set; }
+        public string? IsVenueFacilityCharges { get; set; }
+        public string? VenueFacilityChargesBtc_Bte { get; set; }
+        public int? FacilityChargesExcludingTax { get; set; }
+        public int? FacilityChargesIncludingTax { get; set; }
+        public string? IsAnesthetistRequired { get; set; }
+        public string? AnesthetistRequiredBtc_Bte { get; set; }
+        public int? AnesthetistChargesExcludingTax { get; set; }
+        public int? AnesthetistChargesIncludingTax { get; set; }
+
+        public string Brands { get; set; }
+        public string Panelists { get; set; }
+        public string SlideKits { get; set; }
+        public string Invitees { get; set; }
+        public string MIPLInvitees { get; set; }
+        public string Expenses { get; set; }
+
+        public string Sales_Head { get; set; }
+        public string FinanceHead { get; set; }
+        public string InitiatorName { get; set; }
+        public string Initiator_Email { get; set; }
+
+        public int? AdvanceAmount { get; set; }
+        public int? TotalExpenseBTC { get; set; }
+        public int? TotalExpenseBTE { get; set; }
+        public int? TotalHonorariumAmount { get; set; }
+        public int? TotalTravelAccommodationAmount { get; set; }
+        public int? TotalAccomodationAmount { get; set; }
+        public int? TotalBudget { get; set; }
+        public int? TotalLocalConveyance { get; set; }
+        public int? TotalTravelAmount { get; set; }
+        public int? TotalExpense { get; set; }
+        public int? EventOpen30dayscount { get; set; }
+
+        public string IsFilesUpload { get; set; }
+        public List<UpdateFiles> Files { get; set; }
+
+        public EventRequestBenificiaryDetails? VenueBenificiaryDetailsData { get; set; }
+        public EventRequestBenificiaryDetails? AnaestheticBenificiaryDetailsData { get; set; }
+
+
+    }
+
     public class UpdateStallFabricationDetails
     {
         public string Id { get; set; }

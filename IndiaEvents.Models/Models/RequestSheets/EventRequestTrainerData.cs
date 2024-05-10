@@ -36,15 +36,15 @@ namespace IndiaEvents.Models.Models.RequestSheets
         public string? IsAccomodationBTC_BTE { get; set; }
         public string? IsLCBTC_BTE { get; set; }
         public string? TravelSelection { get; set; }
-        public int? TravelAmountExcludingTax { get; set; }
-        public int? TravelAmountIncludingTax { get; set; }
-        public int? AccomodationAmountExcludingTax { get; set; }
-        public int? AccomodationAmountIncludingTax { get; set; }
-        public int? LocalConveyanceAmountexcludingTax { get; set; }
-        public int? LocalConveyanceAmountincludingTax { get; set; }
-        public int? AgreementAmount { get; set; }
-        public int? TravelandAccomodationspendincludingcurrentevent { get; set; }
-        public int? FinalAmount { get; set; }
+        public double? TravelAmountExcludingTax { get; set; }
+        public double? TravelAmountIncludingTax { get; set; }
+        public double? AccomodationAmountExcludingTax { get; set; }
+        public double? AccomodationAmountIncludingTax { get; set; }
+        public double? LocalConveyanceAmountexcludingTax { get; set; }
+        public double? LocalConveyanceAmountincludingTax { get; set; }
+        public double? AgreementAmount { get; set; }
+        public double? TravelandAccomodationspendincludingcurrentevent { get; set; }
+        public double? FinalAmount { get; set; }
         public string? EventName { get; set; }
         public string? EventType { get; set; }
         public string? VenueName { get; set; }

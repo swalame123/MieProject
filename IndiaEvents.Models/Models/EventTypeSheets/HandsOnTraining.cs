@@ -61,6 +61,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public int? TotalLocalConveyance { get; set; }
         public int? TotalTravelAmount { get; set; }
         public int? TotalExpense { get; set; }
+
         public string? InitiatorEmail { get; set; }
         public string? RBMorBMEmail { get; set; }
         public string? SalesHeadEmail { get; set; }

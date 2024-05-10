@@ -18,9 +18,9 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     {
         public string? PanelId { get; set; }
         public string? IsAttended { get; set; }
-        public int? ActualAccomodationAmount { get; set; }
-        public int? ActualTravelAmount { get; set; }
-        public int? ActualLCAmount { get; set; }
+        public double? ActualAccomodationAmount { get; set; }
+        public double? ActualTravelAmount { get; set; }
+        public double? ActualLCAmount { get; set; }
         public string? IsUploadDocument { get; set; }
         public List<string>? UploadDocument { get; set; }
     }
@@ -28,21 +28,21 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     {
         public string? InviteeId { get; set; }
         public string? IsAttended { get; set; }
-        public int? ActualAmount { get; set; }
+        public double? ActualAmount { get; set; }
         public string? IsUploadDocument { get; set; }
         public List<string>? UploadDocument { get; set; }
     }
     public class UpdateExpenseDetails
     {
         public string? ExpenseId { get; set; }
-        public int? ActualAmount { get; set; }
+        public double? ActualAmount { get; set; }
         public string? IsUploadDocument { get; set; }
         public List<string>? UploadDocument { get; set; }
     }
     public class UpdateSlideKitDetails
     {
         public string? SlideKitId { get; set; }
-        public int? ProductName { get; set; }
+        public string? ProductName { get; set; }
         public string? IndicationsDone { get; set; }
         public string? BatchNumber { get; set; }
         public string? SubjectNameandSurName { get; set; }

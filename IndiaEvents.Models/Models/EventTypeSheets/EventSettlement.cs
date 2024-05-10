@@ -54,11 +54,11 @@
         public string? AdditionalAmountNeededToPayForInitiator { get; set; }
         public string? TotalLocalConveyance { get; set; }
         public string? IsDeviationUpload { get; set; }
-        public int? TotalBudgetAmount { get; set; }
-        public int? ActualExpenseAmount { get; set; }
-        public int? AdvanceProvided { get; set; }
-        public int? TotalBtcAmount { get; set; }
-        public int? TotalBteAmount { get; set; }
+        public double? TotalBudgetAmount { get; set; }
+        public double? ActualExpenseAmount { get; set; }
+        public double? AdvanceProvided { get; set; }
+        public double? TotalBtcAmount { get; set; }
+        public double? TotalBteAmount { get; set; }
 
 
         public List<string>? Files { get; set; }
@@ -84,8 +84,8 @@
         public string? Amount { get; set; }
         public string? AmountExcludingTax { get; set; }
         public string? BtcorBte { get; set; }
-        public int? BudgetAmount { get; set; }
-        public int? ActualAmount { get; set; }
+        public double? BudgetAmount { get; set; }
+        public double? ActualAmount { get; set; }
 
     }
 

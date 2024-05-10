@@ -78,12 +78,12 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             int addedExpencesNo = 1;
             //int addedExpencesNoBTE = 1;
 
-            int TotalHonorariumAmount = 0;
-            int TotalTravelAmount = 0;
-            int TotalAccomodateAmount = 0;
-            int TotalHCPLcAmount = 0;
-            int TotalInviteesLcAmount = 0;
-            int TotalExpenseAmount = 0;
+            double TotalHonorariumAmount = 0;
+            double TotalTravelAmount = 0;
+            double TotalAccomodateAmount = 0;
+            double TotalHCPLcAmount = 0;
+            double TotalInviteesLcAmount = 0;
+            double TotalExpenseAmount = 0;
 
             foreach (var formdata in formDataList.EventRequestExpenseSheet)
             {
@@ -142,8 +142,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             string MenariniInvitees = addedMEnariniInviteesData.ToString();
             foreach (var formdata in formDataList.EventRequestHcpRole)
             {
-                int HM = SheetHelper.NumCheck(formdata.HonarariumAmount);
-                int t = SheetHelper.NumCheck(formdata.Travel) + SheetHelper.NumCheck(formdata.Accomdation);
+                double HM = SheetHelper.NumCheck(formdata.HonarariumAmount);
+                double t = SheetHelper.NumCheck(formdata.Travel) + SheetHelper.NumCheck(formdata.Accomdation);
                 string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {HM} |Trav.&Acc.Amt: {t} |Rationale :{formdata.Rationale}";
                 addedHcpData.AppendLine(rowData);
                 addedHcpDataNo++;
@@ -153,9 +153,9 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 TotalHCPLcAmount += SheetHelper.NumCheck(formdata.LocalConveyance);
             }
             string HCP = addedHcpData.ToString();
-            int c = TotalHCPLcAmount + TotalInviteesLcAmount;
-            int total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
-            int s = TotalTravelAmount + TotalAccomodateAmount;
+            double c = TotalHCPLcAmount + TotalInviteesLcAmount;
+            double total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
+            double s = TotalTravelAmount + TotalAccomodateAmount;
             try
             {
                 Row newRow = new()
@@ -374,6 +374,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Local Conveyance Excluding Tax"), Value = formData.LocalConveyanceExcludingTax });
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "LC BTC/BTE"), Value = formData.LcBtcorBte });
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Travel BTC/BTE"), Value = formData.TravelBtcorBte });
+                    newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Mode of Travel"), Value = formData.TravelSelection });
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Accomodation BTC/BTE"), Value = formData.AccomodationBtcorBte });
 
                     if (formData.Currency == "Others")
@@ -1077,12 +1078,12 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             int addedInviteesDataNoforMenarini = 1;
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
-            int TotalHonorariumAmount = 0;
-            int TotalTravelAmount = 0;
-            int TotalAccomodateAmount = 0;
-            int TotalHCPLcAmount = 0;
-            int TotalInviteesLcAmount = 0;
-            int TotalExpenseAmount = 0;
+            double TotalHonorariumAmount = 0;
+            double TotalTravelAmount = 0;
+            double TotalAccomodateAmount = 0;
+            double TotalHCPLcAmount = 0;
+            double TotalInviteesLcAmount = 0;
+            double TotalExpenseAmount = 0;
             foreach (var formdata in formDataList.EventRequestExpenseSheet)
             {
                 string rowData = $"{addedExpencesNo}. {formdata.Expense} | AmountExcludingTax: {formdata.AmountExcludingTax}| Amount: {formdata.Amount} | {formdata.BtcorBte}";
@@ -1145,8 +1146,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
             foreach (var formdata in formDataList.EventRequestHcpRole)
             {
-                int HM = SheetHelper.NumCheck(formdata.HonarariumAmount);
-                int t = SheetHelper.NumCheck(formdata.Travel) + SheetHelper.NumCheck(formdata.Accomdation);
+                double HM = SheetHelper.NumCheck(formdata.HonarariumAmount);
+                double t = SheetHelper.NumCheck(formdata.Travel) + SheetHelper.NumCheck(formdata.Accomdation);
 
                 string rowData = $"{addedHcpDataNo}. {formdata.HcpRole} |{formdata.HcpName} | Honr.Amt: {HM} |Trav.&Acc.Amt: {t} |Rationale : {formdata.Rationale}";
                 addedHcpData.AppendLine(rowData);
@@ -1158,12 +1159,12 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             }
             string HCP = addedHcpData.ToString();
 
-            int c = TotalHCPLcAmount + TotalInviteesLcAmount;
+            double c = TotalHCPLcAmount + TotalInviteesLcAmount;
 
 
-            int total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
+            double total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount + TotalExpenseAmount;
 
-            int s = (TotalTravelAmount + TotalAccomodateAmount);
+            double s = (TotalTravelAmount + TotalAccomodateAmount);
             try
             {
                 Row newRow = new()
@@ -1385,7 +1386,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                                     newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EventDate"), Value = formDataList.Webinar.EventDate });
                                     newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "StartTime"), Value = formDataList.Webinar.StartTime });
                                     newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "EndTime"), Value = formDataList.Webinar.EndTime });
-                                
+
 
 
                                     newRow7.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet7, "MIS Code"), Value = SheetHelper.MisCodeCheck(pp.MisCode) });
@@ -1505,7 +1506,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "LC BTC/BTE"), Value = formData.LcBtcorBte });
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Travel BTC/BTE"), Value = formData.TravelBtcorBte });
                     newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Accomodation BTC/BTE"), Value = formData.AccomodationBtcorBte });
-
+                    newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Mode of Travel"), Value = formData.TravelSelection });
                     if (formData.Currency == "Others")
                     {
                         newRow1.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet4, "Other Currency"), Value = formData.OtherCurrencyType });
@@ -1704,13 +1705,13 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
 
-            int TotalHonorariumAmount = 0;
-            int TotalTravelAmount = 0;
-            int TotalAccomodateAmount = 0;
-            int TotalHCPLcAmount = 0;
-            int TotalInviteesLcAmount = 0;
-            int TotalExpenseAmount = 0;
-            int TotalRegstAmount = 0;
+            double TotalHonorariumAmount = 0;
+            double TotalTravelAmount = 0;
+            double TotalAccomodateAmount = 0;
+            double TotalHCPLcAmount = 0;
+            double TotalInviteesLcAmount = 0;
+            double TotalExpenseAmount = 0;
+            double TotalRegstAmount = 0;
 
 
 
@@ -1726,8 +1727,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 addedExpences.AppendLine(rowData);
                 addedExpencesNo++;
 
-                int amount = SheetHelper.NumCheck(formdata.ExpenseAmount);
-                int regst = SheetHelper.NumCheck(formdata.RegstAmount);
+                double amount = SheetHelper.NumCheck(formdata.ExpenseAmount);
+                double regst = SheetHelper.NumCheck(formdata.RegstAmount);
                 TotalExpenseAmount = TotalExpenseAmount + amount;
                 TotalRegstAmount = TotalRegstAmount + regst;
             }
@@ -1743,8 +1744,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
             foreach (var formdata in formDataList.HcpList)
             {
-                int HM = SheetHelper.NumCheck(formdata.RegistrationAmount);
-                int t = SheetHelper.NumCheck(formdata.TravelAmount) + SheetHelper.NumCheck(formdata.AccomAmount);
+                double HM = SheetHelper.NumCheck(formdata.RegistrationAmount);
+                double t = SheetHelper.NumCheck(formdata.TravelAmount) + SheetHelper.NumCheck(formdata.AccomAmount);
                 string rowData = $"{addedHcpDataNo}. {formdata.MisCode} |{formdata.HcpName} | Regst.Amt: {HM} |Trav.&Acc.Amt: {t} |Rationale :{formdata.Rationale}";
 
                 addedHcpData.AppendLine(rowData);
@@ -1755,10 +1756,10 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 TotalHCPLcAmount = TotalHCPLcAmount + SheetHelper.NumCheck(formdata.LcAmount);
             }
             string HCP = addedHcpData.ToString();
-            int c = TotalHCPLcAmount + TotalInviteesLcAmount;
-            int total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount;
+            double c = TotalHCPLcAmount + TotalInviteesLcAmount;
+            double total = TotalHonorariumAmount + TotalTravelAmount + TotalAccomodateAmount + TotalHCPLcAmount + TotalInviteesLcAmount;
 
-            int s = TotalTravelAmount + TotalAccomodateAmount;
+            double s = TotalTravelAmount + TotalAccomodateAmount;
 
             StringBuilder addedExpencesBTE = new();
             int addedExpencesNoBTE = 1;
@@ -2106,7 +2107,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             StringBuilder addedExpences = new StringBuilder();
             int addedBrandsDataNo = 1;
             int addedExpencesNo = 1;
-            int TotalExpenseAmount = 0;
+            double TotalExpenseAmount = 0;
             string uploadDeviationForTableContainsData = !string.IsNullOrEmpty(formDataList.StallFabrication.TableContainsDataUpload) ? "Yes" : "No";
             string EventWithin7Days = !string.IsNullOrEmpty(formDataList.StallFabrication.EventWithin7daysUpload) ? "Yes" : "No";
             string BrouchereUpload = !string.IsNullOrEmpty(formDataList.StallFabrication.EventBrouchereUpload) ? "Yes" : "No";
@@ -2143,7 +2144,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 addedBrandsDataNo++;
             }
             string brand = addedBrandsData.ToString();
-            int total = TotalExpenseAmount;
+            double total = TotalExpenseAmount;
 
             try
             {
@@ -2438,7 +2439,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             int addedExpencesNo = 1;
 
 
-            int TotalExpenseAmount = 0;
+            double TotalExpenseAmount = 0;
             string EventOpen30Days = !string.IsNullOrEmpty(formDataList.MedicalUtilityData.EventOpen30daysFile) ? "Yes" : "No";
             string EventWithin7Days = !string.IsNullOrEmpty(formDataList.MedicalUtilityData.EventWithin7daysFile) ? "Yes" : "No";
             string UploadDeviationFile = !string.IsNullOrEmpty(formDataList.MedicalUtilityData.UploadDeviationFile) ? "Yes" : "No";
@@ -2452,7 +2453,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 string rowData = $"{addedExpencesNo}. {formdata.Expense} | TotalAmount: {formdata.TotalExpenseAmount}| {formdata.BTC_BTE}";
                 addedExpences.AppendLine(rowData);
                 addedExpencesNo++;
-                int amount = SheetHelper.NumCheck(formdata.TotalExpenseAmount);
+                double amount = SheetHelper.NumCheck(formdata.TotalExpenseAmount);
                 TotalExpenseAmount = TotalExpenseAmount + amount;
             }
             string Expense = addedExpences.ToString();
@@ -2471,7 +2472,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             }
             string HCP = addedHcpData.ToString();
 
-            int total = TotalExpenseAmount;
+            double total = TotalExpenseAmount;
 
 
             StringBuilder addedExpencesBTE = new();
