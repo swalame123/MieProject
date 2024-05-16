@@ -92,7 +92,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     }
 
                     IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
-                    if(!string.IsNullOrEmpty(formDataList.Comments))
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
                     {
                         if (targetRow.Discussions != null)
                         {
@@ -103,7 +103,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                             Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
                         }
                     }
-                    
+
 
 
                     return Ok(new { Message = "Updated Successfully" });
@@ -169,7 +169,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                             Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
                         }
                     }
-                   
+
 
 
                     return Ok(new { Message = "Updated Successfully" });
@@ -247,7 +247,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                             Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
                         }
                     }
-                    
+
 
 
                     return Ok(new { Message = "Updated Successfully" });
@@ -325,7 +325,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                             Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
                         }
                     }
-                   
+
 
 
                     return Ok(new { Message = "Updated Successfully" });
@@ -344,6 +344,39 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
         }
 
+        [HttpPut("ComplianceHeadCancellation")]
+        public IActionResult ComplianceHeadCancellation(ComplianceRejectionFlow formDataList)
+        {
+            var EventId = formDataList.EventId;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
 
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+
+
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Event Cancelled"), Value = formDataList.IsComplianceCancelledEvent });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Reason for Cancellation"), Value = formDataList.Comments });
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+
+
+
+
+            return Ok();
+        }
     }
 }

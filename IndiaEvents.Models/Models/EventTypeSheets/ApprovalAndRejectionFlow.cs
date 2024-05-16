@@ -26,8 +26,12 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? Comments { get; set; }
     }
 
-
-
+    public class ComplianceRejectionFlow
+    {
+        public string EventId { get;set; }
+        public bool? IsComplianceCancelledEvent { get; set; }
+        public string? Comments { get; set; }
+    }
     public class ApprovalAndRejectionFlowInHonorarium
     {
         public string? EventId { get; set; }

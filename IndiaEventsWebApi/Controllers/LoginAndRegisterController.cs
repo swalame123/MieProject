@@ -307,7 +307,7 @@ namespace IndiaEventsWebApi.Controllers
 
         }
 
-        private string CreateJwt(string username, string email, string role, string reportingmanager, string firstLevelManager, string RBM_BM, string SalesHead,string FinanceHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury,string FinanceChecker, string FinanceAccounts, string SalesCoordinator,string MarketingCoordinator)
+        private string CreateJwt(string username, string email, string role, string reportingmanager, string firstLevelManager, string RBM_BM, string SalesHead,string FinanceHead, string MarketingHead, string compliance, string MedicalAffairsHead, string FinanceTreasury,string FinanceChecker, string FinanceAccounts, string SalesCoordinator,string MarketingCoordinator)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
