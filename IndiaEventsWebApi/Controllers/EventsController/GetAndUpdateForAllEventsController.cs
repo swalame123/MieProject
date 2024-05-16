@@ -2702,7 +2702,9 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Advance Amount"), Value = formDataList.AdvanceProvided });
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Expense BTC"), Value = formDataList.TotalBtcAmount });
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Expense BTE"), Value = formDataList.TotalBteAmount });
-
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "ExpenseDetails"), Value = formDataList.ExpenseDetails });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "TotalExpenseDetails"), Value = formDataList.TotalExpenseDetails });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "AdvanceDetails"), Value = formDataList.AdvanceDetails });
 
 
 
