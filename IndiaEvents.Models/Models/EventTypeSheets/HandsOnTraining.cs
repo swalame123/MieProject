@@ -66,6 +66,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? RBMorBMEmail { get; set; }
         public string? SalesHeadEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
+        public string? MarketingCoordinatorEmail { get; set; }
         public string? MarketingHeadEmail { get; set; }
         public string? FinanceEmail { get; set; }
         public string? ComplianceEmail { get; set; }
@@ -209,6 +210,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
 
     public class Expense
     {
+        //public string? Expense { get; set; }
         public string? ExpenseType { get; set; }
         public string? IsBtcorBte { get; set; }
         public int? ExpenseAmountExcludingTax { get; set; }

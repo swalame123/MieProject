@@ -295,11 +295,12 @@ namespace IndiaEventsWebApi.Controllers
                         {
                             var name = attachment.Name;
                             var s = name.Split(".")[0];
-                            if (s == (EventID + "-AttendanceSheet")) //RQID757-AttendenceSheet
+                            //if (s == (EventID + "-AttendanceSheet")) //RQID757-AttendenceSheet
+                            if(name.ToLower().Contains("attendancesheet"))
                             {
                                 var AID = (long)attachment.Id;
                                 var file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheetAs.Id.Value, AID);
-                                FileName = file.Name.Split("-")[1];
+                                FileName = file.Name;
                                 url = file.Url;
                             }
 

@@ -17,31 +17,31 @@ namespace IndiaEventsWebApi.Helpers
             var hash = key.GetBytes(HashSize);
 
             var hashBytes = new byte[SaltSize + HashSize];
-            Array.Copy(salt,0,hashBytes,0,SaltSize);
-            Array.Copy(hash,0,hashBytes,SaltSize,HashSize);
+            Array.Copy(salt, 0, hashBytes, 0, SaltSize);
+            Array.Copy(hash, 0, hashBytes, SaltSize, HashSize);
 
-            var base64Hash=Convert.ToBase64String(hashBytes);
+            var base64Hash = Convert.ToBase64String(hashBytes);
 
 
             return base64Hash;
         }
-        public static bool verifyPassword(string password , string base64Hash)
+        public static bool verifyPassword(string password, string base64Hash)
         {
             var hashBytes = Convert.FromBase64String(base64Hash);
             var salt = new byte[SaltSize];
             Array.Copy(hashBytes, 0, salt, 0, SaltSize);
 
             var key = new Rfc2898DeriveBytes(password, salt, Iterations);
-            byte[] hash= key.GetBytes(HashSize);
-            for (var i=0;i< HashSize;i++)
+            byte[] hash = key.GetBytes(HashSize);
+            for (var i = 0; i < HashSize; i++)
             {
                 if (hashBytes[i + SaltSize] != hash[i])
                 {
                     return false;
                 }
-                 
-               
-                
+
+
+
             }
             return true;
 

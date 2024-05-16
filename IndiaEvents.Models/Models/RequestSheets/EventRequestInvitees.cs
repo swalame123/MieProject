@@ -31,7 +31,7 @@
         public int? LcAmount { get; set; }
         public int? LcAmountExcludingTax { get; set; }
         public string? InviteedFrom { get; set; }
-        //public string? Addedinpostevent { get; set; }
+        public string? Addedinpostevent { get; set; }
         public string? InviteeName { get; set; }
         public string? Speciality { get; set; }
         public string? HCPType { get; set; }

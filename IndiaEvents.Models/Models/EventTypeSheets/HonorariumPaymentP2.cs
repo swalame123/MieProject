@@ -1,4 +1,6 @@
-﻿using IndiaEventsWebApi.Models.EventTypeSheets;
+﻿using IndiaEvents.Models.Models.Draft;
+using IndiaEvents.Models.Models.RequestSheets;
+using IndiaEventsWebApi.Models.EventTypeSheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +37,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? ReportingManagerEmail { get; set; }
         public string? FirstLevelEmail { get; set; }
         public string? SalesCoordinatorEmail { get; set; }
+        public string? MarketingCoordinatorEmail { get; set; }
         public string? MarketingHeadEmail { get; set; }
         public string? SalesHeadEmail { get; set; }
         public string? Role { get; set; }
@@ -69,6 +72,27 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
     {
         public HonorariumPaymentP2? RequestHonorariumList { get; set; }
         public List<HCPDetailsP2>? HcpRoles { get; set; }
+    }
+    public class UpdateHonorariumPaymentListPh2
+    {
+        public string? EventId { get; set; }
+        public string? EventTopic { get; set; }
+        public string? EventType { get; set; }
+        public string? EventDate { get; set; }
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
+        public string? VenueName { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? SalesHeadEmail { get; set; }
+        public string? FinanceHead { get; set; }
+        public string? InitiatorName { get; set; }
+        public string? InitiatorEmail { get; set; }
+        public string? IsFilesUpload { get; set; }
+        public string? IsDeviationUpload { get; set; }
+        public List<UpdateFiles> Files { get; set; }
+        public List<string>? DeviationFiles { get; set; }
+
     }
     public class HonorariumUpdate
     {

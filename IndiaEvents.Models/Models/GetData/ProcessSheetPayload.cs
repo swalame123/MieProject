@@ -137,10 +137,10 @@ namespace IndiaEvents.Models.Models.GetData
         public string OtherExpenses { get; set; }
 
         [JsonProperty("Total Invitees")]
-        public int TotalInvitees { get; set; }
+        public double TotalInvitees { get; set; }
 
         [JsonProperty("Total Attendees")]
-        public int TotalAttendees { get; set; }
+        public double TotalAttendees { get; set; }
         public string Finance { get; set; }
 
         [JsonProperty("Approval Status")]
@@ -175,43 +175,43 @@ namespace IndiaEvents.Models.Models.GetData
         public string SalesCoordinator { get; set; }
 
         [JsonProperty("Total Honorarium Amount")]
-        public int TotalHonorariumAmount { get; set; }
+        public double TotalHonorariumAmount { get; set; }
 
         [JsonProperty("Total Travel & Accommodation Amount")]
-        public int TotalTravelAccommodationAmount { get; set; }
+        public double TotalTravelAccommodationAmount { get; set; }
 
         [JsonProperty("Total Travel Amount")]
-        public int TotalTravelAmount { get; set; }
+        public double TotalTravelAmount { get; set; }
 
         [JsonProperty("Total Accommodation Amount")]
-        public int TotalAccommodationAmount { get; set; }
+        public double TotalAccommodationAmount { get; set; }
 
         [JsonProperty("Total Accomodation Amount")]
-        public int TotalAccomodationAmount { get; set; }
+        public double TotalAccomodationAmount { get; set; }
 
         [JsonProperty("Total Local Conveyance")]
-        public int TotalLocalConveyance { get; set; }
+        public double TotalLocalConveyance { get; set; }
 
         [JsonProperty("Total Expense")]
-        public int TotalExpense { get; set; }
+        public double TotalExpense { get; set; }
 
         [JsonProperty("Other Expense Amount")]
-        public int OtherExpenseAmount { get; set; }
+        public double OtherExpenseAmount { get; set; }
 
         [JsonProperty("Total Budget")]
-        public int TotalBudget { get; set; }
+        public double TotalBudget { get; set; }
 
         [JsonProperty(" Total Expense BTC")]
-        public int TotalExpenseBTC { get; set; }
+        public double TotalExpenseBTC { get; set; }
 
         [JsonProperty("Total Expense BTE")]
-        public int TotalExpenseBTE { get; set; }
+        public double TotalExpenseBTE { get; set; }
 
         [JsonProperty("Cost per participant - Helper")]
-        public int CostperparticipantHelper { get; set; }
+        public double CostperparticipantHelper { get; set; }
 
         [JsonProperty("Advance Amount")]
-        public int AdvanceAmount { get; set; }
+        public double AdvanceAmount { get; set; }
 
         [JsonProperty("Advance Voucher Number")]
         public string AdvanceVoucherNumber { get; set; }
@@ -251,10 +251,10 @@ namespace IndiaEvents.Models.Models.GetData
         public string VenueCountry { get; set; }
 
         [JsonProperty("Total HCP Registration Spend")]
-        public int TotalHCPRegistrationSpend { get; set; }
+        public double TotalHCPRegistrationSpend { get; set; }
 
         [JsonProperty("Total HCP Registration Amount")]
-        public int TotalHCPRegistrationAmount { get; set; }
+        public double TotalHCPRegistrationAmount { get; set; }
 
         [JsonProperty("Medical Utility Type")]
         public string MedicalUtilityType { get; set; }
@@ -281,10 +281,10 @@ namespace IndiaEvents.Models.Models.GetData
         public string FacilityCharges { get; set; }
 
         [JsonProperty("Facility charges Excluding Tax")]
-        public int FacilitychargesExcludingTax { get; set; }
+        public double FacilitychargesExcludingTax { get; set; }
 
         [JsonProperty("Total Facility charges including Tax")]
-        public int TotalFacilitychargesincludingTax { get; set; }
+        public double TotalFacilitychargesincludingTax { get; set; }
 
         [JsonProperty("HOT Webinar Type")]
         public string HOTWebinarType { get; set; }
@@ -308,10 +308,10 @@ namespace IndiaEvents.Models.Models.GetData
         public string AnesthetistBTCBTE { get; set; }
 
         [JsonProperty("Anesthetist Excluding Tax")]
-        public int AnesthetistExcludingTax { get; set; }
+        public double AnesthetistExcludingTax { get; set; }
 
         [JsonProperty("Anesthetist including Tax")]
-        public int AnesthetistincludingTax { get; set; }
+        public double AnesthetistincludingTax { get; set; }
 
         [JsonProperty("Selected Products")]
         public string SelectedProducts { get; set; }
@@ -566,25 +566,25 @@ namespace IndiaEvents.Models.Models.GetData
         public object TotalAttendees { get; set; }
 
         [JsonProperty("Total Honorarium Amount")]
-        public int TotalHonorariumAmount { get; set; }
+        public double TotalHonorariumAmount { get; set; }
 
         [JsonProperty("Total Travel & Accommodation Amount")]
-        public int TotalTravelAccommodationAmount { get; set; }
+        public double TotalTravelAccommodationAmount { get; set; }
 
         [JsonProperty("Total Travel Amount")]
-        public int TotalTravelAmount { get; set; }
+        public double TotalTravelAmount { get; set; }
 
         [JsonProperty("Total Accommodation Amount")]
-        public int TotalAccommodationAmount { get; set; }
+        public double TotalAccommodationAmount { get; set; }
 
         [JsonProperty("Total Local Conveyance")]
-        public int TotalLocalConveyance { get; set; }
+        public double TotalLocalConveyance { get; set; }
 
         [JsonProperty("Total Expense")]
-        public int TotalExpense { get; set; }
+        public double TotalExpense { get; set; }
 
         [JsonProperty("Total Budget")]
-        public int TotalBudget { get; set; }
+        public double TotalBudget { get; set; }
 
         [JsonProperty("HCP Role")]
         public object HCPRole { get; set; }
@@ -619,7 +619,7 @@ namespace IndiaEvents.Models.Models.GetData
         public string VenueName { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public int Attended { get; set; }
+        public double Attended { get; set; }
         public string InviteesParticipated { get; set; }
         public string ExpenseDetails { get; set; }
         public string TotalExpenseDetails { get; set; }
@@ -804,10 +804,10 @@ namespace IndiaEvents.Models.Models.GetData
         public object IndicationsDone { get; set; }
 
         [JsonProperty("Total Invitees")]
-        public int TotalInvitees { get; set; }
+        public double TotalInvitees { get; set; }
 
         [JsonProperty("Total Attendees")]
-        public int TotalAttendees { get; set; }
+        public double TotalAttendees { get; set; }
 
         [JsonProperty("Approval Status")]
         public object ApprovalStatus { get; set; }
@@ -842,28 +842,28 @@ namespace IndiaEvents.Models.Models.GetData
         public string FinanceHead { get; set; }
 
         [JsonProperty("Total Honorarium Amount")]
-        public int TotalHonorariumAmount { get; set; }
+        public double TotalHonorariumAmount { get; set; }
 
         [JsonProperty("Total Travel & Accommodation Amount")]
-        public int TotalTravelAccommodationAmount { get; set; }
+        public double TotalTravelAccommodationAmount { get; set; }
 
         [JsonProperty("Total Travel Amount")]
-        public int TotalTravelAmount { get; set; }
+        public double TotalTravelAmount { get; set; }
 
         [JsonProperty("Total Accommodation Amount")]
-        public int TotalAccommodationAmount { get; set; }
+        public double TotalAccommodationAmount { get; set; }
 
         [JsonProperty("Total Local Conveyance")]
-        public int TotalLocalConveyance { get; set; }
+        public double TotalLocalConveyance { get; set; }
 
         [JsonProperty("Total Expense")]
-        public int TotalExpense { get; set; }
+        public double TotalExpense { get; set; }
 
         [JsonProperty("Total Budget")]
-        public int TotalBudget { get; set; }
+        public double TotalBudget { get; set; }
 
         [JsonProperty("Total Actual")]
-        public int TotalActual { get; set; }
+        public double TotalActual { get; set; }
 
         [JsonProperty("50% Helper")]
         public string _50Helper { get; set; }
@@ -1297,22 +1297,22 @@ namespace IndiaEvents.Models.Models.GetData
         public string MisCode { get; set; }
 
         [JsonProperty("Aggregate Honorarium Limit")]
-        public int AggregateHonorariumLimit { get; set; }
+        public double AggregateHonorariumLimit { get; set; }
 
         [JsonProperty("Aggregate Accommodataion Limit")]
-        public int AggregateAccommodataionLimit { get; set; }
+        public double AggregateAccommodataionLimit { get; set; }
 
         [JsonProperty("Aggregate Honorarium Spent")]
-        public int AggregateHonorariumSpent { get; set; }
+        public double AggregateHonorariumSpent { get; set; }
 
         [JsonProperty("Aggregate Accommodation Spent")]
-        public int AggregateAccommodationSpent { get; set; }
+        public double AggregateAccommodationSpent { get; set; }
 
         [JsonProperty("Aggregate Spent on Medical Utility")]
-        public int AggregateSpentonMedicalUtility { get; set; }
+        public double AggregateSpentonMedicalUtility { get; set; }
 
         [JsonProperty("Aggregate Spent as HCP Consultant")]
-        public int AggregateSpentasHCPConsultant { get; set; }
+        public double AggregateSpentasHCPConsultant { get; set; }
 
         [JsonProperty("FCPA Sign Off Date")]
         public string FCPASignOffDate { get; set; }
@@ -1411,22 +1411,22 @@ namespace IndiaEvents.Models.Models.GetData
         public object NAID { get; set; }
 
         [JsonProperty("Aggregate spend on Honorarium - Trainer")]
-        public int AggregatespendonHonorariumTrainer { get; set; }
+        public double AggregatespendonHonorariumTrainer { get; set; }
 
         [JsonProperty("Aggregate Limit on Accomodation")]
-        public int AggregateLimitonAccomodation { get; set; }
+        public double AggregateLimitonAccomodation { get; set; }
 
         [JsonProperty("Aggregate Honorarium Spent ")]
-        public int AggregateHonorariumSpent { get; set; }
+        public double AggregateHonorariumSpent { get; set; }
 
         [JsonProperty("Aggregate spend on Accomodation")]
-        public int AggregatespendonAccomodation { get; set; }
+        public double AggregatespendonAccomodation { get; set; }
 
         [JsonProperty("Aggregate Spent on Medical Utility")]
-        public int AggregateSpentonMedicalUtility { get; set; }
+        public double AggregateSpentonMedicalUtility { get; set; }
 
         [JsonProperty("Aggregate Spent as HCP Consultant")]
-        public int AggregateSpentasHCPConsultant { get; set; }
+        public double AggregateSpentasHCPConsultant { get; set; }
         public string Qualification { get; set; }
         public object TrainerCategoryId { get; set; }
         public object CityId { get; set; }

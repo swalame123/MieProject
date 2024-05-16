@@ -291,7 +291,7 @@ namespace IndiaEventsWebApi.Controllers
                 foreach (var formdata in formData.Invitee)
                 {
                     string rowData = $"{addedInviteesDataNo}. {formdata.InviteeName} | {formdata.MISCode} | {formdata.LocalConveyance}";
-                    
+
                     addedInviteesData.AppendLine(rowData);
                     addedInviteesDataNo++;
                 }
@@ -337,6 +337,7 @@ namespace IndiaEventsWebApi.Controllers
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "RBM/BM"), Value = formData.RBMorBM });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Head"), Value = formData.SalesHead });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Coordinator"), Value = formData.SalesCoordinatorEmail });
+                newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Marketing Coordinator"), Value = formData.MarketingCoordinatorEmail });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Marketing Head"), Value = formData.MarkeringHead });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Compliance"), Value = formData.Compliance });
                 newRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Finance Accounts"), Value = formData.FinanceAccounts });
@@ -476,7 +477,7 @@ namespace IndiaEventsWebApi.Controllers
                                 if (deviationname == r)
                                 {
                                     string name = words[0].Split("*")[0];
-                                    string filePath = SheetHelper.testingFile(q,  name);
+                                    string filePath = SheetHelper.testingFile(q, name);
                                     Row addedRow = addeddeviationrow[0];
                                     Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet7.Id.Value, addedRow.Id.Value, filePath, "application/msword");
                                     Attachment attachmentintoMain = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(sheet.Id.Value, addedRows[0].Id.Value, filePath, "application/msword");
@@ -538,6 +539,22 @@ namespace IndiaEventsWebApi.Controllers
                             IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet2.Id.Value, new Row[] { updateRow });
                             if (formdata.IsUploadDocument == "Yes")
                             {
+                                PaginatedResult<Attachment> attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet2.Id.Value, targetRow.Id.Value, null);
+                                if (attachments.Data != null || attachments.Data.Count > 0)
+                                {
+
+                                    foreach (var attachment in attachments.Data)
+                                    {
+                                        long Id = attachment.Id.Value;
+                                        smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                                          sheet2.Id.Value,           // sheetId
+                                          Id            // attachmentId
+                                        );
+
+
+                                    }
+
+                                }
                                 foreach (var p in formdata.UploadDocument)
                                 {
                                     string[] words = p.Split(':');
@@ -574,8 +591,27 @@ namespace IndiaEventsWebApi.Controllers
                             updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet1, "Actual Local Conveyance Amount"), Value = formdata.ActualLCAmount });
 
                             IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet1.Id.Value, new Row[] { updateRow });
+
                             if (formdata.IsUploadDocument == "Yes")
                             {
+                                PaginatedResult<Attachment> attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet1.Id.Value, targetRow.Id.Value, null);
+                                if (attachments.Data != null || attachments.Data.Count > 0)
+                                {
+
+                                    foreach (var attachment in attachments.Data)
+                                    {
+                                        var name = attachment.Name;
+                                        if (name.ToLower().Contains("invoice"))
+                                        {
+                                            long Id = attachment.Id.Value;
+                                            smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                                              sheet1.Id.Value,           // sheetId
+                                              Id            // attachmentId
+                                            );
+                                        }
+                                    }
+
+                                }
                                 foreach (var p in formdata.UploadDocument)
                                 {
                                     string[] words = p.Split(':');
@@ -610,6 +646,22 @@ namespace IndiaEventsWebApi.Controllers
                             IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet3.Id.Value, new Row[] { updateRow });
                             if (formdata.IsUploadDocument == "Yes")
                             {
+                                PaginatedResult<Attachment> attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet3.Id.Value, targetRow.Id.Value, null);
+                                if (attachments.Data != null || attachments.Data.Count > 0)
+                                {
+
+                                    foreach (var attachment in attachments.Data)
+                                    {
+                                        long Id = attachment.Id.Value;
+                                        smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                                          sheet3.Id.Value,           // sheetId
+                                          Id            // attachmentId
+                                        );
+
+
+                                    }
+
+                                }
                                 foreach (var p in formdata.UploadDocument)
                                 {
 

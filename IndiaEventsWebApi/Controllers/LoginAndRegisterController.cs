@@ -116,6 +116,7 @@ namespace IndiaEventsWebApi.Controllers
                     var FinanceTreasuryId = SheetHelper.GetColumnIdByName(sheet, "Finance Treasury");
                     var FinanceAccountsId = SheetHelper.GetColumnIdByName(sheet, "Finance Accounts");
                     var SalesCoordinatorId = SheetHelper.GetColumnIdByName(sheet, "Sales Coordinator");
+                    var MarketingCoordinatorId = SheetHelper.GetColumnIdByName(sheet, "Marketing Coordinator");
 
 
 
@@ -144,6 +145,7 @@ namespace IndiaEventsWebApi.Controllers
                         var FinanceTreasuryCell = row.Cells.FirstOrDefault(c => c.ColumnId == FinanceTreasuryId);
                         var FinanceAccountsCell = row.Cells.FirstOrDefault(c => c.ColumnId == FinanceAccountsId);
                         var SalesCoordinatorCell = row.Cells.FirstOrDefault(c => c.ColumnId == SalesCoordinatorId);
+                        var MarketingCoordinatorCell = row.Cells.FirstOrDefault(c => c.ColumnId == MarketingCoordinatorId);
                         var FinanceCheckerCell = row.Cells.FirstOrDefault(c => c.ColumnId == FinanceCheckerId);
 
                         if (EmailIdCell?.Value?.ToString() == userData.EmailId && passwordCell?.Value?.ToString() == userData.Password)
@@ -169,9 +171,10 @@ namespace IndiaEventsWebApi.Controllers
                             var FinanceTreasury = FinanceTreasuryCell.Value?.ToString();
                             var FinanceAccounts = FinanceAccountsCell.Value?.ToString();
                             var SalesCoordinator = SalesCoordinatorCell.Value?.ToString();
+                            var MarketingCoordinator = MarketingCoordinatorCell.Value?.ToString();
                             var FinanceChecker = FinanceCheckerCell.Value?.ToString();
 
-                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, FinanceHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceChecker, FinanceAccounts, SalesCoordinator);
+                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, FinanceHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceChecker, FinanceAccounts, SalesCoordinator, MarketingCoordinator);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
@@ -231,6 +234,7 @@ namespace IndiaEventsWebApi.Controllers
                     var FinanceTreasuryId = SheetHelper.GetColumnIdByName(sheet, "Finance Treasury");
                     var FinanceAccountsId = SheetHelper.GetColumnIdByName(sheet, "Finance Accounts");
                     var SalesCoordinatorId = SheetHelper.GetColumnIdByName(sheet, "Sales Coordinator");
+                    var MarketingCoordinatorId = SheetHelper.GetColumnIdByName(sheet, "Marketing Coordinator");
                     var FinanceCheckerId = SheetHelper.GetColumnIdByName(sheet, "Finance Checker");
 
                     if (EmailColumnId == 0)
@@ -256,6 +260,7 @@ namespace IndiaEventsWebApi.Controllers
                         var FinanceTreasuryCell = row.Cells.FirstOrDefault(c => c.ColumnId == FinanceTreasuryId);
                         var FinanceAccountsCell = row.Cells.FirstOrDefault(c => c.ColumnId == FinanceAccountsId);
                         var SalesCoordinatorCell = row.Cells.FirstOrDefault(c => c.ColumnId == SalesCoordinatorId);
+                        var MarketingCoordinatorCell = row.Cells.FirstOrDefault(c => c.ColumnId == MarketingCoordinatorId);
                         var FinanceCheckerCell = row.Cells.FirstOrDefault(c => c.ColumnId == FinanceCheckerId);
                         if (EmailIdCell?.Value?.ToString() == payload.Email)
                         {
@@ -278,8 +283,9 @@ namespace IndiaEventsWebApi.Controllers
                             var FinanceTreasury = FinanceTreasuryCell.Value?.ToString();
                             var FinanceAccounts = FinanceAccountsCell.Value?.ToString();
                             var SalesCoordinator = SalesCoordinatorCell.Value?.ToString();
+                            var MarketingCoordinator = MarketingCoordinatorCell.Value?.ToString();
                             var FinanceChecker = FinanceCheckerCell.Value?.ToString();
-                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, FinanceHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceChecker, FinanceAccounts, SalesCoordinator);
+                            var token = CreateJwt(username, email, role, ReportingManager, FirstLevelManager, RBM_BM, SalesHead, FinanceHead, MarketingHead, Compliance, MedicalAffairsHead, FinanceTreasury, FinanceChecker, FinanceAccounts, SalesCoordinator, MarketingCoordinator);
 
                             return Ok(new
                             { Token = token, Message = "Login Success!" });
@@ -301,7 +307,7 @@ namespace IndiaEventsWebApi.Controllers
 
         }
 
-        private string CreateJwt(string username, string email, string role, string reportingmanager, string firstLevelManager, string RBM_BM, string SalesHead,string FinanceHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury,string FinanceChecker, string FinanceAccounts, string SalesCoordinator)
+        private string CreateJwt(string username, string email, string role, string reportingmanager, string firstLevelManager, string RBM_BM, string SalesHead,string FinanceHead, string compliance, string MarketingHead, string MedicalAffairsHead, string FinanceTreasury,string FinanceChecker, string FinanceAccounts, string SalesCoordinator,string MarketingCoordinator)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
@@ -326,6 +332,7 @@ namespace IndiaEventsWebApi.Controllers
         new Claim("FinanceAccounts", FinanceAccounts),
         new Claim("FinanceChecker", FinanceChecker),
         new Claim("SalesCoordinator", SalesCoordinator),
+        new Claim("MarketingCoordinator", MarketingCoordinator),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
