@@ -9,8 +9,11 @@ namespace IndiaEvents.Models.Models.GetData
 {
     public class ProcessSheetPayload
     {
+
         [JsonProperty("Event Topic")]
         public string EventTopic { get; set; }
+        public bool EventCancelled { get; set; }
+        public string ReasonForCancellation { get; set; }
         [JsonProperty("EventId/EventRequestId")]
         public string EventIdEventRequestId { get; set; }
         public string EventType { get; set; }

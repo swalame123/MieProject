@@ -449,7 +449,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         BankReferenceNumber = row.TryGetValue("Bank Reference Number", out var BankReferenceNumber) ? BankReferenceNumber?.ToString() : null,
                         AdvanceVoucherDate = row.TryGetValue("Advance Voucher Date", out var AdvanceVoucherDate) ? AdvanceVoucherDate?.ToString() : null,
                         AdvanceVoucherNumber = row.TryGetValue("Advance Voucher Number", out var AdvanceVoucherNumber) ? AdvanceVoucherNumber?.ToString() : null,
-
+                        EventCancelled = row.TryGetValue("Event Cancelled", out var EventCancelled) ? Convert.ToBoolean(EventCancelled) : false,
+                        ReasonForCancellation = row.TryGetValue("Reason for Cancellation", out var ReasonForCancellation) ? ReasonForCancellation?.ToString() : null,
                     }).ToList();
                 return Ok(eventRequestBrandsList);
             }
