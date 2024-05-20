@@ -297,7 +297,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     }
                     else if (!string.IsNullOrEmpty(formDataList.SalesHeadStatus))
                     {
-                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "EventSettlement-Sales Head Approval"), Value = formDataList.SalesHeadStatus });
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "EventSettlement-SalesHead Approval"), Value = formDataList.SalesHeadStatus });
                     }
                     else if (!string.IsNullOrEmpty(formDataList.MarketingHeadStatus))
                     {
@@ -377,6 +377,72 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
 
             return Ok();
+        }
+        [HttpPut("PreEventFinanceTreasuryApproval")]
+        public IActionResult PreEventFinanceTreasuryApproval(PreEventFinanceTreasuryApprovalFlow formDataList)
+        {
+            Discussion discussionSpecification = new Discussion
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new Comment
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.EventId;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PRE-Finance Treasury Approval"), Value = formDataList.PreFinanceTreasuryApprovalStatus });
+                    if (formDataList.PreFinanceTreasuryApprovalStatus.ToLower() == "approved")
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Date"), Value = formDataList.BankReferenceDate });
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Advance Voucher Date"), Value = formDataList.AdvanceVoucherDate });
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Number"), Value = formDataList.BankReferenceNumber });
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Advance Voucher Number"), Value = formDataList.AdvanceVoucherNumber });
+
+                    }
+
+
+
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
         }
     }
 }

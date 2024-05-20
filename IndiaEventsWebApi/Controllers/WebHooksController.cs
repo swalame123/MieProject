@@ -760,7 +760,7 @@ namespace IndiaEventsWebApi.Controllers
                             Column processIdColumn1 = processSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
                             Column processIdColumn2 = processSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Request Status", StringComparison.OrdinalIgnoreCase));
                             Column processIdColumn3 = processSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "Meeting Type", StringComparison.OrdinalIgnoreCase));
-                            Column processIdColumn4 = processSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventType", StringComparison.OrdinalIgnoreCase));
+                            Column processIdColumn4 = processSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Type", StringComparison.OrdinalIgnoreCase));
 
 
                             Row targetRowId = processSheetData.Rows.FirstOrDefault(row => row.Id == WebHookEvent.rowId);
@@ -905,8 +905,8 @@ namespace IndiaEventsWebApi.Controllers
 
                 Column SpecialityColumn = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
                 Column targetColumn1 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Topic", StringComparison.OrdinalIgnoreCase));
-                Column targetColumn2 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventDate", StringComparison.OrdinalIgnoreCase));
-                Column targetColumn3 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "VenueName", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn2 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Date", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn3 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Venue Name", StringComparison.OrdinalIgnoreCase));
 
                 if (SpecialityColumn != null)
                 {

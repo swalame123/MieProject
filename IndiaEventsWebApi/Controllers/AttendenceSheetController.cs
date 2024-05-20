@@ -52,25 +52,7 @@ namespace IndiaEventsWebApi.Controllers
                 var EventVenue = "";
                 List<string> Speakers = new List<string>();
 
-                // SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-
-                //string sheetId_SpeakerCode = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
-                //long.TryParse(sheetId_SpeakerCode, out long parsedSheetId_SpeakerCode);
-                //Sheet sheet_SpeakerCode = smartsheet.SheetResources.GetSheet(parsedSheetId_SpeakerCode, null, null, null, null, null, null, null);
-
-                //string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestInvitees").Value;
-                //long.TryParse(sheetId, out long parsedSheetId);
-                //Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
-
-                //string sheetId1 = configuration.GetSection("SmartsheetSettings:Class1").Value;
-                //long.TryParse(sheetId1, out long parsedSheetId1);
-                //Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
-
-
-                //string processSheet = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
-                //long.TryParse(processSheet, out long parsedProcessSheet);
-                //Sheet processSheetData = smartsheet.SheetResources.GetSheet(parsedProcessSheet, null, null, null, null, null, null, null);
-
+                
                 long rowId = 0;
                 Column IdColumn = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
                 if (IdColumn != null)
@@ -95,8 +77,8 @@ namespace IndiaEventsWebApi.Controllers
 
                 Column SpecialityColumn = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
                 Column targetColumn1 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Topic", StringComparison.OrdinalIgnoreCase));
-                Column targetColumn2 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventDate", StringComparison.OrdinalIgnoreCase));
-                Column targetColumn3 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "VenueName", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn2 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Event Date", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn3 = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "Venue Name", StringComparison.OrdinalIgnoreCase));
 
                 if (SpecialityColumn != null)
                 {

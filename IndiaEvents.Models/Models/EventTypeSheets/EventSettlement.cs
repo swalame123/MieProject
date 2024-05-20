@@ -84,6 +84,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string EventEndDate { get; set; }
         public string Sales_Head { get; set; }
         public string FinanceHead { get; set; }
+        public string SalesCoordinator { get; set; }
         public string InitiatorName { get; set; }
         public string Initiator_Email { get; set; }
         public string EventOpen30dayscount { get; set; }

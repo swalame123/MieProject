@@ -28,8 +28,18 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
 
     public class ComplianceRejectionFlow
     {
-        public string EventId { get;set; }
+        public string EventId { get; set; }
         public bool? IsComplianceCancelledEvent { get; set; }
+        public string? Comments { get; set; }
+    }
+    public class PreEventFinanceTreasuryApprovalFlow
+    {
+        public string EventId { get; set; }
+        public string? PreFinanceTreasuryApprovalStatus { get; set; }
+        public DateTime? BankReferenceDate { get; set; }
+        public DateTime? AdvanceVoucherDate { get; set; }
+        public string? AdvanceVoucherNumber { get; set; }
+        public string? BankReferenceNumber { get; set; }
         public string? Comments { get; set; }
     }
     public class ApprovalAndRejectionFlowInHonorarium

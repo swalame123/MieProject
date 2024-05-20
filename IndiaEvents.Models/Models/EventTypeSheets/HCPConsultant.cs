@@ -104,17 +104,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
     }
 
 
-    //public class HCPPayload
-    //{
-    //    //public Class1? class1 { get; set; }
-    //    public HCPConsultant HcpConsultant { get; set; }
-    //    public List<EventRequestBrandsList>? RequestBrandsList { get; set; }
-    //    public List<EventRequestInvitees>? EventRequestInvitees { get; set; }
-    //    public List<EventRequestsHcpRole>? EventRequestHcpRole { get; set; }
-    //    public List<EventRequestHCPSlideKit>? EventRequestHCPSlideKits { get; set; }
-    //    public List<EventRequestExpenseSheet>? EventRequestExpenseSheet { get; set; }
-    //    // public IFormFile? formFile { get; set; }
-    //}
+    
     public class HCPfollow_upsheet
     {
         public string? HCPName { get; set; }

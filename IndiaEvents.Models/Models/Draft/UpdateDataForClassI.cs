@@ -75,6 +75,7 @@ namespace IndiaEvents.Models.Models.Draft
         public string Expenses { get; set; }
         public string Sales_Head { get; set; }
         public string FinanceHead { get; set; }
+        public string SalesCoordinator { get; set; }
         public string InitiatorName { get; set; }
         public string Initiator_Email { get; set; }
         public double? TotalExpenseBTC { get; set; }
@@ -133,7 +134,7 @@ namespace IndiaEvents.Models.Models.Draft
         public string FinanceHead { get; set; }
         public string InitiatorName { get; set; }
         public string Initiator_Email { get; set; }
-
+        public string SalesCoordinator { get; set; }
         public double? AdvanceAmount { get; set; }
         public double? TotalExpenseBTC { get; set; }
         public double? TotalExpenseBTE { get; set; }
@@ -166,7 +167,7 @@ namespace IndiaEvents.Models.Models.Draft
         public string BrandsData { get; set; }
         public string ExpenseData { get; set; }
         public string ExpenseDataBTE { get; set; }
-
+        public string SalesCoordinator { get; set; }
         public string Sales_Head { get; set; }
         public string FinanceHead { get; set; }
         public string InitiatorName { get; set; }

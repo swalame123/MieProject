@@ -86,6 +86,7 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? State { get; set; }
         public string? SalesHeadEmail { get; set; }
         public string? FinanceHead { get; set; }
+        public string SalesCoordinator { get; set; }
         public string? InitiatorName { get; set; }
         public string? InitiatorEmail { get; set; }
         public string? IsFilesUpload { get; set; }
@@ -102,4 +103,10 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public List<string>? FilesToUpload { get; set; }
         public string? IsAnnualTrainerAgreementValid { get; set; }
     }
+    public class DeleteFilesArray
+    {
+        public string? EventId { get; set; }
+        public List<string>? AttachmentIds { get; set; }
+    }
+
 }

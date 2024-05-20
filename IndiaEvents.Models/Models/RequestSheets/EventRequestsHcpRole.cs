@@ -46,10 +46,10 @@ namespace IndiaEventsWebApi.Models.RequestSheets
         public string? TravelBtcorBte { get; set; }
         public string? AccomodationBtcorBte { get; set; }
 
-        public int? HonarariumAmountExcludingTax { get; set; }
-        public int? TravelExcludingTax { get; set; }
-        public int? AccomdationExcludingTax { get; set; }
-        public int? LocalConveyanceExcludingTax { get; set; }
+        public double? HonarariumAmountExcludingTax { get; set; }
+        public double? TravelExcludingTax { get; set; }
+        public double? AccomdationExcludingTax { get; set; }
+        public double? LocalConveyanceExcludingTax { get; set; }
         public string? IsUpload { get; set; }
         public List<string>? FilesToUpload { get; set; }
 
