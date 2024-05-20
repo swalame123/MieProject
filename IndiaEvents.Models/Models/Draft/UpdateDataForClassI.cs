@@ -73,6 +73,7 @@ namespace IndiaEvents.Models.Models.Draft
         public string Invitees { get; set; }
         public string MIPLInvitees { get; set; }
         public string Expenses { get; set; }
+        public string ExpenseDataBTE { get; set; }
         public string Sales_Head { get; set; }
         public string FinanceHead { get; set; }
         public string SalesCoordinator { get; set; }
