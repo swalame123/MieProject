@@ -13,6 +13,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? StartTime { get; set; }
         public string? EndTime { get; set; }
         public string? Meeting_Type { get; set; }
+        public string? BTEExpenseDetails { get; set; }
         //public string? VenueName { get; set; }
         //public string? City { get; set; }
         //public string? State { get; set; }

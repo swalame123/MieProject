@@ -40,6 +40,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? MarketingCoordinatorEmail { get; set; }
 
         public string? Role { get; set; }
+        public string? BTEExpenseDetails { get; set; }
 
 
         public string? Marketing_Head { get; set; }
