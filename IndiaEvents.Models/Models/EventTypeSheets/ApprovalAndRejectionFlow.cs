@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace IndiaEvents.Models.Models.EventTypeSheets
 {
+
     public class ApprovalAndRejectionFlowInPreEvent
     {
         public string? EventId { get; set; }
@@ -25,7 +26,6 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? FinanceHeadStatus { get; set; }
         public string? Comments { get; set; }
     }
-
     public class ComplianceRejectionFlow
     {
         public string EventId { get; set; }
@@ -60,6 +60,19 @@ namespace IndiaEvents.Models.Models.EventTypeSheets
         public string? MarketingHeadStatus { get; set; }
         public string? MedicalAffairsHeadStatus { get; set; }
         public string? ComplianceStatus { get; set; }
+        public string? Comments { get; set; }
+    }
+    public class ApprovalAndRejectionFlowInApprovedSpeakers
+    {
+        public string? Id { get; set; }
+        public string? SalesHeadStatus { get; set; }
+        public string? MedicalAffairsHeadStatus { get; set; }
+        public string? Comments { get; set; }
+    }
+    public class ApprovalAndRejectionFlowInApprovedVendor
+    {
+        public string? Id { get; set; }
+        public string? FinanceCheckerStatus { get; set; }
         public string? Comments { get; set; }
     }
 }

@@ -25,6 +25,13 @@ namespace IndiaEventsWebApi.Controllers.EventsController
         private readonly string sheetId8;
         private readonly string sheetId9;
 
+        private readonly string sheetId10;
+        private readonly string sheetId11;
+        private readonly string sheetId12;
+        private readonly string sheetId13;
+        private readonly string sheetId14;
+        private readonly string sheetId15;
+
         public ApprovalAndRejectionFlowController(IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -39,6 +46,13 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             sheetId6 = configuration.GetSection("SmartsheetSettings:EventRequestsExpensesSheet").Value;
             sheetId8 = configuration.GetSection("SmartsheetSettings:EventRequestBeneficiary").Value;
             sheetId9 = configuration.GetSection("SmartsheetSettings:EventRequestProductBrandsList").Value;
+
+            sheetId10 = configuration.GetSection("SmartsheetSettings:ApprovedSpeakers").Value;
+            sheetId11 = configuration.GetSection("SmartsheetSettings:ApprovedTrainers").Value;
+            sheetId12 = configuration.GetSection("SmartsheetSettings:VendorMasterSheet").Value;
+            sheetId13 = configuration.GetSection("SmartsheetSettings:SpeakerCodeCreation").Value;
+            sheetId14 = configuration.GetSection("SmartsheetSettings:TrainerCodeCreation").Value;
+            sheetId15 = configuration.GetSection("SmartsheetSettings:VendorCodeCreation").Value;
         }
 
         [HttpPut("ApprovalAndRejectionFlowInPreEvent")]
@@ -378,6 +392,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
             return Ok();
         }
+
         [HttpPut("PreEventFinanceTreasuryApproval")]
         public IActionResult PreEventFinanceTreasuryApproval(PreEventFinanceTreasuryApprovalFlow formDataList)
         {
@@ -444,5 +459,380 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 return BadRequest(new { Message = "Row data not found" });
             }
         }
+
+
+
+        [HttpPut("ApprovedSpeakersApproval")]
+        public IActionResult ApprovedSpeakersApproval(ApprovalAndRejectionFlowInApprovedSpeakers formDataList)
+        {
+            Discussion discussionSpecification = new()
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new()
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.Id;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId10);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new() { Id = targetRow.Id, Cells = new List<Cell>() };
+                    if (!string.IsNullOrEmpty(formDataList.MedicalAffairsHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Medical Affairs Head Approval"), Value = formDataList.MedicalAffairsHeadStatus });
+                    }
+                    else if (!string.IsNullOrEmpty(formDataList.SalesHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Head Approval"), Value = formDataList.SalesHeadStatus });
+                    }
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+        }
+
+        [HttpPut("ApprovedTrainerApproval")]
+        public IActionResult ApprovedTrainerApproval(ApprovalAndRejectionFlowInApprovedSpeakers formDataList)
+        {
+            Discussion discussionSpecification = new Discussion
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new Comment
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.Id;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId11);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                    if (!string.IsNullOrEmpty(formDataList.MedicalAffairsHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Medical Affairs Head Approval"), Value = formDataList.MedicalAffairsHeadStatus });
+                    }
+                    else if (!string.IsNullOrEmpty(formDataList.SalesHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Head Approval"), Value = formDataList.SalesHeadStatus });
+                    }
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+        }
+
+        [HttpPut("SpeakersCodeCreationApproval")]
+        public IActionResult SpeakersCodeCreationApproval(ApprovalAndRejectionFlowInApprovedSpeakers formDataList)
+        {
+            Discussion discussionSpecification = new Discussion
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new Comment
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.Id;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId13);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                    if (!string.IsNullOrEmpty(formDataList.MedicalAffairsHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Medical Affairs Head Approval"), Value = formDataList.MedicalAffairsHeadStatus });
+                    }
+                    else if (!string.IsNullOrEmpty(formDataList.SalesHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Head Approval"), Value = formDataList.SalesHeadStatus });
+                    }
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+        }
+
+        [HttpPut("TrainerCodeCreationApproval")]
+        public IActionResult TrainerCodeCreationApproval(ApprovalAndRejectionFlowInApprovedSpeakers formDataList)
+        {
+            Discussion discussionSpecification = new Discussion
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new Comment
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.Id;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId14);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                    if (!string.IsNullOrEmpty(formDataList.MedicalAffairsHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Medical Affairs Head Approval"), Value = formDataList.MedicalAffairsHeadStatus });
+                    }
+                    else if (!string.IsNullOrEmpty(formDataList.SalesHeadStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Sales Head Approval"), Value = formDataList.SalesHeadStatus });
+                    }
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+        }
+
+        [HttpPut("ApprovedVendorApproval")]
+        public IActionResult ApprovedVendorApproval(ApprovalAndRejectionFlowInApprovedVendor formDataList)
+        {
+            Discussion discussionSpecification = new Discussion
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new Comment
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.Id;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId12);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                    if (!string.IsNullOrEmpty(formDataList.FinanceCheckerStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Finance Checker Approval"), Value = formDataList.FinanceCheckerStatus });
+                    }
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+        }
+
+        [HttpPut("VendorCodeCreationApproval")]
+        public IActionResult VendorCodeCreationApproval(ApprovalAndRejectionFlowInApprovedVendor formDataList)
+        {
+            Discussion discussionSpecification = new Discussion
+            {
+                Comment = new Comment
+                {
+                    Text = formDataList.Comments
+                },
+                Comments = null
+            };
+            Comment commentSpecification = new Comment
+            {
+                Text = formDataList.Comments
+            };
+
+            var EventId = formDataList.Id;
+            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId15);
+            Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == EventId));
+
+            if (targetRow != null)
+            {
+                try
+                {
+                    Row updateRow = new Row { Id = targetRow.Id, Cells = new List<Cell>() };
+                    if (!string.IsNullOrEmpty(formDataList.FinanceCheckerStatus))
+                    {
+                        updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Finance Checker  approval"), Value = formDataList.FinanceCheckerStatus });
+                    }
+
+
+                    IList<Row> updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRow });
+                    if (!string.IsNullOrEmpty(formDataList.Comments))
+                    {
+                        if (targetRow.Discussions != null)
+                        {
+                            Comment newComment = smartsheet.SheetResources.DiscussionResources.CommentResources.AddComment(sheet.Id.Value, targetRow.Discussions[0].Id.Value, commentSpecification);
+                        }
+                        else
+                        {
+                            Discussion newDiscussion = smartsheet.SheetResources.RowResources.DiscussionResources.CreateDiscussion(sheet.Id.Value, targetRow.Id.Value, discussionSpecification);
+                        }
+                    }
+
+
+
+                    return Ok(new { Message = "Updated Successfully" });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                return BadRequest(new { Message = "Row data not found" });
+            }
+        }
+
+
+
+
+
+
+
+
     }
 }

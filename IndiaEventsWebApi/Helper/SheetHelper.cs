@@ -32,17 +32,41 @@ namespace IndiaEventsWebApi.Helper
             int columnIndex = columnNames.IndexOf(columnName);
             return columnIndex != -1 ? row.Cells[columnIndex].Value?.ToString() : null;
         }
+
+
+        internal static List<Dictionary<string, object>> GetAttachmentsForRow(SmartsheetClient smartsheet, long sheetId, long row)
+        {
+            List<Dictionary<string, object>> attachmentsList = new List<Dictionary<string, object>>();
+            var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheetId, row, null);
+
+            if (attachments.Data != null && attachments.Data.Count > 0)
+            {
+                foreach (var attachment in attachments.Data)
+                {
+                    long AID = (long)attachment.Id;
+                    Attachment file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheetId, AID);
+                    Dictionary<string, object> attachmentInfo = new Dictionary<string, object>
+                    {
+                        { "Name", file.Name },
+                        { "Id", file.Id },
+                        { "Url", file.Url },
+                        { "base64", UrlToBaseValue(file.Url) }
+                    };
+                    attachmentsList.Add(attachmentInfo);
+                }
+            }
+            return attachmentsList;
+        }
+
+
+
+
+
+
+
+
         //UrlToBase64
-        //public static string UrlToBaseValue(string url)
-        //{
 
-        //    using HttpClient client = new();
-        //    byte[] fileContent = client.GetByteArrayAsync(url).Result;
-        //    string base64String = Convert.ToBase64String(fileContent);
-
-
-        //    return base64String;
-        //}
         public static string UrlToBaseValue(string url)
         {
             using HttpClient client = new();

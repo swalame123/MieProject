@@ -43,12 +43,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
                 StringBuilder FinanceAccountsHonorDetails = new StringBuilder();
                 int FTNo = 1;
-                foreach (var formdata in updatedFormData.FinanceAccounts)
+                if (updatedFormData.Status.ToLower() == "approved")
                 {
-                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
-                    FinanceAccountsHonorDetails.AppendLine(rowData);
-                    FTNo++;
+                    foreach (var formdata in updatedFormData.FinanceAccounts)
+                    {
+                        string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
+                        FinanceAccountsHonorDetails.AppendLine(rowData);
+                        FTNo++;
+                    }
                 }
+
                 string FinanceAccounts = FinanceAccountsHonorDetails.ToString();
                 foreach (var f in updatedFormData.FinanceAccounts)
                 {
@@ -111,15 +115,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 int FTNo = 1;
 
 
-
-                foreach (var formdata in updatedFormData.FinanceAccounts)
+                if (updatedFormData.Status.ToLower() == "approved")
                 {
-                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
-                    FinanceAccountsPostDetails.AppendLine(rowData);
-                    FTNo++;
-
-
+                    foreach (var formdata in updatedFormData.FinanceAccounts)
+                    {
+                        string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| JV Number: {formdata.JVNumber} | JV Date: {formdata.JVDate.Value.ToShortDateString()}";
+                        FinanceAccountsPostDetails.AppendLine(rowData);
+                        FTNo++;
+                    }
                 }
+
                 string FinanceAccounts = FinanceAccountsPostDetails.ToString();
                 foreach (var f in updatedFormData.FinanceAccounts)
                 {
@@ -183,12 +188,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
                 StringBuilder FinanceTreasuryHonorDetails = new StringBuilder();
                 int FTNo = 1;
-                foreach (var formdata in updatedFormData.FinanceTreasury)
+                if (updatedFormData.Status.ToLower() == "approved")
                 {
-                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| PV Number: {formdata.PVNumber} | PV Date: {formdata.PVDate.Value.ToShortDateString()} | Bank Reference Number: {formdata.BankReferenceNumber} | Bank Reference Date: {formdata.BankReferenceDate.Value.ToShortDateString()}";
-                    FinanceTreasuryHonorDetails.AppendLine(rowData);
-                    FTNo++;
+                    foreach (var formdata in updatedFormData.FinanceTreasury)
+                    {
+                        string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| PV Number: {formdata.PVNumber} | PV Date: {formdata.PVDate.Value.ToShortDateString()} | Bank Reference Number: {formdata.BankReferenceNumber} | Bank Reference Date: {formdata.BankReferenceDate.Value.ToShortDateString()}";
+                        FinanceTreasuryHonorDetails.AppendLine(rowData);
+                        FTNo++;
+                    }
                 }
+
                 string FinanceTreasury = FinanceTreasuryHonorDetails.ToString();
 
                 foreach (var f in updatedFormData.FinanceTreasury)
@@ -263,21 +272,24 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                 Sheet sheet = smartsheet.SheetResources.GetSheet(parsedSheetId, null, null, null, null, null, null, null);
                 Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
 
-
+                string FinanceTreasury = "";
                 StringBuilder FinanceTreasuryHonorDetails = new StringBuilder();
                 int FTNo = 1;
 
 
-
-                foreach (var formdata in updatedFormData.FinanceTreasury)
+                if (updatedFormData.Status.ToLower() == "approved")
                 {
-                    string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| PV Number: {formdata.PVNumber} | PV Date: {formdata.PVDate.Value.ToShortDateString()} | Bank Reference Number: {formdata.BankReferenceNumber} | Bank Reference Date: {formdata.BankReferenceDate.Value.ToShortDateString()}";
-                    FinanceTreasuryHonorDetails.AppendLine(rowData);
-                    FTNo++;
+                    foreach (var formdata in updatedFormData.FinanceTreasury)
+                    {
+                        string rowData = $"{FTNo}. {formdata.HCPName} | MIS Code: {formdata.MISCode}| PV Number: {formdata.PVNumber} | PV Date: {formdata.PVDate.Value.ToShortDateString()} | Bank Reference Number: {formdata.BankReferenceNumber} | Bank Reference Date: {formdata.BankReferenceDate.Value.ToShortDateString()}";
+                        FinanceTreasuryHonorDetails.AppendLine(rowData);
+                        FTNo++;
 
 
+                    }
+                    FinanceTreasury = FinanceTreasuryHonorDetails.ToString();
                 }
-                string FinanceTreasury = FinanceTreasuryHonorDetails.ToString();
+
 
                 foreach (var f in updatedFormData.FinanceTreasury)
                 {
@@ -286,12 +298,16 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
                         Row existingRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == f.Id));
                         if (existingRow != null)
                         {
-                            Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
-                            updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
-                            var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+                            if (updatedFormData.Status.ToLower() == "approved")
+                            {
+                                Row updateRow = new Row { Id = existingRow.Id, Cells = new List<Cell>() };
+                                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Number"), Value = f.PVNumber });
+                                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "PV Date"), Value = f.PVDate });
+                                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Number"), Value = f.BankReferenceNumber });
+                                updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet, "Bank Reference Date"), Value = f.BankReferenceDate });
+                                var updatedRow = smartsheet.SheetResources.RowResources.UpdateRows(parsedSheetId, new Row[] { updateRow });
+
+                            }
                         }
                         else
                         {

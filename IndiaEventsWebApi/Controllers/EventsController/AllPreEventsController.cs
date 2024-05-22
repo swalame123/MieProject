@@ -1239,7 +1239,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                         SheetHelper.DeleteFile(filePath);
                     }
                 }
-               
+
 
                 if (formDataList.Webinar.EventOpen30days == "Yes" || formDataList.Webinar.EventWithin7days == "Yes" || formDataList.Webinar.FB_Expense_Excluding_Tax == "Yes" || formDataList.Webinar.IsDeviationUpload == "Yes")
                 {
@@ -3751,20 +3751,6 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             catch (Exception ex)
             {
                 Log.Error($"Error occured on AllPreEventsController method {ex.Message} at {DateTime.Now}");
@@ -3773,43 +3759,6 @@ namespace IndiaEventsWebApi.Controllers.EventsController
             }
             return Ok();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 
     }
 }

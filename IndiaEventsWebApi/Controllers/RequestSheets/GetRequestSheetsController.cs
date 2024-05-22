@@ -1372,7 +1372,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
-                var attachments = GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
+                var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
             return Ok(ProductBrandsListrowData);
@@ -1386,7 +1386,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
-                var attachments = GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
+                var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
             return Ok(ProductBrandsListrowData);
@@ -1400,7 +1400,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
-                var attachments = GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
+                var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
             return Ok(ProductBrandsListrowData);
@@ -1414,7 +1414,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
-                var attachments = GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
+                var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
             return Ok(ProductBrandsListrowData);
@@ -1462,30 +1462,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-        private List<Dictionary<string, object>> GetAttachmentsForRow(SmartsheetClient smartsheet, long sheetId, long row)
-        {
-            List<Dictionary<string, object>> attachmentsList = new List<Dictionary<string, object>>();
-            var attachments = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheetId, row, null);
-
-            if (attachments.Data != null && attachments.Data.Count > 0)
-            {
-                foreach (var attachment in attachments.Data)
-                {
-                    long AID = (long)attachment.Id;
-                    Attachment file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheetId, AID);
-                    Dictionary<string, object> attachmentInfo = new Dictionary<string, object>
-                    {
-                        { "Name", file.Name },
-                        { "Id", file.Id },
-                        { "Url", file.Url },
-                        { "base64", SheetHelper.UrlToBaseValue(file.Url) }
-                    };
-                    attachmentsList.Add(attachmentInfo);
-                }
-            }
-            return attachmentsList;
-        }
-
+       
 
 
 
