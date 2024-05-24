@@ -1,4 +1,5 @@
-﻿using IndiaEvents.Models.Models.RequestSheets;
+﻿using Aspose.Pdf.Plugins;
+using IndiaEvents.Models.Models.RequestSheets;
 using IndiaEventsWebApi.Helper;
 using IndiaEventsWebApi.Models;
 using IndiaEventsWebApi.Models.MasterSheets.CodeCreation;
@@ -106,7 +107,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 }
                 if (mis != "")
                 {
-                    return Ok($"MIS Code: {formData.MisCode} already exist in sheetname:{sheetval}");
+                    return Ok(new { Message = $"MIS Code: {formData.MisCode} already exist in sheetname:{sheetval}" });
                 }
 
                 else
@@ -115,7 +116,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                     var IsPanCardDocument = !string.IsNullOrEmpty(formData.PanCardDocument) ? "Yes" : "No";
                     var IsChequeDocument = !string.IsNullOrEmpty(formData.ChequeDocument) ? "Yes" : "No";
                     var IsTaxResidenceCertificate = !string.IsNullOrEmpty(formData.TaxResidenceCertificate) ? "Yes" : "No";
-                    
+
                     var newRow = new Row();
                     newRow.Cells = new List<Cell>();
 

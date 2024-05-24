@@ -62,21 +62,21 @@ namespace IndiaEventsWebApi.Controllers
                     rawContent = await reader.ReadToEndAsync();
                 }
                 requestHeaders.Add("Body", rawContent);
-                Serilog.Log.Information(string.Join(";", requestHeaders.Select(x => x.Key + "=" + x.Value).ToArray()));
+                //Log.Information(string.Join(";", requestHeaders.Select(x => x.Key + "=" + x.Value).ToArray()));
 
 
-                var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
+                Root? RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
                 Attachementfile(RequestWebhook);
 
-                var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
+                string? challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
 
                 return Ok(new Webhook { smartsheetHookResponse = RequestWebhook.challenge });
                 //return Ok();
             }
             catch (Exception ex)
             {
-                Serilog.Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
-                Serilog.Log.Error(ex.StackTrace);
+                Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(ex.StackTrace);
             }
         }
@@ -96,7 +96,7 @@ namespace IndiaEventsWebApi.Controllers
 
 
 
-                var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
+                Root? RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
                 AgreementsTrigger(RequestWebhook);
 
                 var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
@@ -106,8 +106,8 @@ namespace IndiaEventsWebApi.Controllers
             }
             catch (Exception ex)
             {
-                Serilog.Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
-                Serilog.Log.Error(ex.StackTrace);
+                Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(ex.StackTrace);
             }
         }
@@ -126,18 +126,18 @@ namespace IndiaEventsWebApi.Controllers
                 requestHeaders.Add("Body", rawContent);
 
 
-                var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
+                Root? RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
                 ApprovalCheckBox(RequestWebhook);
 
-                var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
+                string? challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
 
                 return Ok(new Webhook { smartsheetHookResponse = RequestWebhook.challenge });
                 //return Ok();
             }
             catch (Exception ex)
             {
-                Serilog.Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
-                Serilog.Log.Error(ex.StackTrace);
+                Log.Error($"Error occured on Webhook apicontroller PostData method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(ex.StackTrace);
             }
         }
@@ -149,17 +149,17 @@ namespace IndiaEventsWebApi.Controllers
             {
                 Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
                 string rawContent = string.Empty;
-                using (var reader = new StreamReader(Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false))
+                using (StreamReader reader = new StreamReader(Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false))
                 {
                     rawContent = await reader.ReadToEndAsync();
                 }
                 requestHeaders.Add("Body", rawContent);
 
 
-                var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
+                Root? RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
                 //EventSettlementApproval(RequestWebhook);
                 EventSettlementDeviationApproval(RequestWebhook);
-                var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
+                string? challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
 
                 return Ok(new Webhook { smartsheetHookResponse = RequestWebhook.challenge });
                 //return Ok();
@@ -207,7 +207,7 @@ namespace IndiaEventsWebApi.Controllers
         {
             try
             {
-                Dictionary<string, string> requestHeaders = new Dictionary<string, string>();
+                Dictionary<string, string> requestHeaders = [];
                 string rawContent = string.Empty;
                 using (var reader = new StreamReader(Request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false))
                 {
@@ -216,10 +216,10 @@ namespace IndiaEventsWebApi.Controllers
                 requestHeaders.Add("Body", rawContent);
 
 
-                var RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
+                Root? RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
                 PreEventApproval(RequestWebhook);
 
-                var challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
+                string? challenge = requestHeaders.Where(x => x.Key == "challenge").Select(x => x.Value).FirstOrDefault();
 
                 return Ok(new Webhook { smartsheetHookResponse = RequestWebhook.challenge });
                 //return Ok();
@@ -233,43 +233,11 @@ namespace IndiaEventsWebApi.Controllers
         }
         private async void PreEventApproval(Root RequestWebhook)
         {
-            //try
-            //{
-            //    string processSheet = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
 
-            //    //var TestingId = "6831673324818308";
-            //    Sheet TestingSheetData = SheetHelper.GetSheetById(smartsheet, processSheet);
-
-            //    if (RequestWebhook != null && RequestWebhook.events != null)
-            //    {
-            //        foreach (var WebHookEvent in RequestWebhook.events)
-            //        {
-            //            if (WebHookEvent.eventType.ToLower() == "updated" || WebHookEvent.eventType.ToLower() == "created")
-            //            {
-            //                Row targetRowId = TestingSheetData.Rows.FirstOrDefault(row => row.Id == WebHookEvent.rowId);
-            //                if (targetRowId != null)
-            //                {
-            //                    string? status = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == 6770461806382980)?.Value?.ToString();
-            //                    if (status.ToLower() == "approved")
-            //                    {
-            //                        long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Is All Deviations Approved?");
-            //                        Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Yes" };
-            //                        Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-            //                        Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-            //                        if (cellToUpdate != null) { cellToUpdate.Value = "Yes"; }
-
-            //                        smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
             try
             {
                 string processSheet = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
 
-                //var TestingId = "6831673324818308";
                 Sheet TestingSheetData = SheetHelper.GetSheetById(smartsheet, processSheet);
 
                 //Column? Trigger = TestingSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "Deviation Status", StringComparison.OrdinalIgnoreCase));
@@ -291,7 +259,6 @@ namespace IndiaEventsWebApi.Controllers
                         if (WebHookEvent.eventType.ToLower() == "updated" || WebHookEvent.eventType.ToLower() == "created")
                         {
                             Row targetRowId = TestingSheetData.Rows.FirstOrDefault(row => row.Id == WebHookEvent.rowId);
-                            //var columnValue = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn1.Id)?.Value.ToString();
 
 
                             if (targetRowId != null)
@@ -457,7 +424,7 @@ namespace IndiaEventsWebApi.Controllers
             {
                 string processSheet = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
 
-                //var TestingId = "6831673324818308";
+
                 Sheet TestingSheetData = SheetHelper.GetSheetById(smartsheet, processSheet);
 
                 Column? Trigger = TestingSheetData.Columns.FirstOrDefault(column => string.Equals(column.Title, "Deviation Status", StringComparison.OrdinalIgnoreCase));
@@ -589,50 +556,6 @@ namespace IndiaEventsWebApi.Controllers
 
 
 
-
-
-
-
-
-
-                                //if ((status1.ToLower() == "approved" || status1.ToLower() == "null") &&
-                                // (status2.ToLower() == "approved" || status2.ToLower() == "null") &&
-                                // (status3.ToLower() == "submitted" || status3.ToLower() == "null") &&
-                                // (status4.ToLower() == "approved" || status4.ToLower() == "null") &&
-                                // (status5.ToLower() == "approved" || status5.ToLower() == "null") &&
-                                // (status6.ToLower() == "approved" || status6.ToLower() == "null") &&
-                                // (status7.ToLower() == "approved" || status7.ToLower() == "null") &&
-                                // (status8.ToLower() == "approved" || status8.ToLower() == "null") &&
-                                // (status9.ToLower() == "approved" || status9.ToLower() == "null"))
-                                //{
-
-                                //    long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Is All Deviations Approved?");
-                                //    Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Sales Deviations Approved" };
-                                //    Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-                                //    Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-                                //    if (cellToUpdate != null) { cellToUpdate.Value = "Sales Deviations Approved"; }
-
-                                //    smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-                                //}
-                                //else if (status3.ToLower() == "approved" || status3.ToLower() == "null")
-                                ////TriggerStatus.ToLower() != "30 days deviation pending" ||
-                                ////TriggerStatus.ToLower() != "Less than 5 invitees pending" ||
-
-                                ////TriggerStatus.ToLower() != "cin pending" ||
-                                ////TriggerStatus.ToLower() != "cis pending" ||
-                                ////TriggerStatus.ToLower() != "cit pending" ||
-                                ////TriggerStatus.ToLower() != "anc pending" ||
-                                ////TriggerStatus.ToLower() != "snc is pending" ||
-                                ////TriggerStatus.ToLower() != "od pending")
-                                //{
-                                //    long honorariumSubmittedColumnId = SheetHelper.GetColumnIdByName(TestingSheetData, "Is All Deviations Approved?");
-                                //    Cell cellToUpdateB = new() { ColumnId = honorariumSubmittedColumnId, Value = "Finance Deviations Approved" };
-                                //    Row updateRow = new() { Id = targetRowId.Id, Cells = new Cell[] { cellToUpdateB } };
-                                //    Cell? cellToUpdate = targetRowId.Cells.FirstOrDefault(c => c.ColumnId == honorariumSubmittedColumnId);
-                                //    if (cellToUpdate != null) { cellToUpdate.Value = "Finance Deviations Approved"; }
-
-                                //    smartsheet.SheetResources.RowResources.UpdateRows(TestingSheetData.Id.Value, new Row[] { updateRow });
-                                //}
                             }
                         }
                     }
@@ -684,8 +607,8 @@ namespace IndiaEventsWebApi.Controllers
 
             catch (Exception ex)
             {
-                Serilog.Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
-                Serilog.Log.Error(ex.StackTrace);
+                Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
             }
 
         }
@@ -710,16 +633,12 @@ namespace IndiaEventsWebApi.Controllers
 
 
                             long ColumnId = SheetHelper.GetColumnIdByName(sheet_SpeakerCode, "Agreement Trigger");
-                            Cell updatedCell = new Cell
+                            Cell updatedCell = new()
                             {
                                 ColumnId = ColumnId,
                                 Value = "Yes"
                             };
-                            Row updatedRow = new Row
-                            {
-                                Id = targetRowId.Id,
-                                Cells = new List<Cell> { updatedCell }
-                            };
+                            Row updatedRow = new() { Id = targetRowId?.Id, Cells = new List<Cell> { updatedCell } };
 
 
 
@@ -736,8 +655,8 @@ namespace IndiaEventsWebApi.Controllers
 
             catch (Exception ex)
             {
-                Serilog.Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
-                Serilog.Log.Error(ex.StackTrace);
+                Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
             }
 
         }
@@ -769,20 +688,20 @@ namespace IndiaEventsWebApi.Controllers
 
                             if (processIdColumn1 != null && processIdColumn2 != null)
                             {
-                                var columnValue = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn1.Id)?.Value.ToString();
-                                var status = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn2.Id)?.Value.ToString();
-                                var meetingType = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn3.Id)?.Value;
-                                var EventType = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn4.Id)?.Value.ToString();
+                                string? columnValue = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn1.Id)?.Value.ToString();
+                                string? status = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn2.Id)?.Value.ToString();
+                                object? meetingType = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn3.Id)?.Value;
+                                string? EventType = targetRowId.Cells.FirstOrDefault(cell => cell.ColumnId == processIdColumn4.Id)?.Value.ToString();
                                 if (EventType == "Class I" || EventType == "Webinar")
                                 {
                                     if (status != null && (status == "Approved" || status == "Waiting for Finance Treasury Approval"))
 
                                     {
-                                        int timeInterval = 250000;
+                                        int timeInterval = 60000;
                                         await Task.Delay(timeInterval);
                                         if (meetingType != null)
                                         {
-                                            if (meetingType.ToString() == "Other | ")
+                                            if (meetingType.ToString().ToLower().Contains("other"))
                                             {
 
                                                 moveAttachments(columnValue, WebHookEvent.rowId);
@@ -801,7 +720,7 @@ namespace IndiaEventsWebApi.Controllers
                                 }
                                 else if (status != null && status == "Approved" || status == "Waiting for Finance Treasury Approval")
                                 {
-                                    int timeInterval = 250000;
+                                    int timeInterval = 0000;
                                     await Task.Delay(timeInterval);
                                     moveAttachments(columnValue, WebHookEvent.rowId);
                                 }
@@ -816,8 +735,8 @@ namespace IndiaEventsWebApi.Controllers
 
             catch (Exception ex)
             {
-                Serilog.Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
-                Serilog.Log.Error(ex.StackTrace);
+                Log.Error($"Error occured on Webhook apicontroller Attachementfile method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
             }
 
         }
@@ -833,19 +752,19 @@ namespace IndiaEventsWebApi.Controllers
 
                 if (matchingCell != null && matchingCell.Value != null)
                 {
-                    var Id = (long)row.Id;
+                    long Id = (long)row.Id;
                     string eventId = matchingCell.Value.ToString();
                     if (!string.IsNullOrEmpty(eventId) && eventId.Equals(EventID, StringComparison.OrdinalIgnoreCase))
                     {
-                        var a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments((long)sheet_SpeakerCode.Id, Id, null);
-                        var url = "";
-                        var name = "";
+                        PaginatedResult<Attachment> a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments((long)sheet_SpeakerCode.Id, Id, null);
+                        string url = "";
+                        string name = "";
                         foreach (var x in a.Data)
                         {
                             if (x != null)
                             {
-                                var AID = (long)x.Id;
-                                var file = smartsheet.SheetResources.AttachmentResources.GetAttachment((long)sheet_SpeakerCode.Id, AID);
+                                long AID = (long)x.Id;
+                                Attachment file = smartsheet.SheetResources.AttachmentResources.GetAttachment((long)sheet_SpeakerCode.Id, AID);
                                 //string filename = file.Name.Split(".")[0].Split("-")[1];
                                 string FullName = file.Name;
                                 string substring = "agreement";
@@ -864,8 +783,8 @@ namespace IndiaEventsWebApi.Controllers
                                     byte[] data = client.GetByteArrayAsync(url).Result;
                                     string base64 = Convert.ToBase64String(data);
                                     byte[] xy = Convert.FromBase64String(base64);
-                                    var f = Path.Combine("Resources", "Images");
-                                    var ps = Path.Combine(Directory.GetCurrentDirectory(), f);
+                                    string f = Path.Combine("Resources", "Images");
+                                    string ps = Path.Combine(Directory.GetCurrentDirectory(), f);
                                     if (!Directory.Exists(ps))
                                     {
                                         Directory.CreateDirectory(ps);
@@ -876,11 +795,11 @@ namespace IndiaEventsWebApi.Controllers
 
                                     System.IO.File.WriteAllBytes(fp, xy);
                                     string type = SheetHelper.GetContentType(ft);
-                                    var z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile((long)processSheetData.Id, rowId, fp, "application/msword");
+                                    Attachment z = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile((long)processSheetData.Id, rowId, fp, "application/msword");
 
                                 }
                                 url = "";
-                                var bs64 = "";
+                                string bs64 = "";
                             }
                         }
                     }
@@ -893,10 +812,10 @@ namespace IndiaEventsWebApi.Controllers
             try
             {
 
-                var EventCode = "";
-                var EventName = "";
-                var EventDate = "";
-                var EventVenue = "";
+                string? EventCode = "";
+                string? EventName = "";
+                string EventDate = "";
+                string? EventVenue = "";
                 DateTime parsedDate;
                 List<string> Speakers = new List<string>();
 
@@ -998,8 +917,7 @@ namespace IndiaEventsWebApi.Controllers
                         newRow["S.No"] = Sr_No;
                         foreach (Cell cell in row.Cells)
                         {
-                            string columnName = sheet.Columns
-                                .FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
+                            string columnName = sheet.Columns.FirstOrDefault(c => c.Id == cell.ColumnId)?.Title;
                             if (requiredColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase))
                             {
                                 newRow[columnName] = cell.DisplayValue;
@@ -1036,8 +954,8 @@ namespace IndiaEventsWebApi.Controllers
 
                 byte[] fileBytes = SheetHelper.exportAttendencepdfnew(dtMai, MenariniTable, EventCode, EventName, EventDate, EventVenue, resultString);
                 string filename = "Attendance Sheet_" + EventID + ".pdf";
-                var folderName = Path.Combine("Resources", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                string folderName = Path.Combine("Resources", "Images");
+                string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 if (!Directory.Exists(pathToSave))
                 {
                     Directory.CreateDirectory(pathToSave);
@@ -1045,7 +963,7 @@ namespace IndiaEventsWebApi.Controllers
                 string fileType = SheetHelper.GetFileType(fileBytes);
                 string filePath = Path.Combine(pathToSave, filename);
                 System.IO.File.WriteAllBytes(filePath, fileBytes);
-                var attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile((long)processSheetData.Id, rowId, filePath, "application/msword");
+                Attachment attachment = smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile((long)processSheetData.Id, rowId, filePath, "application/msword");
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);

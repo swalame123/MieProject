@@ -1,4 +1,5 @@
-﻿using IndiaEventsWebApi.Helper;
+﻿using Aspose.Pdf.Plugins;
+using IndiaEventsWebApi.Helper;
 using IndiaEventsWebApi.Models.MasterSheets.CodeCreation;
 using IndiaEventsWebApi.Models.RequestSheets;
 using Microsoft.AspNetCore.Http;
@@ -67,7 +68,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets.CodeCreation
                 }
                 if (mis != "")
                 {
-                    return Ok($"MIS Code: {formData.MISCode} already exist in sheetname:{sheetval}");
+                    return Ok(new {Message = $"MIS Code: {formData.MISCode} already exist in sheetname:{sheetval}" });
                 }
                 else
                 {

@@ -740,6 +740,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 List<ApprovedSpeakersGetPayload> eventRequestBrandsList = sheetData
+                    .Where(row => row.TryGetValue("Is Active", out var isActive) && isActive?.ToString().ToLower().Equals("yes", StringComparison.OrdinalIgnoreCase) == true)
                     .Select(row => new ApprovedSpeakersGetPayload
                     {
 
@@ -827,6 +828,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 List<ApprovedTrainersGetPayload> eventRequestBrandsList = sheetData
+                     .Where(row => row.TryGetValue("IsActive", out var isActive) && isActive?.ToString().ToLower().Equals("yes", StringComparison.OrdinalIgnoreCase) == true)
                     .Select(row => new ApprovedTrainersGetPayload
                     {
 
@@ -928,6 +930,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 List<ApprovedVendorsGetPayload> eventRequestBrandsList = sheetData
+                    .Where(row => row.TryGetValue("IsActive?",out var isActive)&&isActive?.ToString().ToLower().Equals("yes",StringComparison.OrdinalIgnoreCase) == true)
                     .Select(row => new ApprovedVendorsGetPayload
                     {
                         VendorId = row.TryGetValue("VendorId", out var eventTopic) ? eventTopic?.ToString() : null,
