@@ -323,7 +323,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-           
+
             List<string> BrandsColumnNames = new List<string>();
             foreach (Column column in sheet2.Columns)
             {
@@ -368,7 +368,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-            
+
             List<string> InviteesColumnNames = new List<string>();
             foreach (Column column in sheet3.Columns)
             {
@@ -410,7 +410,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-           
+
             List<string> PanelColumnNames = new List<string>();
             foreach (Column column in sheet4.Columns)
             {
@@ -458,7 +458,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-            
+
             List<string> SlideKitColumnNames = new List<string>();
             foreach (Column column in sheet5.Columns)
             {
@@ -501,7 +501,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-            
+
             List<string> ExpenseColumnNames = new List<string>();
             foreach (Column column in sheet6.Columns)
             {
@@ -525,7 +525,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 }
             }
 
-            
+
             List<string> DeviationscolumnNames = new List<string>();
             foreach (Column column in sheet7.Columns)
             {
@@ -2740,8 +2740,13 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Advance Details"), Value = formDataList.AdvanceDetails });
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Attended"), Value = formDataList.TotalAttendees });
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Invitees Participated"), Value = formDataList.AttendeesLineItem });
-                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Invitees"), Value = formDataList.TotalInvitees});
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Invitees"), Value = formDataList.TotalInvitees });
                     updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Attendees"), Value = formDataList.TotalAttendees });
+
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Travel Amount"), Value = formDataList.TotalTravelSpend });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Accommodation Amount"), Value = formDataList.TotalAccomodationSpend });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Travel & Accommodation Amount"), Value = formDataList.TotalTravelAndAccomodationSpend });
+                    updateRow.Cells.Add(new Cell { ColumnId = SheetHelper.GetColumnIdByName(sheet10, "Total Local Conveyance"), Value = formDataList.TotalLocalConveyance });
 
 
 

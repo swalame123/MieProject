@@ -70,7 +70,8 @@ Log.Logger = new LoggerConfiguration()
 //        .WriteTo.Console();
 //}, preserveStaticLogger: true);
 
-//builder.Host.UseSerilog((hostingContext, loggerConfiguration) => {
+//builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+//{
 //    loggerConfiguration
 //        .ReadFrom.Configuration(hostingContext.Configuration)
 //        .Enrich.FromLogContext()

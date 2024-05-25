@@ -62,7 +62,7 @@ namespace IndiaEventsWebApi.Controllers
                     rawContent = await reader.ReadToEndAsync();
                 }
                 requestHeaders.Add("Body", rawContent);
-                //Log.Information(string.Join(";", requestHeaders.Select(x => x.Key + "=" + x.Value).ToArray()));
+                Log.Information(string.Join(";", requestHeaders.Select(x => x.Key + "=" + x.Value).ToArray()));
 
 
                 Root? RequestWebhook = JsonConvert.DeserializeObject<Root>(rawContent);
@@ -706,6 +706,11 @@ namespace IndiaEventsWebApi.Controllers
 
                                                 moveAttachments(columnValue, WebHookEvent.rowId);
                                             }
+                                            else
+                                            {
+                                                GenerateSummaryPDF(columnValue, WebHookEvent.rowId);
+                                                moveAttachments(columnValue, WebHookEvent.rowId);
+                                            }
                                         }
 
                                         else
@@ -741,7 +746,7 @@ namespace IndiaEventsWebApi.Controllers
 
         }
 
-        private void moveAttachments(string EventID, long rowId)
+        private async void moveAttachments(string EventID, long rowId)
         {
             List<Attachment> attachments = new List<Attachment>();
 
@@ -807,7 +812,7 @@ namespace IndiaEventsWebApi.Controllers
             }
         }
 
-        private void GenerateSummaryPDF(string EventID, long rowId)
+        private async void GenerateSummaryPDF(string EventID, long rowId)
         {
             try
             {

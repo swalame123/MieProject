@@ -46,23 +46,28 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public string? IsAdvanceRequired { get; set; }
         public string? totalInvitees { get; set; }
         public string? TotalAttendees { get; set; }
-        public string? TotalTravelSpend { get; set; }
-        public string? TotalAccomodationSpend { get; set; }
+     
         public string? TotalExpenses { get; set; }
-        public string? TotalTravelAndAccomodationSpend { get; set; }
+        
         public string? TotalHonorariumSpend { get; set; }
         public string? TotalSpend { get; set; }
         public string? TotalActuals { get; set; }
         public string? AdvanceUtilizedForEvents { get; set; }
         public string? PayBackAmountToCompany { get; set; }
         public string? AdditionalAmountNeededToPayForInitiator { get; set; }
-        public string? TotalLocalConveyance { get; set; }
+       
         public string? IsDeviationUpload { get; set; }
         public double? TotalBudgetAmount { get; set; }
         public double? ActualExpenseAmount { get; set; }
         public double? AdvanceProvided { get; set; }
         public double? TotalBtcAmount { get; set; }
         public double? TotalBteAmount { get; set; }
+
+
+        public string? TotalTravelAndAccomodationSpend { get; set; }
+        public string? TotalLocalConveyance { get; set; }
+        public string? TotalTravelSpend { get; set; }
+        public string? TotalAccomodationSpend { get; set; }
 
 
         public List<string>? Files { get; set; }
@@ -143,7 +148,10 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public double TotalAttendees { get; set; }
         public string AttendeesLineItem { get; set; }
 
-
+        public double? TotalTravelAndAccomodationSpend { get; set; }
+        public double? TotalLocalConveyance { get; set; }
+        public double? TotalTravelSpend { get; set; }
+        public double? TotalAccomodationSpend { get; set; }
 
     }
 
