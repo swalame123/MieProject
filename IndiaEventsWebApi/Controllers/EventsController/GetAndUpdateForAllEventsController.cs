@@ -251,6 +251,49 @@ namespace IndiaEventsWebApi.Controllers.EventsController
 
         #endregion
 
+        [HttpGet("GetUrlFromSheet")]
+        public async Task<IActionResult> GetUrlFromSheet(string SheetName, long AttachmentId)
+        {
+
+            try
+            {
+                SmartsheetClient smartsheet = await Task.Run(() => SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
+
+                if (SheetName.ToLower().Contains("honorarium"))
+                {
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId11);
+                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
+                    return Ok(file.Url);
+                }
+                else if (SheetName.ToLower().Contains("settlement"))
+                {
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId10);
+                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
+                    return Ok(file.Url);
+                }
+                else if (SheetName.ToLower().Contains("eventrequestprocess"))
+                {
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
+                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
+                    return Ok(file.Url);
+                }
+
+                else
+                {
+                    return Ok(new { Message = "AttachmentId not found" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new
+                {
+                    Message = ex.Message + "------" + ex.StackTrace
+                });
+            }
+        }
+
         [HttpGet("GetDataFromAllSheetsUsingEventIdInPreEvent")]
         public async Task<IActionResult> GetDataFromAllSheetsUsingEventId(string eventId, int count = 5)
         {
@@ -573,13 +616,13 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                                 {
                                     long AID = (long)attachment.Id;
                                     string Name = attachment.Name;
-                                    //Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet4, AID));
+                                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet4, AID));
                                     ////Attachment file = await Task.Run(() => smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet4.Id.Value, AID));
                                     Dictionary<string, object> attachmentInfo = new()
                             {
                                 { "Name",Name},
-                                { "Id", AID }
-                               //{ "base64" , SheetHelper.UrlToBaseValue(file.Url) }
+                                { "Id", AID },
+                               { "base64" , SheetHelper.UrlToBaseValue(file.Url) }
                             };
                                     PanelattachmentsList.Add(attachmentInfo);
                                 }
@@ -633,13 +676,13 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                                 {
                                     long AID = (long)attachment.Id;
                                     string Name = attachment.Name;
-                                    // Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet5, AID));
+                                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet5, AID));
                                     // Attachment file = await Task.Run(() => smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet5.Id.Value, AID));
                                     Dictionary<string, object> attachmentInfo = new()
                             {
                                 { "Name", Name },
-                                { "Id", AID }
-                                //{ "base64" , SheetHelper.UrlToBaseValue(file.Url)                                }
+                                { "Id", AID },
+                                { "base64" , SheetHelper.UrlToBaseValue(file.Url)                                }
                             };
                                     SlideKitattachmentsList.Add(attachmentInfo);
                                 }
