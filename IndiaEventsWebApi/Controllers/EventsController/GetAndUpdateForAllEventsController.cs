@@ -263,19 +263,19 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                 {
                     Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId11);
                     Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
-                    return Ok(file.Url);
+                    return Ok(new { url = file.Url });
                 }
                 else if (SheetName.ToLower().Contains("settlement"))
                 {
                     Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId10);
                     Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
-                    return Ok(file.Url);
+                    return Ok(new { url = file.Url });
                 }
                 else if (SheetName.ToLower().Contains("eventrequestprocess"))
                 {
                     Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
                     Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
-                    return Ok(file.Url);
+                    return Ok(new { url = file.Url });
                 }
 
                 else
