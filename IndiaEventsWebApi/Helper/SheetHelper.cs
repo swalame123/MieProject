@@ -50,7 +50,8 @@ namespace IndiaEventsWebApi.Helper
                         { "Name", file.Name },
                         { "Id", file.Id },
                         { "Url", file.Url },
-                        { "base64", UrlToBaseValue(file.Url) }
+                        { "base64", UrlToBaseValue(file.Url) },
+                        {"SheetId",sheetId }
                     };
                     attachmentsList.Add(attachmentInfo);
                 }
@@ -71,6 +72,7 @@ namespace IndiaEventsWebApi.Helper
                     {
                         { "Name", attachment.Name },
                         { "Id", attachment.Id },
+                         {"SheetId",sheetId }
 
                     };
                     attachmentsList.Add(attachmentInfo);

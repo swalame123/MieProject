@@ -252,41 +252,18 @@ namespace IndiaEventsWebApi.Controllers.EventsController
         #endregion
 
         [HttpGet("GetUrlFromSheet")]
-        public async Task<IActionResult> GetUrlFromSheet(string SheetName, long AttachmentId)
+        public async Task<IActionResult> GetUrlFromSheet(long SheetId, long AttachmentId)
         {
-
             try
             {
                 SmartsheetClient smartsheet = await Task.Run(() => SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
 
-                if (SheetName.ToLower().Contains("honorarium"))
-                {
-                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId11);
-                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
-                    return Ok(new { url = file.Url });
-                }
-                else if (SheetName.ToLower().Contains("settlement"))
-                {
-                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId10);
-                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
-                    return Ok(new { url = file.Url });
-                }
-                else if (SheetName.ToLower().Contains("eventrequestprocess"))
-                {
-                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
-                    Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet, AttachmentId));
-                    return Ok(new { url = file.Url });
-                }
+                Attachment attachments = await Task.Run(() => smartsheet.SheetResources.AttachmentResources.GetAttachment(SheetId, AttachmentId));
 
-                else
-                {
-                    return Ok(new { Message = "AttachmentId not found" });
-                }
-
+                return attachments != null ? Ok(new { url = attachments.Url }) : (IActionResult)Ok(new { Message = "AttachmentId not found" });
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new
                 {
                     Message = ex.Message + "------" + ex.StackTrace
@@ -322,7 +299,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     List<Dictionary<string, object>> SlideKiteventDetails = [];
                     List<Dictionary<string, object>> ExpenseeventDetails = [];
                     List<Dictionary<string, object>> attachmentsList = [];
-                    List<Dictionary<string, object>> DeviationsattachmentsList = [];
+                    //List<Dictionary<string, object>> DeviationsattachmentsList = [];
                     List<Dictionary<string, object>> attachmentInfoFiles = [];
 
                     Sheet sheet1 = SheetHelper.GetSheetById(smartsheet, sheetId1);
@@ -337,8 +314,8 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     strMessage += "==HcpSlideKit Get Completed==" + DateTime.Now.ToString() + "==";
                     Sheet sheet6 = SheetHelper.GetSheetById(smartsheet, sheetId6);
                     strMessage += "==ExpensesSheet Get Completed==" + DateTime.Now.ToString() + "==";
-                    Sheet sheet7 = SheetHelper.GetSheetById(smartsheet, sheetId7);
-                    strMessage += "==Deviation Get Completed==" + DateTime.Now.ToString() + "==";
+                    //Sheet sheet7 = SheetHelper.GetSheetById(smartsheet, sheetId7);
+                    //strMessage += "==Deviation Get Completed==" + DateTime.Now.ToString() + "==";
 
                     List<string> columnNames = [];
                     foreach (Column column in sheet1.Columns)
@@ -441,7 +418,9 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                                 Dictionary<string, object> attachmentInfoData = new()
                             {
                                 { "Name", Name },
-                                { "Id", AID }
+                                { "Id", AID },
+                                {"SheetId",sheet1.Id }
+
                                 //{ "base64", SheetHelper.UrlToBaseValue(file.Url) }
 
                             };
@@ -622,6 +601,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                             {
                                 { "Name",Name},
                                 { "Id", AID },
+                                {"SheetId",sheet4.Id },
                                { "base64" , SheetHelper.UrlToBaseValue(file.Url) }
                             };
                                     PanelattachmentsList.Add(attachmentInfo);
@@ -682,6 +662,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                             {
                                 { "Name", Name },
                                 { "Id", AID },
+                                {"SheetId",sheet5.Id },
                                 { "base64" , SheetHelper.UrlToBaseValue(file.Url)                                }
                             };
                                     SlideKitattachmentsList.Add(attachmentInfo);
@@ -727,50 +708,50 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     }
 
 
-                    List<string> DeviationscolumnNames = [];
+                    //List<string> DeviationscolumnNames = [];
 
-                    foreach (Column column in sheet7.Columns)
-                    {
-                        DeviationscolumnNames.Add(column.Title);
-                    }
-                    IEnumerable<Row> DataInSheet7 = [];
-                    DataInSheet7 = sheet7.Rows.Where(x => Convert.ToString(x.Cells[Convert.ToInt32(sheet7.Columns.Where(y => y.Title == "EventId/EventRequestId").Select(z => z.Index).FirstOrDefault())].Value) == eventId);
-                    foreach (Row row in DataInSheet7)
-                    //foreach (var row in sheet7.Rows)
-                    {
-                        if (row.Cells.Any(c => c.DisplayValue == eventId))
-                        {
-                            List<string> DeviationscolumnsToInclude = new List<string> { "Deviation Type" };
+                    //foreach (Column column in sheet7.Columns)
+                    //{
+                    //    DeviationscolumnNames.Add(column.Title);
+                    //}
+                    //IEnumerable<Row> DataInSheet7 = [];
+                    //DataInSheet7 = sheet7.Rows.Where(x => Convert.ToString(x.Cells[Convert.ToInt32(sheet7.Columns.Where(y => y.Title == "EventId/EventRequestId").Select(z => z.Index).FirstOrDefault())].Value) == eventId);
+                    //foreach (Row row in DataInSheet7)
+                    ////foreach (var row in sheet7.Rows)
+                    //{
+                    //    if (row.Cells.Any(c => c.DisplayValue == eventId))
+                    //    {
+                    //        List<string> DeviationscolumnsToInclude = new List<string> { "Deviation Type" };
 
-                            Dictionary<string, object> DeviationsattachmentInfo = new Dictionary<string, object>();
-                            for (int i = 0; i < DeviationscolumnNames.Count; i++)
-                            {
-                                if (DeviationscolumnsToInclude.Contains(DeviationscolumnNames[i]))
-                                {
-                                    var val = row.Cells[i].Value.ToString();
+                    //        Dictionary<string, object> DeviationsattachmentInfo = new Dictionary<string, object>();
+                    //        for (int i = 0; i < DeviationscolumnNames.Count; i++)
+                    //        {
+                    //            if (DeviationscolumnsToInclude.Contains(DeviationscolumnNames[i]))
+                    //            {
+                    //                var val = row.Cells[i].Value.ToString();
 
-                                    // PaginatedResult<Attachment> attachments = await Task.Run(() => smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet7.Id.Value, row.Id.Value, null));
-                                    strMessage += "==Before listing attachments in row form deviation sheet" + "==" + DateTime.Now.ToString() + "==";
+                    //                // PaginatedResult<Attachment> attachments = await Task.Run(() => smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments(sheet7.Id.Value, row.Id.Value, null));
+                    //                strMessage += "==Before listing attachments in row form deviation sheet" + "==" + DateTime.Now.ToString() + "==";
 
-                                    PaginatedResult<Attachment> attachments = await Task.Run(() => ApiCalls.GetAttachmantsFromSheet(smartsheet, sheet7, row));
+                    //                PaginatedResult<Attachment> attachments = await Task.Run(() => ApiCalls.GetAttachmantsFromSheet(smartsheet, sheet7, row));
 
 
-                                    foreach (var attachment in attachments.Data)
-                                    {
-                                        var AID = (long)attachment.Id;
-                                        //string Name = attachment.Name;
-                                        //Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet7, AID));
-                                        //var file = await Task.Run(() => smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet7.Id.Value, AID));
-                                        DeviationsattachmentInfo[val] = AID;//SheetHelper.UrlToBaseValue(file.Url);
+                    //                foreach (var attachment in attachments.Data)
+                    //                {
+                    //                    var AID = (long)attachment.Id;
+                    //                    //string Name = attachment.Name;
+                    //                    //Attachment file = await Task.Run(() => ApiCalls.GetAttachment(smartsheet, sheet7, AID));
+                    //                    //var file = await Task.Run(() => smartsheet.SheetResources.AttachmentResources.GetAttachment(sheet7.Id.Value, AID));
+                    //                    DeviationsattachmentInfo[val] = AID;//SheetHelper.UrlToBaseValue(file.Url);
 
-                                    }
-                                    strMessage += "==After listing " + attachments.Data.Count.ToString() + " attachments in row from deviation sheet" + "==" + DateTime.Now.ToString() + "==";
+                    //                }
+                    //                strMessage += "==After listing " + attachments.Data.Count.ToString() + " attachments in row from deviation sheet" + "==" + DateTime.Now.ToString() + "==";
 
-                                }
-                            }
-                            DeviationsattachmentsList.Add(DeviationsattachmentInfo);
-                        }
-                    }
+                    //            }
+                    //        }
+                    //        DeviationsattachmentsList.Add(DeviationsattachmentInfo);
+                    //    }
+                    //}
 
                     resultData["eventDetails"] = eventDetails;
                     resultData["Files"] = attachmentInfoFiles;
@@ -779,7 +760,7 @@ namespace IndiaEventsWebApi.Controllers.EventsController
                     resultData["PanelDetails"] = PaneleventDetails;
                     resultData["SlideKitSelection"] = SlideKiteventDetails;
                     resultData["ExpenseSelection"] = ExpenseeventDetails;
-                    resultData["Deviation"] = DeviationsattachmentsList;
+                    //resultData["Deviation"] = DeviationsattachmentsList;
                     Log.Information("end of api " + DateTime.Now);
                     strMessage += "==end of api== " + DateTime.Now + "==";
                     return Ok(resultData);
