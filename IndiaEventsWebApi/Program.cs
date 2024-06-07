@@ -7,14 +7,17 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using Microsoft.AspNetCore.Http.Headers;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddSingleton(new SemaphoreSlim(1, 1));
 
 var configuration = builder.Configuration;
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -51,9 +54,9 @@ builder.Services.Configure<KestrelServerOptions>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyPolicy", builder =>
+    options.AddPolicy("UseCors", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("https://ambitious-rock-0757ea510.4.azurestaticapps.net", "http://localhost:4200")
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
@@ -63,27 +66,28 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-//builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
-//{
-//    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration)
-//        .Enrich.FromLogContext()
-//        .WriteTo.Console();
-//}, preserveStaticLogger: true);
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Console();
+}, preserveStaticLogger: true);
 
-//builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
-//{
-//    loggerConfiguration
-//        .ReadFrom.Configuration(hostingContext.Configuration)
-//        .Enrich.FromLogContext()
-//        .WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(evt => evt.Exception != null).WriteTo.Console());
-//}, preserveStaticLogger: true);
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(hostingContext.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(evt => evt.Exception != null).WriteTo.Console());
+}, preserveStaticLogger: true);
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-app.UseCors("MyPolicy");
-//app.UseSerilogRequestLogging();
+app.UseCors("UseCors");
+app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

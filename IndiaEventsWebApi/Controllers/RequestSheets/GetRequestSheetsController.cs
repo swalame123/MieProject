@@ -28,6 +28,8 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             this.configuration = configuration;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
             smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+            //smartsheet = SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
+
         }
 
         [HttpGet("GetEventRequestWebData")]
@@ -1364,7 +1366,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
         }
 
         [HttpGet("GetAttachmentsFromProcessSheetBasedOnEventId")]
-        public IActionResult GetAttachmentsFromProcessSheetBasedOnEventId(string eventId)
+        public async Task<IActionResult> GetAttachmentsFromProcessSheetBasedOnEventId(string eventId)
         {
             string sheetId = configuration.GetSection("SmartsheetSettings:EventRequestProcess").Value;
             Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
@@ -1372,6 +1374,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
+                
                 var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
@@ -1391,6 +1394,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             }
             return Ok(ProductBrandsListrowData);
         }
+
         [HttpGet("GetAttachmentsFromHonorariumSheetBasedOnEventId")]
         public IActionResult GetAttachmentsFromHonorariumSheetBasedOnEventId(string eventId)
         {
@@ -1400,11 +1404,12 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
-                var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
+                var attachments = SheetHelper.GetAttachmentsIdForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
             return Ok(ProductBrandsListrowData);
         }
+
         [HttpGet("GetAttachmentsFromEventSettlementSheetBasedOnEventId")]
         public IActionResult GetAttachmentsFromEventSettlementSheetBasedOnEventId(string eventId)
         {
@@ -1414,7 +1419,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
             Row? targetRow = sheet.Rows.FirstOrDefault(r => r.Cells.Any(c => c.DisplayValue == eventId));
             if (targetRow != null)
             {
-                var attachments = SheetHelper.GetAttachmentsForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
+                var attachments = SheetHelper.GetAttachmentsIdForRow(smartsheet, sheet.Id.Value, targetRow.Id.Value);
                 ProductBrandsListrowData["Attachments"] = attachments;
             }
             return Ok(ProductBrandsListrowData);
@@ -1462,7 +1467,7 @@ namespace IndiaEventsWebApi.Controllers.RequestSheets
 
 
 
-       
+
 
 
 

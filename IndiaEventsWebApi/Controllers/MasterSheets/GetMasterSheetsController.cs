@@ -1,4 +1,5 @@
-﻿using IndiaEvents.Models.Models.GetData;
+﻿using Aspose.Pdf.Plugins;
+using IndiaEvents.Models.Models.GetData;
 using IndiaEventsWebApi.Helper;
 using IndiaEventsWebApi.Models.RequestSheets;
 using Microsoft.AspNetCore.Authorization;
@@ -393,42 +394,146 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet("HcpMaster")]
+        //public IActionResult HcpMaster(int count = 5)
+        //{
+        //    int loopCount = 0;
+        //    while (loopCount < count)
+        //    {
+        //        try
+        //        {
+        //            List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+        //            string sheetId1 = configuration.GetSection("SmartsheetSettings:HcpMaster1").Value;
+        //            string sheetId2 = configuration.GetSection("SmartsheetSettings:HcpMaster2").Value;
+        //            string sheetId3 = configuration.GetSection("SmartsheetSettings:HcpMaster3").Value;
+        //            string sheetId4 = configuration.GetSection("SmartsheetSettings:HcpMaster4").Value;
+
+        //            List<string> Sheets = new List<string>() { sheetId1, sheetId2, sheetId3, sheetId4 };
+
+        //            foreach (var sheetId in Sheets)
+        //            {
+
+        //                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+        //                Log.Information("executed the data in sheet"+sheetId+"---"+DateTime.Now);
+        //                List<string> columnNames = new List<string>();
+        //                foreach (Column column in sheet.Columns)
+        //                {
+        //                    columnNames.Add(column.Title);
+        //                }
+        //                foreach (Row row in sheet.Rows)
+        //                {
+        //                    Dictionary<string, object> rowData = new Dictionary<string, object>();
+        //                    for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+        //                    {
+        //                        rowData[columnNames[i]] = row.Cells[i].Value;
+        //                    }
+        //                    sheetData.Add(rowData);
+        //                }
+        //            }
+        //            return Ok(sheetData);
+        //        }
+        //        catch (SmartsheetException ex)
+        //        {
+        //            Log.Error($"Error occured on SmartsheetException method {ex.Message} at {DateTime.Now}");
+        //            Log.Error(ex.StackTrace);
+        //            if (loopCount < count)
+        //            {
+        //                loopCount++;
+        //            }
+        //            else
+        //            {
+        //                return BadRequest(new
+        //                {
+        //                    Message = ex.Message + "------" + ex.StackTrace
+        //                });
+        //            }
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Log.Error($"Error occured on GetData method {ex.Message} at {DateTime.Now}");
+        //            Log.Error(ex.StackTrace);
+        //            if (loopCount < count)
+        //            {
+        //                loopCount++;
+        //                //await Task.Delay(2000);
+        //            }
+        //            else
+        //            {
+        //                return BadRequest(new
+        //                {
+        //                    Message = ex.Message + "------" + ex.StackTrace
+        //                });
+        //            }
+
+        //        }
+        //        //catch (Exception ex)
+        //        //{
+
+        //        //    return BadRequest(new
+        //        //    {
+        //        //        Message = ex.Message + "------" + ex.StackTrace
+        //        //    });
+        //        //}
+
+        //    }
+        //    return Ok();
+        //}
         [HttpGet("HcpMaster")]
-        public IActionResult HcpMaster()
+        public IActionResult HcpMaster(int count = 5)
         {
             try
             {
                 List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-                string sheetId1 = configuration.GetSection("SmartsheetSettings:HcpMaster1").Value;
-                string sheetId2 = configuration.GetSection("SmartsheetSettings:HcpMaster2").Value;
-                string sheetId3 = configuration.GetSection("SmartsheetSettings:HcpMaster3").Value;
-                string sheetId4 = configuration.GetSection("SmartsheetSettings:HcpMaster4").Value;
 
-                List<string> Sheets = new List<string>() { sheetId1, sheetId2, sheetId3, sheetId4 };
-
-                foreach (var sheetId in Sheets)
+                for (int loopCount = 0; loopCount < count; loopCount++)
                 {
-                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
-                    List<string> columnNames = new List<string>();
-                    foreach (Column column in sheet.Columns)
+                    try
                     {
-                        columnNames.Add(column.Title);
-                    }
-                    foreach (Row row in sheet.Rows)
-                    {
-                        Dictionary<string, object> rowData = new Dictionary<string, object>();
-                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        string[] sheetIds = {
+                            configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
+                            configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
+                            configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
+                            configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
+                        };
+
+                        foreach (string sheetId in sheetIds)
                         {
-                            rowData[columnNames[i]] = row.Cells[i].Value;
+                            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                            //Log.Information($"Executed the data in sheet {sheetId} --- {DateTime.Now}");
+
+                            List<string> columnNames = sheet.Columns.Select(column => column.Title).ToList();
+
+                            foreach (Row row in sheet.Rows)
+                            {
+                                Dictionary<string, object> rowData = new Dictionary<string, object>();
+                                for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                                {
+                                    rowData[columnNames[i]] = row.Cells[i].Value;
+                                }
+                                sheetData.Add(rowData);
+                            }
                         }
-                        sheetData.Add(rowData);
+                        return Ok(sheetData);
+                    }
+                    catch (SmartsheetException ex)
+                    {
+                        Log.Error($"Error occurred on SmartsheetException method {ex.Message} at {DateTime.Now}");
+                        Log.Error(ex.StackTrace);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Error occurred on GetData method {ex.Message} at {DateTime.Now}");
+                        Log.Error(ex.StackTrace);
                     }
                 }
-                return Ok(sheetData);
+
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                Log.Error($"Unexpected error occurred: {ex.Message}");
+                return BadRequest(new { Message = ex.Message });
             }
         }
         [HttpGet("GetRowsDataInHcpMasterByMisCode")]
@@ -501,7 +606,11 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+
+                return BadRequest(new
+                {
+                    Message = ex.Message + "------" + ex.StackTrace
+                });
             }
         }
         [HttpGet("GetHCPRoleData")]
@@ -929,7 +1038,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
                 List<Dictionary<string, object>> sheetData = SheetHelper.GetSheetData(sheet);
                 List<ApprovedVendorsGetPayload> eventRequestBrandsList = sheetData
-                    .Where(row => row.TryGetValue("IsActive?",out var isActive)&&isActive?.ToString().ToLower().Equals("yes",StringComparison.OrdinalIgnoreCase) == true)
+                    .Where(row => row.TryGetValue("IsActive?", out var isActive) && isActive?.ToString().ToLower().Equals("yes", StringComparison.OrdinalIgnoreCase) == true)
                     .Select(row => new ApprovedVendorsGetPayload
                     {
                         VendorId = row.TryGetValue("VendorId", out var eventTopic) ? eventTopic?.ToString() : null,
@@ -1009,7 +1118,7 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         SpeakerCategory = row.TryGetValue("Speaker Category", out var eventDate) ? eventDate?.ToString() : null,
                         SpeakerType = row.TryGetValue("Speaker Type", out var endTime) ? endTime?.ToString() : null,
                         SpeakerCriteria = row.TryGetValue("Speaker Criteria", out var SpeakerCriteria) ? SpeakerCriteria?.ToString() : null,
-                        
+
                         SpeakerCriteriaDetails = row.TryGetValue("Speaker Criteria Details", out var eventOpenSalesHeadApprovalDate) ? eventOpenSalesHeadApprovalDate?.ToString() : null,
                         CreatedDateHelper = row.TryGetValue("Created Date - Helper", out var eventApprovedDate) ? eventApprovedDate?.ToString() : null,
                         SalesAlertTrigger = row.TryGetValue("Sales Alert Trigger", out var eventEndDate) ? eventEndDate?.ToString() : null,

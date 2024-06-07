@@ -1,4 +1,4 @@
-﻿
+﻿Where(x => Convert.ToString(x.Cells[Convert.ToInt32(UrlData.Columns.Where(y => y.Title == "User").Select(z => z.Index).FirstOrDefault())].Value) == "Finance Accounts URL")
 
 [HttpGet("GetDataFromAllSheetsByEventIdInPreEvent")]
         public IActionResult GetDataFromAllSheetsByEventIdInPreEvent(string eventId)
@@ -1044,3 +1044,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

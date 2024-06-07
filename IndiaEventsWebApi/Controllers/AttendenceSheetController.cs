@@ -209,13 +209,13 @@ namespace IndiaEventsWebApi.Controllers
                     if (splitName == "AttendanceSheet")
                     {
 
-                        var ExistingFile = smartsheet.SheetResources.AttachmentResources.GetAttachment((long)sheet1.Id, Id);
-                        url = ExistingFile.Url;
+                       // var ExistingFile = smartsheet.SheetResources.AttachmentResources.GetAttachment((long)sheet1.Id, Id);
+                        //url = ExistingFile.Url;
 
-                        //smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
-                        //  (long)sheet1.Id,           // sheetId
-                        //  Id            // attachmentId
-                        //);
+                        smartsheet.SheetResources.AttachmentResources.DeleteAttachment(
+                          (long)sheet1.Id,           // sheetId
+                          Id            // attachmentId
+                        );
 
                     }
                 }

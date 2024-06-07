@@ -33,28 +33,41 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
         [HttpGet("GetHCPDataUsingNameAndMISCode")]
         public IActionResult GetHCPDataUsingNameAndMISCode(string Name, string misCode)
         {
-            string[] sheetIds = {
+            try
+            {
+
+
+                string[] sheetIds = {
                 configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
             };
-            foreach (string i in sheetIds)
-            {
-                Sheet sheeti = SheetHelper.GetSheetById(smartsheet, i);
-                Column hcpNameColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCPName");
-                Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "MisCode");
-                if (hcpNameColumn != null && misCodeColumn != null)
+                foreach (string i in sheetIds)
                 {
-                    Row existingRow = sheeti.Rows.FirstOrDefault(row => row.Cells != null && row.Cells.Any(cell => cell.ColumnId == hcpNameColumn.Id && cell.Value != null && cell.Value.ToString() == Name) &&
-                        row.Cells.Any(cell => cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == misCode));
-                    if (existingRow != null)
+                    Sheet sheeti = SheetHelper.GetSheetById(smartsheet, i);
+                    Column hcpNameColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "HCPName");
+                    Column misCodeColumn = sheeti.Columns.FirstOrDefault(column => column.Title == "MisCode");
+                    if (hcpNameColumn != null && misCodeColumn != null)
                     {
-                        return Ok("True");
+                        Row existingRow = sheeti.Rows.FirstOrDefault(row => row.Cells != null && row.Cells.Any(cell => cell.ColumnId == hcpNameColumn.Id && cell.Value != null && cell.Value.ToString() == Name) &&
+                            row.Cells.Any(cell => cell.ColumnId == misCodeColumn.Id && cell.Value != null && cell.Value.ToString() == misCode));
+                        if (existingRow != null)
+                        {
+                            return Ok("True");
+                        }
                     }
                 }
+                return Ok("False");
             }
-            return Ok("False");
+            catch (Exception ex)
+            {
+
+                return BadRequest(new
+                {
+                    Message = ex.Message + "------" + ex.StackTrace
+                });
+            }
         }
 
 

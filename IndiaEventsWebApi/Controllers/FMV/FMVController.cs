@@ -24,30 +24,52 @@ namespace IndiaEventsWebApi.Controllers.FMV
         [HttpGet("GetfmvColumnValue")]
         public IActionResult GetfmvColumnValue(string specialty, string columnTitle)
         {
-            int defaultval = 0;
-            SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
-            string sheetId = configuration.GetSection("SmartsheetSettings:fmv").Value;
-            //  long.TryParse(sheetId, out long parsedSheetId);
-            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
-
-            Column SpecialityColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "Speciality", StringComparison.OrdinalIgnoreCase));
-            Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, columnTitle, StringComparison.OrdinalIgnoreCase));
-            if (targetColumn != null && SpecialityColumn != null)
+            try
             {
-                Row targetRow = sheet.Rows.FirstOrDefault(row => row.Cells.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value.ToString() == specialty));
 
-                if (targetRow != null)
+
+                int defaultval = 0;
+                //SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
+                string sheetId = configuration.GetSection("SmartsheetSettings:fmv").Value;
+                //  long.TryParse(sheetId, out long parsedSheetId);
+                Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+
+                Column SpecialityColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, "Speciality", StringComparison.OrdinalIgnoreCase));
+                Column targetColumn = sheet.Columns.FirstOrDefault(column => string.Equals(column.Title, columnTitle, StringComparison.OrdinalIgnoreCase));
+                if (targetColumn != null && SpecialityColumn != null)
                 {
-                    var columnValue = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value;
-                    if (columnValue != null)
+                    Row targetRow = sheet.Rows.FirstOrDefault(row => row.Cells.Any(cell => cell.ColumnId == SpecialityColumn.Id && cell.Value.ToString() == specialty));
+
+                    if (targetRow != null)
                     {
-                        return Ok(columnValue);
+                        var columnValue = targetRow.Cells.FirstOrDefault(cell => cell.ColumnId == targetColumn.Id)?.Value;
+                        if (columnValue != null)
+                        {
+                            return Ok(columnValue);
+                        }
+                        else
+                        {
+                            return Ok(defaultval);
+                        }
                     }
-                    else return Ok(defaultval);
+                    else
+                    {
+                        return Ok(defaultval);
+                    }
                 }
-                else return Ok(defaultval);
+                else
+                {
+                    return Ok(defaultval);
+                }
             }
-            else return Ok(defaultval);
+            catch (Exception ex)
+            {
+
+                return BadRequest(new
+                {
+                    Message = ex.Message + "------" + ex.StackTrace
+                });
+            }
         }
 
 
