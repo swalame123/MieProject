@@ -9,7 +9,6 @@ using Smartsheet.Api.Models;
 using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace IndiaEventsWebApi.Controllers
 {

@@ -59,16 +59,21 @@ namespace IndiaEventsWebApi.Controllers
                 Column IdColumn = sheet1.Columns.FirstOrDefault(column => string.Equals(column.Title, "EventId/EventRequestId", StringComparison.OrdinalIgnoreCase));
                 if (IdColumn != null)
                 {
-                    // Find all rows with the specified speciality
-                    List<Row> targetRows = sheet1.Rows
-                        .Where(row => row.Cells.Any(cell => cell.ColumnId == IdColumn.Id && cell.Value.ToString() == EventID))
-                        .ToList();
 
-                    if (targetRows.Any())
-                    {
-                        var rowIds = targetRows.Select(row => row.Id).ToList();
-                        rowId = (long)rowIds[0];
-                    }
+                    Row targetRows = sheet1.Rows
+                     .FirstOrDefault(row => row.Cells?.Any(cell => cell.ColumnId == IdColumn.Id && cell.Value?.ToString() == EventID) == true);
+                    rowId = targetRows.Id.Value;
+                    // Find all rows with the specified speciality
+                    //List<Row>? targetRows = sheet1.Rows
+                    //    .Where(row => row.Cells.Any(cell => cell.ColumnId == IdColumn.Id && cell.Value.ToString() == EventID))
+                    //    .ToList();
+
+
+                    //if (targetRows != null)
+                    //{
+                    //    var rowIds = targetRows.Select(row => row.Id).ToList();
+                    //    rowId = (long)rowIds[0];
+                    //}
 
                 }
                 var a = smartsheet.SheetResources.RowResources.AttachmentResources.ListAttachments((long)sheet1.Id, rowId, null);

@@ -39,6 +39,7 @@ namespace IndiaEventsWebApi.Controllers
         {
             try
             {
+                Log.Information("Start of Honorarium Post api" + DateTime.Now);
                 SmartsheetClient smartsheet = await Task.Run(() => SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
 
                 string sheetId = configuration.GetSection("SmartsheetSettings:HonorariumPayment").Value;
@@ -240,6 +241,7 @@ namespace IndiaEventsWebApi.Controllers
 
                     //smartsheet.SheetResources.RowResources.UpdateRows(sheet1.Id.Value, new Row[] { updateRow });
                 }
+                Log.Information("End of Honorarium Post api" + DateTime.Now);
                 return Ok(new
                 { Message = "Data added successfully." });
                 //}
@@ -252,7 +254,8 @@ namespace IndiaEventsWebApi.Controllers
             }
             catch (Exception ex)
             {
-
+                Log.Error($"Error occured {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(new
                 {
                     Message = ex.Message + "------" + ex.StackTrace
@@ -266,6 +269,7 @@ namespace IndiaEventsWebApi.Controllers
         {
             try
             {
+                Log.Information("Start of Honorarium update api" + DateTime.Now);
                 SmartsheetClient smartsheet = await Task.Run(() => SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
 
                 string sheetId4 = configuration.GetSection("SmartsheetSettings:EventRequestsHcpRole").Value;
@@ -325,6 +329,7 @@ namespace IndiaEventsWebApi.Controllers
                         }
                     }
                 }
+                Log.Information("End of Honorarium Update api" + DateTime.Now);
                 return Ok(new { Message = " Updated Successfully" });
                 //}
                 //catch (Exception ex)
@@ -336,7 +341,8 @@ namespace IndiaEventsWebApi.Controllers
             }
             catch (Exception ex)
             {
-
+                Log.Error($"Error occured on UpdateClassIPreEvent method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(new
                 {
                     Message = ex.Message + "------" + ex.StackTrace

@@ -7,7 +7,7 @@ using Serilog;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.Text;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
+
 
 namespace IndiaEventsWebApi.Controllers
 {
@@ -268,6 +268,7 @@ namespace IndiaEventsWebApi.Controllers
         {
             try
             {
+                Log.Information("Start of EventSettlement Post" + DateTime.Now);
                 SmartsheetClient smartsheet = await Task.Run(() => SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
 
                 string sheetId = configuration.GetSection("SmartsheetSettings:EventSettlement").Value;
@@ -554,21 +555,17 @@ namespace IndiaEventsWebApi.Controllers
                 if (cellsToUpdate != null) { cellsToUpdate.Value = formData.Role; }
 
                 smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, new Row[] { updateRows });
+                Log.Information("End of EventSettlement Post" + DateTime.Now);
 
                 return Ok(new
                 { Message = "Data added successfully." });
 
-                //}
-                //catch (Exception ex)
-                //{
-                //    Log.Error($"Error occured on EventSettlementController method {ex.Message} at {DateTime.Now}");
-                //    Log.Error(ex.StackTrace);
-                //    return BadRequest(ex.Message);
-                //}
+              
             }
             catch (Exception ex)
             {
-
+                Log.Error($"Error occured on UpdateClassIPreEvent method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(new
                 {
                     Message = ex.Message + "------" + ex.StackTrace
@@ -581,6 +578,8 @@ namespace IndiaEventsWebApi.Controllers
         {
             try
             {
+                Log.Information("Start of EventSettlement Update" + DateTime.Now);
+
                 SmartsheetClient smartsheet = await Task.Run(() => SmartSheetBuilder.AccessClient(accessToken, _externalApiSemaphore));
 
                 if (formData.InviteesData.Count > 0)
@@ -802,6 +801,7 @@ namespace IndiaEventsWebApi.Controllers
                 //        }
                 //    }
                 //}
+                Log.Information("End of EventSettlement Update" + DateTime.Now);
 
                 return Ok(new { Message = "Attendees Updated Successfully" });
                 //}
@@ -814,7 +814,8 @@ namespace IndiaEventsWebApi.Controllers
             }
             catch (Exception ex)
             {
-
+                Log.Error($"Error occured on UpdateClassIPreEvent method {ex.Message} at {DateTime.Now}");
+                Log.Error(ex.StackTrace);
                 return BadRequest(new
                 {
                     Message = ex.Message + "------" + ex.StackTrace

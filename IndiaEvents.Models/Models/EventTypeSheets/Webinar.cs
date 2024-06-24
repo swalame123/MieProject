@@ -56,6 +56,7 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         //public List<string>? DeviationFiles { get; set; }
         //public string? Role { get; set; }
     }
+
     public class WebinarPayload
     {
         public Webinar? Webinar { get; set; }
@@ -66,4 +67,5 @@ namespace IndiaEventsWebApi.Models.EventTypeSheets
         public List<EventRequestExpenseSheet>? EventRequestExpenseSheet { get; set; }
         // public IFormFile? formFile { get; set; }
     }
+  
 }

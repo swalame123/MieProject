@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
 using System.Text;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
+
 namespace IndiaEventsWebApi.Helper
 {
     public class ApiCalls
     {
-
+        #region
         public static IList<Row> AddWebinarData(SmartsheetClient smartsheet, Sheet sheet1, WebinarPayload formDataList)
         {
             try
@@ -177,7 +177,7 @@ namespace IndiaEventsWebApi.Helper
                 return (IList<Row>)AddWebinarData(smartsheet, sheet1, formDataList);
             }
         }
-
+        #endregion
         public static async Task<Attachment> AddAttachmentsToSheet(SmartsheetClient smartsheet, Sheet sheet1, Row addedRow, string filePath, int count = 0)
         {
 
@@ -224,6 +224,30 @@ namespace IndiaEventsWebApi.Helper
 
         }
 
+        public static async Task<Attachment> AddAttachmentsToSheetSync(SmartsheetClient smartsheet, Sheet sheet1, Row addedRow, string filename, int count = 0)
+        {
+
+            try
+            {
+                var folderName = Path.Combine("Resources", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                string filePath = Path.Combine(pathToSave, filename);
+                Attachment attachment = await Task.Run(() => smartsheet.SheetResources.RowResources.AttachmentResources.AttachFile(
+                          sheet1.Id.Value, addedRow.Id.Value, filePath, "application/msword"));
+                return attachment;
+
+            }
+            catch (Exception ex)
+            {
+                if (count >= 8)
+                {
+                    throw ex;
+                }
+
+                return await AddAttachmentsToSheetSync(smartsheet, sheet1, addedRow, filename, count + 1);
+            }
+
+        }
 
         public static async Task<PaginatedResult<Attachment>> GetAttachmantsFromSheet(SmartsheetClient smartsheet, Sheet sheet1, Row row, int count = 0)
         {
@@ -454,7 +478,6 @@ namespace IndiaEventsWebApi.Helper
             }
 
         }
-
         public static IList<Row> UpdateRole(SmartsheetClient smartsheet, Sheet sheet4, Row updateRows, int count = 0)
         {
             try
@@ -473,6 +496,26 @@ namespace IndiaEventsWebApi.Helper
             }
 
         }
+        public static IList<Row> BulkUpdateRows(SmartsheetClient smartsheet, Sheet sheet, List<Row> liRowsToUpdate, int count = 0)
+        {
+            try
+            {
+                IList<Row> rows = smartsheet.SheetResources.RowResources.UpdateRows(sheet.Id.Value, liRowsToUpdate);
+                return rows;
+            }
+            catch (Exception ex)
+            {
+                if (count >= 5)
+                {
+                    throw ex;
+                }
+                return BulkUpdateRows(smartsheet, sheet, liRowsToUpdate, count + 1);
+
+            }
+
+        }
+
+
         public static IList<Row> DeviationData(SmartsheetClient smartsheet, Sheet sheet4, Row newRow1, int count = 0)
         {
             try
@@ -491,7 +534,60 @@ namespace IndiaEventsWebApi.Helper
             }
 
         }
+        public static List<Dictionary<string, object>> HcpData(string[] sheetIds, SmartsheetClient smartsheet, int count = 1)
+        {
+            List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
+            try
+            {
 
+                foreach (string sheetId in sheetIds)
+                {
+                    Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
+                    List<string> columnNames = sheet.Columns.Select(column => column.Title).ToList();
+                    foreach (Row row in sheet.Rows)
+                    {
+                        Dictionary<string, object> rowData = new Dictionary<string, object>();
+                        for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
+                        {
+                            rowData[columnNames[i]] = row.Cells[i].Value;
+                        }
+                        sheetData.Add(rowData);
+                    }
+                }
+
+                return sheetData;
+            }
+            catch (Exception ex)
+            {
+                if (count >= 5)
+                {
+                    throw ex;
+                }
+                return HcpData(sheetIds, smartsheet, count + 1);
+            }
+        }
+        public static async Task<Attachment> UpdateAttachments(SmartsheetClient smartsheet, long sheetId, long Id, string filePath, int count = 0)
+        {
+
+            try
+            {
+
+                Attachment attachment = smartsheet.SheetResources.AttachmentResources.VersioningResources.AttachNewVersion(
+                                    sheetId, Id, filePath, "application/msword");
+                return attachment;
+
+            }
+            catch (Exception ex)
+            {
+                if (count >= 8)
+                {
+                    throw ex;
+                }
+
+                return await UpdateAttachments(smartsheet, sheetId, Id, filePath, count + 1);
+            }
+
+        }
 
     }
 }

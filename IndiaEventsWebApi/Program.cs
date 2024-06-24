@@ -9,16 +9,29 @@ using System.Text;
 using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 
+using Microsoft.EntityFrameworkCore;
+using IndiaEventsWebApi;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddSingleton(new SemaphoreSlim(1, 1));
+builder.Services.AddMemoryCache();
+builder.Services.AddLazyCache();
 
 var configuration = builder.Configuration;
+//builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("SampleConnectionString")!);
 
-
+builder.Services.AddDbContext<DataContext>(
+    options =>
+    {
+        options.UseMySql(builder.Configuration.GetConnectionString("mysql"),
+            new MySqlServerVersion(new Version(8, 0, 23)));
+        //Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.23-mysql"));
+    });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -61,25 +74,27 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateLogger();
+            .WriteTo.File("Logs\\logs.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 
-builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
-{
-    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Console();
-}, preserveStaticLogger: true);
+//Log.Logger = new LoggerConfiguration()
+//    .WriteTo.Console()
+//    .CreateLogger();
 
-builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
-{
-    loggerConfiguration
-        .ReadFrom.Configuration(hostingContext.Configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(evt => evt.Exception != null).WriteTo.Console());
-}, preserveStaticLogger: true);
+//builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+//{
+//    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration)
+//        .Enrich.FromLogContext()
+//        .WriteTo.Console();
+//}, preserveStaticLogger: true);
+
+//builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+//{
+//    loggerConfiguration
+//        .ReadFrom.Configuration(hostingContext.Configuration)
+//        .Enrich.FromLogContext()
+//        .WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(evt => evt.Exception != null).WriteTo.Console());
+//}, preserveStaticLogger: true);
 
 var app = builder.Build();
 
@@ -87,7 +102,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("UseCors");
-app.UseSerilogRequestLogging();
+//app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

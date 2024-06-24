@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Web.Http.Results;
 using Aspose.Pdf.Operators;
 using IndiaEventsWebApi.Helper;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 using NPOI.HPSF;
 
 namespace IndiaEventsWebApi.Helper
@@ -27,6 +26,23 @@ namespace IndiaEventsWebApi.Helper
             }
             return 0;
         }
+        internal static string SQlFileinsertion(string base64, string name)
+        {
+            byte[] fileBytes = Convert.FromBase64String(base64);
+            //var fileSize = (fileBytes.Length) / 1048576;
+            var folderName = Path.Combine("Resources", "Images");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+            string fileType = GetFileType(fileBytes);
+            string fileName = name + DateTime.Now.ToString("ddMMyyyymmss") + "." + fileType;
+            string filePath = Path.Combine(pathToSave, fileName);
+            File.WriteAllBytes(filePath, fileBytes);
+            return fileName;
+        }
+
         public static string GetValueByColumnName(Row row, List<string> columnNames, string columnName)
         {
             int columnIndex = columnNames.IndexOf(columnName);
@@ -44,13 +60,13 @@ namespace IndiaEventsWebApi.Helper
                 foreach (var attachment in attachments.Data)
                 {
                     long AID = (long)attachment.Id;
-                    Attachment file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheetId, AID);
+                    //Attachment file = smartsheet.SheetResources.AttachmentResources.GetAttachment(sheetId, AID);
                     Dictionary<string, object> attachmentInfo = new Dictionary<string, object>
                     {
-                        { "Name", file.Name },
-                        { "Id", file.Id },
-                        { "Url", file.Url },
-                        { "base64", UrlToBaseValue(file.Url) },
+                        { "Name", attachment.Name },
+                        { "Id", AID },
+                       // { "Url", file.Url },
+                       // { "base64", UrlToBaseValue(file.Url) },
                         {"SheetId",sheetId }
                     };
                     attachmentsList.Add(attachmentInfo);
@@ -184,7 +200,7 @@ namespace IndiaEventsWebApi.Helper
                 Directory.CreateDirectory(pathToSave);
             }
             string fileType = GetFileType(fileBytes);
-            string fileName = name + "." + fileType;
+            string fileName =  name + DateTime.Now.ToString("ddMMyyyymmss") + "." + fileType;
             string filePath = Path.Combine(pathToSave, fileName);
             File.WriteAllBytes(filePath, fileBytes);
             return filePath;

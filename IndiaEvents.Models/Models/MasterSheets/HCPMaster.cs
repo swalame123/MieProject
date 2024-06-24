@@ -1,4 +1,10 @@
-﻿namespace IndiaEventsWebApi.Models.MasterSheets
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using NPOI.SS.Formula.Functions;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace IndiaEventsWebApi.Models.MasterSheets
 {
     public class HCPMaster
     {
@@ -21,7 +27,7 @@
     }
     public class HCPMaster1
     {
-       
+
         public string? LastName { get; set; }
         public string? FirstName { get; set; }
         public string? HCPName { get; set; }
@@ -29,11 +35,47 @@
         public string? GOorNGO { get; set; }
         public string? MISCode { get; set; }
         public string? CompanyName { get; set; }
-       
+
     }
     public class MIsandType
     {
-        public string? MISCode { get; set;}
-        public string? Type { get; set;}
+        public string? MISCode { get; set; }
+        public string? Type { get; set; }
+    }
+    public static class HcpCacheData
+    {
+        public static string HcpData = "HcpData";
+    }
+    public class HcpMasterData
+    {
+        [Column("LastName")]
+        public string LastName { get; set; }
+        [Column("FirstName")]
+        public string FirstName { get; set; }
+        [Column("HCPName")]
+        public string HCPName { get; set; }
+        [Column("HCP Type")]
+        public string HCPType { get; set; }
+        [Column("Employee Group")]
+        public int? EmployeeGroup { get; set; }
+        [Column("External ID")]
+        public string ExternalID { get; set; }
+        [Column("MIsCode")]
+        public string MIsCode { get; set; }
+        [Column("Company Name")]
+        public string CompanyName { get; set; }
+        [Column("Medical Council Registration")]
+        public string MedicalCouncilRegistration { get; set; }
+        [Column("Speciality")]
+        public string Speciality { get; set; }
+        [Column("FCPA Sign Off Date")]
+        public string FCPASignOffDate { get; set; }
+        [Column("FCPA Expiry Date")]
+        public string FCPAExpiryDate { get; set; }
+        [Column("FCPA Valid?")]
+        public string FCPAValid { get; set; }
+        [Column("ID")]
+        [Key]
+        public int? ID { get; set; }
     }
 }

@@ -1,14 +1,20 @@
 ﻿using Aspose.Pdf.Plugins;
 using IndiaEvents.Models.Models.GetData;
+using IndiaEvents.Models.Models.Webhook;
 using IndiaEventsWebApi.Helper;
+using IndiaEventsWebApi.Models.MasterSheets;
 using IndiaEventsWebApi.Models.RequestSheets;
+using LazyCache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Caching.Memory;
+using MySqlConnector;
 using Serilog;
 using Smartsheet.Api;
 using Smartsheet.Api.Models;
+using System.Data;
 
 namespace IndiaEventsWebApi.Controllers.MasterSheets
 {
@@ -20,10 +26,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         private readonly string accessToken;
         private readonly IConfiguration configuration;
         private readonly SmartsheetClient smartsheet;
+        private ICacheProvider _cacheProvider;
 
-        public GetMasterSheetsController(IConfiguration configuration)
+        public GetMasterSheetsController(IConfiguration configuration, ICacheProvider cacheProvider)
         {
             this.configuration = configuration;
+            this._cacheProvider = cacheProvider;
             accessToken = configuration.GetSection("SmartsheetSettings:AccessToken").Value;
             smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
         }
@@ -479,63 +487,105 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
         //    }
         //    return Ok();
         //}
-        [HttpGet("HcpMaster")]
-        public IActionResult HcpMaster(int count = 5)
+
+        [HttpGet("HcpMaster")]//rock  HcpMasterSmartSheet
+        public async Task<IActionResult> HcpMaster()
         {
             try
             {
-                List<Dictionary<string, object>> sheetData = new List<Dictionary<string, object>>();
-
-                for (int loopCount = 0; loopCount < count; loopCount++)
-                {
-                    try
-                    {
-                        string[] sheetIds = {
+                Log.Information("Hcp Master loop started at " + DateTime.Now);
+                string[] sheetIds = {
                             configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                             configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                             configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
                             configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
                         };
-
-                        foreach (string sheetId in sheetIds)
-                        {
-                            Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId);
-                            //Log.Information($"Executed the data in sheet {sheetId} --- {DateTime.Now}");
-
-                            List<string> columnNames = sheet.Columns.Select(column => column.Title).ToList();
-
-                            foreach (Row row in sheet.Rows)
-                            {
-                                Dictionary<string, object> rowData = new Dictionary<string, object>();
-                                for (int i = 0; i < row.Cells.Count && i < columnNames.Count; i++)
-                                {
-                                    rowData[columnNames[i]] = row.Cells[i].Value;
-                                }
-                                sheetData.Add(rowData);
-                            }
-                        }
-                        return Ok(sheetData);
-                    }
-                    catch (SmartsheetException ex)
+                if (!_cacheProvider.TryGetValue(HcpCacheData.HcpData, out List<Dictionary<string, object>> HcpData))
+                {
+                    HcpData = ApiCalls.HcpData(sheetIds, smartsheet);
+                    var cacheEntryOption = new MemoryCacheEntryOptions
                     {
-                        Log.Error($"Error occurred on SmartsheetException method {ex.Message} at {DateTime.Now}");
-                        Log.Error(ex.StackTrace);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error($"Error occurred on GetData method {ex.Message} at {DateTime.Now}");
-                        Log.Error(ex.StackTrace);
-                    }
+                        AbsoluteExpiration = DateTime.Now.AddHours(5),
+                        SlidingExpiration = TimeSpan.FromHours(5),
+                        Size = 40000000
+                    };
+                    _cacheProvider.Set(HcpCacheData.HcpData, HcpData, cacheEntryOption);
                 }
-
-                return Ok();
+                Log.Information("Hcp Master loop Ended at " + DateTime.Now);
+                return Ok(HcpData);
             }
             catch (Exception ex)
             {
                 Log.Error($"Unexpected error occurred: {ex.Message}");
                 return BadRequest(new { Message = ex.Message });
             }
+
+
         }
+
+        [HttpGet("HcpMasterUAT")] //UAT  HcpMaster
+        public async Task<IActionResult> HcpMasterUAT()
+        {
+            try
+            {
+                string MyConnection = configuration.GetSection("ConnectionStrings:mysql").Value;
+                MySqlConnection MyConn2 = new MySqlConnection(MyConnection);
+                MySqlCommand MyCommand2 = new MySqlCommand("GetHCPMaster", MyConn2);
+                MyCommand2.CommandType = CommandType.StoredProcedure;
+                await MyConn2.OpenAsync();
+                MySqlDataAdapter MyAdapter = new MySqlDataAdapter();
+                MyAdapter.SelectCommand = MyCommand2;
+                DataTable dTable = new DataTable();
+                MyAdapter.Fill(dTable);
+                string JsonData = Newtonsoft.Json.JsonConvert.SerializeObject(dTable);
+                await MyConn2.CloseAsync();
+                return Ok(JsonData);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        //    return Ok();
+        //    //string connStr = "server=10.9.128.92;user=menarini;database=IN-Events;port=3306;password=Men@rini123";
+        //    //MySqlConnection conn = new MySqlConnection(connStr);
+        //    //try
+        //    //{
+        //    //    Console.WriteLine("Connecting to MySQL...");
+        //    //    conn.Open();
+
+        //    //    string sql = "select * from HCPMaster";
+        //    //    MySqlCommand cmd = new MySqlCommand(sql, conn);
+        //    //    MySqlDataReader rdr = cmd.ExecuteReader();
+
+        //    //    while (rdr.Read())
+        //    //    {
+        //    //        Console.WriteLine(rdr[0] + " -- " + rdr[1]);
+        //    //    }
+        //    //    rdr.Close();
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Console.WriteLine(ex.ToString());
+        //    //    return BadRequest(ex.Message);
+        //    //}
+
+        //    //conn.Close();
+        //    //Console.WriteLine("Done.");
+        //    //return Ok();
+        //}
+        ////[HttpGet("SqlHcpMaster")]
+        ////public async Task<IActionResult> SqlHcpMaster(int id)
+        ////{
+        ////    using var connection = await database.OpenConnectionAsync();
+        ////    using var command = connection.CreateCommand();
+        ////    command.CommandText = @"SELECT `Id`, `Title`, `Content` FROM `BlogPost` WHERE `Id` = @id";
+        ////    command.Parameters.AddWithValue("@id", id);
+        ////    var result = await ReadAllAsync(await command.ExecuteReaderAsync());
+        ////    return result.FirstOrDefault();
+        ////}
+
         [HttpGet("GetRowsDataInHcpMasterByMisCode")]
         public IActionResult GetRowsDataInHcpMasterByMisCode(string? searchValue)
         {
@@ -893,15 +943,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         SalesHead = row.TryGetValue("Sales Head", out var _7daysSalesHeadApproval) ? _7daysSalesHeadApproval?.ToString() : null,
                         MedicalAffairsHead = row.TryGetValue("Medical Affairs Head", out var _7daysSalesHeadApprovaldate) ? _7daysSalesHeadApprovaldate?.ToString() : null,
                         NAID = row.TryGetValue("NA ID", out var prefBExpenseExcludingTaxApproval) ? prefBExpenseExcludingTaxApproval?.ToString() : null,
-
-
-                        AggregateHonorariumLimit = row.TryGetValue("Aggregate Honorarium Limit", out var totalAttendees) && int.TryParse(totalAttendees?.ToString(), out var parsedTotalAttendees) ? parsedTotalAttendees : 0,
-
-                        AggregateAccommodataionLimit = row.TryGetValue("Aggregate Accommodataion Limit", out var totalHonorariumAmount) && int.TryParse(totalHonorariumAmount?.ToString(), out var parsedTotalHonorariumAmount) ? parsedTotalHonorariumAmount : 0,
-                        AggregateHonorariumSpent = row.TryGetValue("Aggregate Honorarium Spent", out var totalTravelAccommodationAmount) && int.TryParse(totalTravelAccommodationAmount?.ToString(), out var parsedTotalTravelAccommodationAmount) ? parsedTotalTravelAccommodationAmount : 0,
-                        AggregateAccommodationSpent = row.TryGetValue("Aggregate Accommodation Spent", out var totalTravelAmount) && int.TryParse(totalTravelAmount?.ToString(), out var parsedTotalTravelAmount) ? parsedTotalTravelAmount : 0,
-                        AggregateSpentonMedicalUtility = row.TryGetValue("Aggregate Spent on Medical Utility", out var totalAccommodationAmount) && int.TryParse(totalAccommodationAmount?.ToString(), out var parsedTotalAccommodationAmount) ? parsedTotalAccommodationAmount : 0,
-                        AggregateSpentasHCPConsultant = row.TryGetValue("Aggregate Spent as HCP Consultant", out var totalLocalConveyance) && int.TryParse(totalLocalConveyance?.ToString(), out var parsedTotalLocalConveyance) ? parsedTotalLocalConveyance : 0,
+                        AggregateHonorariumLimit = row.TryGetValue("Aggregate Honorarium Limit", out var totalAttendees) && double.TryParse(totalAttendees?.ToString(), out var parsedTotalAttendees) ? parsedTotalAttendees : 0,
+                        AggregateAccommodataionLimit = row.TryGetValue("Aggregate Accommodataion Limit", out var totalHonorariumAmount) && double.TryParse(totalHonorariumAmount?.ToString(), out var parsedTotalHonorariumAmount) ? parsedTotalHonorariumAmount : 0,
+                        AggregateHonorariumSpent = row.TryGetValue("Aggregate Honorarium Spent", out var totalTravelAccommodationAmount) && double.TryParse(totalTravelAccommodationAmount?.ToString(), out var parsedTotalTravelAccommodationAmount) ? parsedTotalTravelAccommodationAmount : 0,
+                        AggregateAccommodationSpent = row.TryGetValue("Aggregate Accommodation Spent", out var totalTravelAmount) && double.TryParse(totalTravelAmount?.ToString(), out var parsedTotalTravelAmount) ? parsedTotalTravelAmount : 0,
+                        AggregateSpentonMedicalUtility = row.TryGetValue("Aggregate Spent on Medical Utility", out var totalAccommodationAmount) && double.TryParse(totalAccommodationAmount?.ToString(), out var parsedTotalAccommodationAmount) ? parsedTotalAccommodationAmount : 0,
+                        AggregateSpentasHCPConsultant = row.TryGetValue("Aggregate Spent as HCP Consultant", out var totalLocalConveyance) && double.TryParse(totalLocalConveyance?.ToString(), out var parsedTotalLocalConveyance) ? parsedTotalLocalConveyance : 0,
 
                     }).ToList();
                 return Ok(eventRequestBrandsList);
@@ -949,12 +996,12 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
                         Is_NONGO = row.TryGetValue("Is_NONGO", out var venueName) ? venueName?.ToString() : null,
                         MisCode = row.TryGetValue("MisCode", out var city) ? city?.ToString() : null,
                         NAID = row.TryGetValue("NA ID", out var prefBExpenseExcludingTaxApproval) ? prefBExpenseExcludingTaxApproval?.ToString() : null,
-                        AggregatespendonHonorariumTrainer = row.TryGetValue("Aggregate spend on Honorarium - Trainer", out var totalAttendees) && int.TryParse(totalAttendees?.ToString(), out var parsedTotalAttendees) ? parsedTotalAttendees : 0,
-                        AggregateLimitonAccomodation = row.TryGetValue("Aggregate Limit on Accomodation", out var totalHonorariumAmount) && int.TryParse(totalHonorariumAmount?.ToString(), out var parsedTotalHonorariumAmount) ? parsedTotalHonorariumAmount : 0,
-                        AggregateHonorariumSpent = row.TryGetValue("Aggregate Honorarium Spent ", out var totalTravelAccommodationAmount) && int.TryParse(totalTravelAccommodationAmount?.ToString(), out var parsedTotalTravelAccommodationAmount) ? parsedTotalTravelAccommodationAmount : 0,
-                        AggregatespendonAccomodation = row.TryGetValue("Aggregate spend on Accomodation", out var totalTravelAmount) && int.TryParse(totalTravelAmount?.ToString(), out var parsedTotalTravelAmount) ? parsedTotalTravelAmount : 0,
-                        AggregateSpentonMedicalUtility = row.TryGetValue("Aggregate Spent on Medical Utility", out var totalAccommodationAmount) && int.TryParse(totalAccommodationAmount?.ToString(), out var parsedTotalAccommodationAmount) ? parsedTotalAccommodationAmount : 0,
-                        AggregateSpentasHCPConsultant = row.TryGetValue("Aggregate Spent as HCP Consultant", out var totalLocalConveyance) && int.TryParse(totalLocalConveyance?.ToString(), out var parsedTotalLocalConveyance) ? parsedTotalLocalConveyance : 0,
+                        AggregatespendonHonorariumTrainer = row.TryGetValue("Aggregate spend on Honorarium - Trainer", out var totalAttendees) && double.TryParse(totalAttendees?.ToString(), out var parsedTotalAttendees) ? parsedTotalAttendees : 0,
+                        AggregateLimitonAccomodation = row.TryGetValue("Aggregate Limit on Accomodation", out var totalHonorariumAmount) && double.TryParse(totalHonorariumAmount?.ToString(), out var parsedTotalHonorariumAmount) ? parsedTotalHonorariumAmount : 0,
+                        AggregateHonorariumSpent = row.TryGetValue("Aggregate Honorarium Spent ", out var totalTravelAccommodationAmount) && double.TryParse(totalTravelAccommodationAmount?.ToString(), out var parsedTotalTravelAccommodationAmount) ? parsedTotalTravelAccommodationAmount : 0,
+                        AggregatespendonAccomodation = row.TryGetValue("Aggregate spend on Accomodation", out var totalTravelAmount) && double.TryParse(totalTravelAmount?.ToString(), out var parsedTotalTravelAmount) ? parsedTotalTravelAmount : 0,
+                        AggregateSpentonMedicalUtility = row.TryGetValue("Aggregate Spent on Medical Utility", out var totalAccommodationAmount) && double.TryParse(totalAccommodationAmount?.ToString(), out var parsedTotalAccommodationAmount) ? parsedTotalAccommodationAmount : 0,
+                        AggregateSpentasHCPConsultant = row.TryGetValue("Aggregate Spent as HCP Consultant", out var totalLocalConveyance) && double.TryParse(totalLocalConveyance?.ToString(), out var parsedTotalLocalConveyance) ? parsedTotalLocalConveyance : 0,
 
                         // CreatedDateHelper = row.TryGetValue("Created Date - Helper", out var createdDateHelper) ? createdDateHelper?.ToString() : null,
                         Qualification = row.TryGetValue("Qualification", out var isAdvanceRequired) ? isAdvanceRequired?.ToString() : null,
@@ -1287,7 +1334,6 @@ namespace IndiaEventsWebApi.Controllers.MasterSheets
             }
             return Ok(ProductBrandsListrowData);
         }
-
 
 
 

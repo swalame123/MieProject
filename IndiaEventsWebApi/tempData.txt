@@ -1,4 +1,29 @@
-﻿Where(x => Convert.ToString(x.Cells[Convert.ToInt32(UrlData.Columns.Where(y => y.Title == "User").Select(z => z.Index).FirstOrDefault())].Value) == "Finance Accounts URL")
+﻿webinar
+ List<long> rowIdsToDelete = new List<long>();
+                        IEnumerable<Row> DataInSheet4 = [];
+                        DataInSheet4 = sheet4.Rows.Where(x => Convert.ToString(x.Cells[Convert.ToInt32(sheet4.Columns.Where(y => y.Title == "EventId/EventRequestId").Select(z => z.Index).FirstOrDefault())].Value) == eventId);
+                        foreach (Row row in DataInSheet4)
+                        //foreach (Row row in sheet4.Rows)
+                        {
+                            if (row.Cells.Any(cell => cell.DisplayValue == formDataList.EventDetails.Id))
+                            {
+                                rowIdsToDelete.Add((long)row.Id);
+                            }
+                        }
+                        if (rowIdsToDelete.Count > 0)
+                        {
+                            await Task.Run(() => smartsheet.SheetResources.RowResources.DeleteRows(sheet4.Id.Value, rowIdsToDelete.ToArray(), true));
+                        }
+
+
+
+
+
+
+IEnumerable<Row> DataInSheet3 = [];
+                        DataInSheet3 = sheet3.Rows.Where(x => Convert.ToString(x.Cells[Convert.ToInt32(sheet3.Columns.Where(y => y.Title == "EventId/EventRequestId").Select(z => z.Index).FirstOrDefault())].Value) == eventId);
+                       
+Where(x => Convert.ToString(x.Cells[Convert.ToInt32(UrlData.Columns.Where(y => y.Title == "User").Select(z => z.Index).FirstOrDefault())].Value) == "Finance Accounts URL")
 
 [HttpGet("GetDataFromAllSheetsByEventIdInPreEvent")]
         public IActionResult GetDataFromAllSheetsByEventIdInPreEvent(string eventId)

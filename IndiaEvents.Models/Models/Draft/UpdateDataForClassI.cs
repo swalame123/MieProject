@@ -11,7 +11,6 @@ namespace IndiaEvents.Models.Models.Draft
 {
     public class UpdateDataForClassI
     {
-
         public UpdateEventDetails EventDetails { get; set; }
         public List<UpdateBrandSelection> BrandSelection { get; set; }
         public List<UpdatePanelSelection> PanelSelection { get; set; }
@@ -20,7 +19,6 @@ namespace IndiaEvents.Models.Models.Draft
         public List<UpdateExpenseSelection> ExpenseSelection { get; set; }
         public string IsDeviationUpload { get; set; }
         public List<EventRequestDeviationsData>? DeviationDetails { get; set; }
-        //public List<string> DeviationFiles { get; set; }
     }
 
     public class UpdateDataForStall
@@ -49,7 +47,7 @@ namespace IndiaEvents.Models.Models.Draft
 
     public class UpdateBrandSelection
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string BrandName { get; set; }
         public string? PercentageAllocation { get; set; }
         public string ProjectId { get; set; }
@@ -57,7 +55,7 @@ namespace IndiaEvents.Models.Models.Draft
 
     public class UpdateEventDetails
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string EventTopic { get; set; }
         public string EventType { get; set; }
         public DateTime EventDate { get; set; }
@@ -99,7 +97,7 @@ namespace IndiaEvents.Models.Models.Draft
 
     public class UpdateHandsOnDetails
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string EventName { get; set; }
         public string EventType { get; set; }
         public DateTime EventDate { get; set; }
@@ -189,7 +187,7 @@ namespace IndiaEvents.Models.Models.Draft
 
     public class UpdateExpenseSelection
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string Expense { get; set; }
         public string ExpenseType { get; set; }
         public double ExpenseAmountIncludingTax { get; set; }
@@ -198,7 +196,7 @@ namespace IndiaEvents.Models.Models.Draft
 
     public class UpdateInviteeSelection
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string InviteeFrom { get; set; }
         public string Name { get; set; }
         public string MisCode { get; set; }
@@ -214,7 +212,7 @@ namespace IndiaEvents.Models.Models.Draft
 
     public class UpdatePanelSelection
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string SpeakerCode { get; set; }
         public string TrainerCode { get; set; }
         public string Speciality { get; set; }
@@ -261,19 +259,20 @@ namespace IndiaEvents.Models.Models.Draft
         public string IsGlobalFMVCheck { get; set; }
         public string SwiftCode { get; set; }
         public string IsFilesUpload { get; set; }
-        public List<string> Files { get; set; }
+        public List<UpdateFiles> Files { get; set; }
     }
 
     public class UpdateSlideKitSelection
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string HcpName { get; set; }
         public string MisCode { get; set; }
         public string HcpType { get; set; }
         public string SlideKitType { get; set; }
         public string SlideKitOption { get; set; }
         public string IsFilesUpload { get; set; }
-        public List<string> Files { get; set; }
+
+        public List<UpdateFiles> Files { get; set; }
     }
 
     public class UpdateFiles
@@ -282,6 +281,17 @@ namespace IndiaEvents.Models.Models.Draft
         public string? FileBase64 { get; set; }
     }
 
+    public class UpdateAttachments
+    {
+        public long SheetId { get; set; }
+        public long AttachmentId { get; set; }
+        public string? FileBase64 { get; set; }
+    }
+    public class DeleteRowData
+    {
+        public long SheetId { get; set; }
+        public List<long> RowId { get; set; }
+    }
 
 
     public class GetEventDetails

@@ -3,6 +3,7 @@ using IndiaEventsWebApi.Models;
 using IndiaEventsWebApi.Models.MasterSheets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NPOI.XSSF.UserModel;
 using NPOI.XWPF.UserModel;
 using Smartsheet.Api;
@@ -170,8 +171,6 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
             {
                 file.CopyTo(memoryStream);
                 var workbook = new Aspose.Cells.Workbook(memoryStream);
-
-
                 var worksheet = workbook.Worksheets[0];
 
                 List<HCPMaster1> formDataList = new List<HCPMaster1>();
@@ -194,6 +193,8 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                 }
                 totalCount = formDataList.Count();
 
+                //List<long> rowIdsToDelete = new List<long>();
+
                 foreach (var i in formDataList)
                 {
                     var MisCodeValue = "";
@@ -204,23 +205,47 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
                         Sheet sheet1 = smartsheet.SheetResources.GetSheet(parsedSheetId1, null, null, null, null, null, null, null);
 
                         Row existingRow = sheet1.Rows.FirstOrDefault(row =>
-                            row.Cells != null &&
-                            row.Cells.Any(cell =>
-                                cell.Value != null &&
-                                cell.Value.ToString() == i.MISCode)
-                        );
+                            row.Cells != null && row.Cells.Any(cell => cell.Value != null && cell.Value.ToString() == i.MISCode));
                         if (existingRow != null)
                         {
-                            //MisCodeValue = i.MISCode;
-                            //Row existingRowId = GetRowById(smartsheet, parsedSheetId, MisCodeValue);
+                            long Id = (long)existingRow.Id;
+                            //rowIdsToDelete.Add(Id);
 
-                            var Id = (long)existingRow.Id;
                             smartsheet.SheetResources.RowResources.DeleteRows(parsedSheetId1, new long[] { Id }, true);
                         }
                     }
 
-                    //foreach (var formData in formDataList)
+
+                    //if (rowIdsToDelete.Count > 0)
                     //{
+                    //    await Task.Run(() => smartsheet.SheetResources.RowResources.DeleteRows(sheet4.Id.Value, rowIdsToDelete.ToArray(), true));
+                    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     Row newRow = new Row();
                     newRow.Cells = new List<Cell>();
@@ -235,11 +260,7 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
 
                     smartsheet.SheetResources.RowResources.AddRows(parsedSheetId, new Row[] { newRow });
                     insertedCount++;
-                    //}
-
                 }
-
-
                 return Ok(new { Message = insertedCount.ToString() + " out of " + totalCount.ToString() + " has been added successfully!" });
             }
         }
@@ -265,27 +286,27 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
 
         private IEnumerable<string> GetSheetIds()
         {
-            return new[]
-            {
+            return
+            [
                 configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
-            };
+            ];
         }
 
         private ConcurrentBag<Dictionary<string, string>> GetExistingRowData(SmartsheetClient smartsheet, string MisCode)
         {
 
 
-            string[] sheetIds = {
+            string[] sheetIds = [
 
                 configuration.GetSection("SmartsheetSettings:HcpMaster1").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster2").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster3").Value,
                 configuration.GetSection("SmartsheetSettings:HcpMaster4").Value
-            };
-            ConcurrentBag<Dictionary<string, string>> resultData = new ConcurrentBag<Dictionary<string, string>>();
+            ];
+            ConcurrentBag<Dictionary<string, string>> resultData = [];
             bool foundMatch = false;
 
             Parallel.ForEach(sheetIds, sheetId =>
@@ -333,9 +354,6 @@ namespace IndiaEventsWebApi.Controllers.HCPMaster
 
             });
             return resultData;
-
-            //return new ConcurrentBag<Dictionary<string, string>>;
-            //return /*"No Data Found"*/;
 
 
 

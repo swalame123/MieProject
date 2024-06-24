@@ -12,4 +12,11 @@
         public List<string> PanelistId { get; set; }
         
     }
+    public class InvoiceIdsFromExpensePanelAndInvitee
+    {
+        public List<string> ExpenseId { get; set; }
+        public List<string> PanelistId { get; set; }
+        public List<string> InviteeId { get; set; }
+
+    }
 }
