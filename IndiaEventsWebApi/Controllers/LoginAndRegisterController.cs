@@ -218,6 +218,7 @@ namespace IndiaEventsWebApi.Controllers
         {
             try
             {
+                string IsActiveVal = "";
                 SmartsheetClient smartsheet = new SmartsheetBuilder().SetAccessToken(accessToken).Build();
                 string sheetId1 = configuration.GetSection("SmartsheetSettings:SheetId2").Value;
                 Sheet sheet = SheetHelper.GetSheetById(smartsheet, sheetId1);
@@ -287,29 +288,29 @@ namespace IndiaEventsWebApi.Controllers
 
                     if (isActiveCell?.Value?.ToString() == "No")
                     {
-                        return BadRequest("Employee is inactive");
+                        IsActiveVal = "No";
+                        //return BadRequest("Employee is inactive");
                     }
 
                     UserDetails userDetails = new UserDetails
                     {
-                        Username = UsernameIdCell?.Value?.ToString(),
-                        Email = EmailIdCell?.Value?.ToString(),
-                        Password = passwordCell?.Value?.ToString(),
-                        Role = roleCell?.Value?.ToString(),
-                        ReportingManager = ReportingManagerCell?.Value?.ToString(),
-                        FirstLevelManager = FirstLevelManagerCell?.Value?.ToString(),
+                        unique_name = UsernameIdCell?.Value?.ToString(),
+                        email = EmailIdCell?.Value?.ToString(),
+                        role = roleCell?.Value?.ToString(),
+                        reportingmanager = ReportingManagerCell?.Value?.ToString(),
+                        firstLevelManager = FirstLevelManagerCell?.Value?.ToString(),
                         RBM_BM = RBM_BMCell?.Value?.ToString(),
                         SalesHead = SalesHeadCell?.Value?.ToString(),
                         FinanceHead = FinanceHeadCell?.Value?.ToString(),
                         MarketingHead = MarketingHeadCell?.Value?.ToString(),
-                        Compliance = ComplianceCell?.Value?.ToString(),
+                        ComplianceHead = ComplianceCell?.Value?.ToString(),
                         MedicalAffairsHead = MedicalAffairsHeadCell?.Value?.ToString(),
                         FinanceTreasury = FinanceTreasuryCell?.Value?.ToString(),
                         FinanceAccounts = FinanceAccountsCell?.Value?.ToString(),
                         SalesCoordinator = SalesCoordinatorCell?.Value?.ToString(),
                         MarketingCoordinator = MarketingCoordinatorCell?.Value?.ToString(),
                         FinanceChecker = FinanceCheckerCell?.Value?.ToString(),
-                        IsActive = isActiveCell?.Value?.ToString()
+
                     };
 
                     userDetailsList.Add(userDetails);
@@ -317,6 +318,10 @@ namespace IndiaEventsWebApi.Controllers
 
                 if (userDetailsList.Count > 0)
                 {
+                    if (userDetailsList.Count == 1 && IsActiveVal == "No")
+                    {
+                        return BadRequest("Employee is inactive");
+                    }
                     string token = CreateJwtNew(userDetailsList);
                     return Ok(new { Token = token, Message = "Login Success!" });
                 }
@@ -505,83 +510,82 @@ namespace IndiaEventsWebApi.Controllers
 
 
 
-        private string CreateJwtNew1(List<UserDetails> userDetailsList)
-        {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
+        //private string CreateJwtNew1(List<UserDetails> userDetailsList)
+        //{
+        //    var jwtTokenHandler = new JwtSecurityTokenHandler();
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
 
-            var claims = new List<Claim>();
+        //    var claims = new List<Claim>();
 
-            foreach (var user in userDetailsList)
-            {
-                claims.Add(new Claim("username", user.Username));
-                claims.Add(new Claim("email", user.Email));
-                claims.Add(new Claim("role", user.Role));
-                claims.Add(new Claim("reportingmanager", user.ReportingManager));
-                claims.Add(new Claim("firstLevelManager", user.FirstLevelManager));
-                claims.Add(new Claim("RBM_BM", user.RBM_BM));
-                claims.Add(new Claim("SalesHead", user.SalesHead));
-                claims.Add(new Claim("FinanceHead", user.FinanceHead));
-                claims.Add(new Claim("MarketingHead", user.MarketingHead));
-                claims.Add(new Claim("ComplianceHead", user.Compliance));
-                claims.Add(new Claim("MedicalAffairsHead", user.MedicalAffairsHead));
-                claims.Add(new Claim("FinanceTreasury", user.FinanceTreasury));
-                claims.Add(new Claim("FinanceAccounts", user.FinanceAccounts));
-                claims.Add(new Claim("SalesCoordinator", user.SalesCoordinator));
-                claims.Add(new Claim("MarketingCoordinator", user.MarketingCoordinator));
-                claims.Add(new Claim("FinanceChecker", user.FinanceChecker));
-            }
+        //    foreach (var user in userDetailsList)
+        //    {
+        //        claims.Add(new Claim("username", user.Username));
+        //        claims.Add(new Claim("email", user.Email));
+        //        claims.Add(new Claim("role", user.Role));
+        //        claims.Add(new Claim("reportingmanager", user.ReportingManager));
+        //        claims.Add(new Claim("firstLevelManager", user.FirstLevelManager));
+        //        claims.Add(new Claim("RBM_BM", user.RBM_BM));
+        //        claims.Add(new Claim("SalesHead", user.SalesHead));
+        //        claims.Add(new Claim("FinanceHead", user.FinanceHead));
+        //        claims.Add(new Claim("MarketingHead", user.MarketingHead));
+        //        claims.Add(new Claim("ComplianceHead", user.Compliance));
+        //        claims.Add(new Claim("MedicalAffairsHead", user.MedicalAffairsHead));
+        //        claims.Add(new Claim("FinanceTreasury", user.FinanceTreasury));
+        //        claims.Add(new Claim("FinanceAccounts", user.FinanceAccounts));
+        //        claims.Add(new Claim("SalesCoordinator", user.SalesCoordinator));
+        //        claims.Add(new Claim("MarketingCoordinator", user.MarketingCoordinator));
+        //        claims.Add(new Claim("FinanceChecker", user.FinanceChecker));
+        //    }
 
-            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+        //    claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
-            var token = new JwtSecurityToken(
-                issuer: "http://localhost:5098",
-                audience: "ABM",
-                expires: DateTime.Now.AddDays(1),
-                claims: claims,
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
+        //    var token = new JwtSecurityToken(
+        //        issuer: "http://localhost:5098",
+        //        audience: "ABM",
+        //        expires: DateTime.Now.AddDays(1),
+        //        claims: claims,
+        //        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        //    );
 
-            return jwtTokenHandler.WriteToken(token);
-        }
+        //    return jwtTokenHandler.WriteToken(token);
+        //}
 
-        private string CreateJwtNew2(List<UserDetails> userDetailsList)
-        {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
+        //private string CreateJwtNew2(List<UserDetails> userDetailsList)
+        //{
+        //    var jwtTokenHandler = new JwtSecurityTokenHandler();
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
 
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+        //    var claims = new List<Claim>
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        //    };
 
-            // Serialize user details list to JSON and add as a claim
-            string userDetailsJson = JsonConvert.SerializeObject(userDetailsList);
-            claims.Add(new Claim("userDetails", userDetailsJson));
+        //    // Serialize user details list to JSON and add as a claim
+        //    string userDetailsJson = JsonConvert.SerializeObject(userDetailsList);
+        //    claims.Add(new Claim("userDetails", userDetailsJson));
 
-            var token = new JwtSecurityToken(
-                issuer: "http://localhost:5098",
-                audience: "ABM",
-                expires: DateTime.Now.AddDays(1),
-                claims: claims,
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
+        //    var token = new JwtSecurityToken(
+        //        issuer: "http://localhost:5098",
+        //        audience: "ABM",
+        //        expires: DateTime.Now.AddDays(1),
+        //        claims: claims,
+        //        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        //    );
 
-            return jwtTokenHandler.WriteToken(token);
-        }
+        //    return jwtTokenHandler.WriteToken(token);
+        //}
 
         private string CreateJwtNew(List<UserDetails> userDetailsList)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryveryveryveryverysecret......................"));
 
-            // Convert the list to a JSON string without escape characters
             string userDetailsJson = JsonConvert.SerializeObject(userDetailsList);
 
             var claims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("userDetails", userDetailsJson, JsonClaimValueTypes.Json) // Use JsonClaimValueTypes.Json to ensure proper formatting
+                    new Claim("userDetails", userDetailsJson, JsonClaimValueTypes.Json)
                 };
 
             var token = new JwtSecurityToken(
